@@ -15,7 +15,7 @@ declare var tracking: any;
 export class MyApp {
   rootPage: any = HomePage;
 
-  constructor(cameraPreview: CameraPreview, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
@@ -30,10 +30,27 @@ export class MyApp {
         toBack: true,
         alpha: 1
       };
+      var cameraPreview = new CameraPreview();
+      var video = document.getElementById('videoel');
+      //var tracker = new tracking.ObjectTracker('face');
+      //tracking.track('#videoel', tracker, { camera: true });
+      //var task = tracking.track('#videoel', tracker);
+
 
       cameraPreview.startCamera(cameraPreviewOpts).then(
         (res) => {
-
+          var tracker = new tracking.ObjectTracker('face');
+          tracker.setStepSize(1.7);
+          alert('tracking is ready');
+          // var img = new Image();
+          // img.width = 200;
+          // img.height = 200;
+          // img.crossOrigin = '*';
+          var task = tracking.track('#videoel', tracker, { camera: true });
+          alert('task tracking is ready');
+          tracker.on('track', function (event) {
+            alert(JSON.stringify(event));
+          });
         },
         (err) => {
         });
