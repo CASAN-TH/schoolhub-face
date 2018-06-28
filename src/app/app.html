@@ -1,3 +1,18 @@
-<ion-nav [root]="rootPage"></ion-nav>
-<video id="videoel" width="400" height="300" preload="auto" playsinline autoplay>
-</video>
+<!-- <ion-nav [root]="rootPage"></ion-nav> -->
+
+
+<!-- <video id="videoel" preload="auto" playsinline autoplay></video>
+<canvas #canvas></canvas> -->
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <video id="video" preload="auto" playsinline autoplay></video>
+        <canvas #canvas>
+            Your browser does not support the canvas element.
+        </canvas>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

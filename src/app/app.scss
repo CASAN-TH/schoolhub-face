@@ -1,11 +1,32 @@
 // http://ionicframework.com/docs/theming/
-html,
-body,
-ion-app,
-ion-content,
-ion-page,
-.nav-decor {
-    background-color: transparent !important;
+video,canvas {
+    position: absolute;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+}
+
+canvas{
+    z-index: 999;
+}
+
+// canvas {
+//     border: 1em red solid;
+//     position: absolute;
+//     min-width: 100%;
+//     min-height: 100%;
+//     width: auto;
+//     height: auto;
+//     z-index: 999;
+// }
+
+.grid {
+    padding: 0px;
+}
+
+.col {
+    padding: 0px;
 }
 
 // App Global Sass

@@ -1,59 +1,51 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
-import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview';
 import 'tracking/build/tracking';
 import 'tracking/build/data/face';
-
-declare var window: any;
 declare var tracking: any;
+
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
+  @ViewChild('canvas') canvas: ElementRef;
   rootPage: any = HomePage;
-
+  react: any = 'dook';
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-      const cameraPreviewOpts: CameraPreviewOptions = {
-        x: 0,
-        y: 0,
-        width: window.screen.width,
-        height: window.screen.height,
-        camera: 'front',
-        tapPhoto: false,
-        previewDrag: false,
-        toBack: true,
-        alpha: 1
-      };
-      var cameraPreview = new CameraPreview();
-      var video = document.getElementById('videoel');
-      //var tracker = new tracking.ObjectTracker('face');
-      //tracking.track('#videoel', tracker, { camera: true });
-      //var task = tracking.track('#videoel', tracker);
+      let canvas: any = this.canvas.nativeElement;
+      let context: any = canvas.getContext('2d');
+      context.strokeStyle = '#00e000';
+          //context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+          context.strokeRect(100, 10, 50, 50);
 
 
-      cameraPreview.startCamera(cameraPreviewOpts).then(
-        (res) => {
-          var tracker = new tracking.ObjectTracker('face');
-          tracker.setStepSize(1.7);
-          alert('tracking is ready');
-          // var img = new Image();
-          // img.width = 200;
-          // img.height = 200;
-          // img.crossOrigin = '*';
-          var task = tracking.track('#videoel', tracker, { camera: true });
-          alert('task tracking is ready');
-          tracker.on('track', function (event) {
-            alert(JSON.stringify(event));
-          });
-        },
-        (err) => {
+      let tracker = new tracking.ObjectTracker('face');
+      tracker.setInitialScale(4);
+      tracker.setStepSize(0.5);
+      tracker.setEdgesDensity(0.1);
+      let task = tracking.track('#video', tracker, { camera: true });
+      tracker.on('track', function (event) {
+        //alert(JSON.stringify(event));
+        console.log('event ready');
+        //context.clearRect(0, 0, canvas.width, canvas.height);
+        event.data.forEach(function (rect) {
+          console.log(rect);
+          context.strokeStyle = '#00e000';
+           context.clearRect(0, 0, canvas.width, canvas.height);
+          //context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+          context.strokeRect(rect.x, 10, rect.width, rect.height);
+          context.font = '11px Helvetica';
+          context.fillStyle = "#00e000";
+          context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+          context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
         });
+      });
     });
   }
 }
