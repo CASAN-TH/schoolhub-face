@@ -1,15 +1,19 @@
 // http://ionicframework.com/docs/theming/
 video,canvas {
+    // position: absolute;
+    // min-width: 100%;
+    // min-height: 100%;
+    // width: auto;
+    // height: auto;
+    
+    margin-left: 230px;
+    margin-top: 120px;
     position: absolute;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
 }
 
-canvas{
-    z-index: 999;
-}
+// canvas{
+//     z-index: 999;
+// }
 
 // canvas {
 //     border: 1em red solid;
