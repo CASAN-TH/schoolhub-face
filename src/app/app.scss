@@ -6,14 +6,16 @@ video,canvas {
     // width: auto;
     // height: auto;
     
-    margin-left: 230px;
-    margin-top: 120px;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
     position: absolute;
 }
 
-// canvas{
-//     z-index: 999;
-// }
+canvas{
+    z-index: 999;
+}
 
 // canvas {
 //     border: 1em red solid;
