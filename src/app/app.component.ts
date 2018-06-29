@@ -5,6 +5,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import 'tracking/build/tracking';
 import 'tracking/build/data/face';
+import 'tracking/build/data/eye';
+import 'tracking/build/data/mouth';
 declare var tracking: any;
 
 @Component({
@@ -25,26 +27,35 @@ export class MyApp {
           context.strokeRect(100, 10, 50, 50);
 
 
-      let tracker = new tracking.ObjectTracker('face');
+      //let tracker = new tracking.ObjectTracker('face');
+      let tracker = new tracking.ObjectTracker(['face', 'eye', 'mouth']);
       tracker.setInitialScale(4);
-      tracker.setStepSize(0.5);
+      tracker.setStepSize(0.2);
       tracker.setEdgesDensity(0.1);
       let task = tracking.track('#video', tracker, { camera: true });
       tracker.on('track', function (event) {
-        //alert(JSON.stringify(event));
-        console.log('event ready');
-        //context.clearRect(0, 0, canvas.width, canvas.height);
-        event.data.forEach(function (rect) {
-          console.log(rect);
-          context.strokeStyle = '#00e000';
-           context.clearRect(0, 0, canvas.width, canvas.height);
-          //context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-          context.strokeRect(rect.x, 10, rect.width, rect.height);
-          context.font = '11px Helvetica';
-          context.fillStyle = "#00e000";
-          context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
-          context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
-        });
+        // //alert(JSON.stringify(event));
+        // console.log('event ready');
+        // //context.clearRect(0, 0, canvas.width, canvas.height);
+        // event.data.forEach(function (rect) {
+        //   console.log(rect);
+        //   context.strokeStyle = '#00e000';
+        //    context.clearRect(0, 0, canvas.width, canvas.height);
+        //   //context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+        //   context.strokeRect(rect.x, 10, rect.width, rect.height);
+        //   context.font = '11px Helvetica';
+        //   context.fillStyle = "#00e000";
+        //   context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+        //   context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+        // });
+        if (event.data.length === 0) {
+          // No colors were detected in this frame.
+        } else {
+          event.data.forEach(function(rect) {
+            // rect.x, rect.y, rect.height, rect.width, rect.color
+            console.log(rect.x, rect.y, rect.height, rect.width, rect.color);
+          });
+        }
       });
     });
   }
