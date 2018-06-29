@@ -7,7 +7,7 @@ import 'tracking/build/tracking';
 import 'tracking/build/data/face';
 // import 'tracking/build/data/eye';
 // import 'tracking/build/data/mouth';
-import { CameraPreview } from '@ionic-native/camera-preview';
+import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview';
 declare var tracking: any;
 
 @Component({
@@ -22,6 +22,27 @@ export class MyApp {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
+
+      const cameraPreviewOpts: CameraPreviewOptions = {
+        x: 0,
+        y: 0,
+        width: window.screen.width,
+        height: window.screen.height,
+        camera: 'front',
+        tapPhoto: false,
+        previewDrag: false,
+        toBack: true,
+        alpha: 1
+      };
+
+      cameraPreview.startCamera(cameraPreviewOpts).then(
+        (res) => {
+
+        },
+        (err) => {
+          alert(err);
+        });
+
       let canvas: any = this.canvas.nativeElement;
       let video: any = this.video.nativeElement;
       let context: any = canvas.getContext('2d');
