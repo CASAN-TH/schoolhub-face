@@ -5,7 +5,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import 'tracking/build/tracking';
 import 'tracking/build/data/face';
-import { SELECT_VALUE_ACCESSOR } from '@angular/forms/src/directives/select_control_value_accessor';
 declare var tracking: any;
 
 @Component({
@@ -34,20 +33,15 @@ export class MyApp {
       let task = tracking.track('#video', tracker, { camera: true });
       tracker.on('track', function (event) {
         event.data.forEach(function (rect) {
-          navigator.getUserMedia({ video: true }, function (stream) {
-            let blob: any = window.URL.createObjectURL(stream);
-            console.log(blob);
-
-          }, function (error) { console.error(error) });
-          // console.log(rect);
-          // context.strokeStyle = '#00e000';
-          // context.clearRect(0, 0, canvas.width, canvas.height);
-          // //context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-          // context.strokeRect(rect.x, 10, rect.width, rect.height);
-          // context.font = '11px Helvetica';
-          // context.fillStyle = "#00e000";
-          // context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
-          // context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+          console.log(rect);
+          context.strokeStyle = '#00e000';
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          //context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+          context.strokeRect(rect.x, 10, rect.width, rect.height);
+          context.font = '11px Helvetica';
+          context.fillStyle = "#00e000";
+          context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+          context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
         });
       });
     });
