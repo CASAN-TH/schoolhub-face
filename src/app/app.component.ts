@@ -58,7 +58,7 @@ export class MyApp {
       tracker.setEdgesDensity(0.1);
       let task = tracking.track('#video', tracker, { camera: true });
       tracker.on('track', function (event) {
-        console.log("event");
+        //console.log("event");
         context.clearRect(0, 0, canvas.width, canvas.height);
         if (event.data.length === 0) {
           // No colors were detected in this frame.
@@ -91,6 +91,11 @@ export class MyApp {
         }
       });
     });
+  }
+
+  getWidth() {
+    let width: string = screen.width + 'px';
+    return width;
   }
 }
 

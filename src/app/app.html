@@ -4,9 +4,16 @@
 <!-- <video id="videoel" preload="auto" playsinline autoplay></video>
 <canvas #canvas></canvas> -->
 
-<ion-content center>
+<!-- <ion-content center>
   <video id="video" #video preload="auto" playsinline autoplay></video>
   <canvas #canvas>
     Your browser does not support the canvas element.
   </canvas>
-</ion-content>
+</ion-content> -->
+
+<div>
+  <video id="video" #video preload="auto" autoplay [style.width]="getWidth()"></video>
+  <canvas #canvas>
+    Your browser does not support the canvas element.
+  </canvas>
+</div>
