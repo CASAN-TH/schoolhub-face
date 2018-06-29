@@ -7,6 +7,7 @@ import 'tracking/build/tracking';
 import 'tracking/build/data/face';
 import 'tracking/build/data/eye';
 import 'tracking/build/data/mouth';
+import { CameraPreview } from '@ionic-native/camera-preview';
 declare var tracking: any;
 
 @Component({
@@ -17,7 +18,7 @@ export class MyApp {
   @ViewChild('video') video: ElementRef;
   rootPage: any = HomePage;
   react: any = 'dook';
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(cameraPreview: CameraPreview, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
