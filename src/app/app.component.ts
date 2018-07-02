@@ -56,7 +56,14 @@ export class MyApp {
           ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
           var img = new Image();
           img.src = _canvas.toDataURL();
-          console.log(img.src);
+          ////////////////////////Upload////////////
+          let storageRef = firebase.storage().ref();
+          const filename = Math.floor(Date.now() / 1000);
+          const imageRef = storageRef.child(`images/${filename}.jpg`);
+          imageRef.putString(img.src, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
+            console.log(snapshot);
+          });
+          /////////////////////////////////////////
           event.data.forEach(function (rect) {
             // rect.x, rect.y, rect.height, rect.width, rect.color
             console.log(rect.x, rect.y, rect.height, rect.width, event);
