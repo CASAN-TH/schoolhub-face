@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import 'tracking/build/tracking';
 import 'tracking/build/data/face';
+import firebase from 'firebase';
 // import 'tracking/build/data/eye';
 // import 'tracking/build/data/mouth';
 declare var tracking: any;
@@ -14,14 +15,24 @@ declare var tracking: any;
 })
 export class MyApp {
   @ViewChild('canvas') canvas: ElementRef;
-  @ViewChild('video') video: ElementRef;
   rootPage: any = HomePage;
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
+
+      const firebaseConfig = {
+        apiKey: 'AIzaSyAKkCULXo1SNuBRN4KRzHl9D2DxV8LzZWE',
+        authDomain: 'testdev-475e6.firebaseapp.com',
+        databaseURL: 'testdev-475e6.firebaseio.com',
+        storageBucket: 'testdev-475e6.appspot.com',
+        messagingSenderId: '307498376583'
+
+      };
+
+      firebase.initializeApp(firebaseConfig);
+
       let canvas: any = this.canvas.nativeElement;
-      let video: any = this.video.nativeElement;
       let context: any = canvas.getContext('2d');
       context.strokeStyle = '#00e000';
       context.strokeRect(100, 10, 50, 50);
