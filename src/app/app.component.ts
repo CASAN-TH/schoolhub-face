@@ -23,25 +23,25 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
 
-      const cameraPreviewOpts: CameraPreviewOptions = {
-        x: 0,
-        y: 0,
-        width: window.screen.width,
-        height: window.screen.height,
-        camera: 'front',
-        tapPhoto: false,
-        previewDrag: false,
-        toBack: true,
-        alpha: 1
-      };
+      // const cameraPreviewOpts: CameraPreviewOptions = {
+      //   x: 0,
+      //   y: 0,
+      //   width: window.screen.width,
+      //   height: window.screen.height,
+      //   camera: 'front',
+      //   tapPhoto: false,
+      //   previewDrag: false,
+      //   toBack: true,
+      //   alpha: 1
+      // };
 
-      cameraPreview.startCamera(cameraPreviewOpts).then(
-        (res) => {
+      // cameraPreview.startCamera(cameraPreviewOpts).then(
+      //   (res) => {
 
-        },
-        (err) => {
-          alert(err);
-        });
+      //   },
+      //   (err) => {
+      //     alert(err);
+      //   });
 
       let canvas: any = this.canvas.nativeElement;
       let video: any = this.video.nativeElement;
@@ -58,12 +58,21 @@ export class MyApp {
       tracker.setEdgesDensity(0.1);
       let task = tracking.track('#video', tracker, { camera: true });
       tracker.on('track', function (event) {
-        //console.log("event");
         context.clearRect(0, 0, canvas.width, canvas.height);
         if (event.data.length === 0) {
           // No colors were detected in this frame.
         } else {
+          var _video: any = document.querySelector('video');
+          var _canvas: any = document.createElement('canvas');
+          _canvas.height = _video.videoHeight;
+          _canvas.width = _video.videoWidth;
+          var ctx = _canvas.getContext('2d');
+          ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
+          var img = new Image();
+          img.src = _canvas.toDataURL();
+          console.log(img.src);
           event.data.forEach(function (rect) {
+
 
             // if (navigator.mediaDevices) {
             //   // access the web cam
