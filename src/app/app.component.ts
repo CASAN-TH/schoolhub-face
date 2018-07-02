@@ -7,7 +7,6 @@ import 'tracking/build/tracking';
 import 'tracking/build/data/face';
 // import 'tracking/build/data/eye';
 // import 'tracking/build/data/mouth';
-import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview';
 declare var tracking: any;
 
 @Component({
@@ -17,39 +16,15 @@ export class MyApp {
   @ViewChild('canvas') canvas: ElementRef;
   @ViewChild('video') video: ElementRef;
   rootPage: any = HomePage;
-  react: any = 'dook';
-  constructor(cameraPreview: CameraPreview, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-
-      // const cameraPreviewOpts: CameraPreviewOptions = {
-      //   x: 0,
-      //   y: 0,
-      //   width: window.screen.width,
-      //   height: window.screen.height,
-      //   camera: 'front',
-      //   tapPhoto: false,
-      //   previewDrag: false,
-      //   toBack: true,
-      //   alpha: 1
-      // };
-
-      // cameraPreview.startCamera(cameraPreviewOpts).then(
-      //   (res) => {
-
-      //   },
-      //   (err) => {
-      //     alert(err);
-      //   });
-
       let canvas: any = this.canvas.nativeElement;
       let video: any = this.video.nativeElement;
       let context: any = canvas.getContext('2d');
       context.strokeStyle = '#00e000';
-      //context.strokeRect(rect.x, rect.y, rect.width, rect.height);
       context.strokeRect(100, 10, 50, 50);
-
 
       let tracker = new tracking.ObjectTracker('face');
       //let tracker = new tracking.ObjectTracker(['face', 'eye', 'mouth']);
@@ -72,22 +47,6 @@ export class MyApp {
           img.src = _canvas.toDataURL();
           console.log(img.src);
           event.data.forEach(function (rect) {
-
-
-            // if (navigator.mediaDevices) {
-            //   // access the web cam
-            //   navigator.mediaDevices.getUserMedia({video: true})
-            //   // permission granted:
-            //     .then(function(stream) {
-            //       video.src = window.URL.createObjectURL(stream);
-            //       console.log(stream);
-            //     })
-            //     // permission denied:
-            //     .catch(function(error) {
-            //       document.body.textContent = 'Could not access the camera. Error: ' + error.name;
-            //     });
-            // }
-
             // rect.x, rect.y, rect.height, rect.width, rect.color
             console.log(rect.x, rect.y, rect.height, rect.width, event);
             context.strokeStyle = '#a64ceb';
