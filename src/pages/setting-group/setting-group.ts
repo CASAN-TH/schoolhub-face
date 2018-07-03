@@ -32,7 +32,7 @@ export class SettingGroupPage {
     modal.onDidDismiss(res => {
       if (res) {
         this.faceServiceProvider.CreatePersonGroup(res.name, res).then((data) => {
-          console.log(data);
+          this.getListperson();
         }).catch((err) => {
           console.log(err);
         });

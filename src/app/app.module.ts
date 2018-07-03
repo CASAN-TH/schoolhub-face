@@ -9,13 +9,15 @@ import { FaceServiceProvider } from '../providers/face-service/face-service';
 import { SettingGroupPage } from '../pages/setting-group/setting-group';
 import { HttpClientModule  } from '@angular/common/http';
 import { PersonGroupDetailPage } from '../pages/person-group-detail/person-group-detail';
+import { CreatePersonModalPage } from '../pages/create-person-modal/create-person-modal';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     SettingGroupPage,
-    PersonGroupDetailPage
+    PersonGroupDetailPage,
+    CreatePersonModalPage
   ],
   imports: [
     HttpClientModule,
@@ -27,7 +29,8 @@ import { PersonGroupDetailPage } from '../pages/person-group-detail/person-group
     MyApp,
     HomePage,
     SettingGroupPage,
-    PersonGroupDetailPage
+    PersonGroupDetailPage,
+    CreatePersonModalPage
   ],
   providers: [
     StatusBar,

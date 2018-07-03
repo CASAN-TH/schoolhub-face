@@ -22,4 +22,12 @@ export class FaceServiceProvider {
     return this.http.put(this.uriBase + '/persongroups/' + personGroupId, body, { headers: this.headers }).toPromise();
   }
 
+  GetListPerson(personGroupId) {
+    return this.http.get(this.uriBase + '/persongroups/' + personGroupId + '/persons?top=1000', { headers: this.headers }).toPromise();
+  }
+
+  CreatePerson(personGroupId, body) {
+    return this.http.post(this.uriBase + '/persongroups/' + personGroupId + '/persons', body, { headers: this.headers }).toPromise();
+  }
+
 }

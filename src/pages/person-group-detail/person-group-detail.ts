@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { CreatePersonModalPage } from '../create-person-modal/create-person-modal';
+import { FaceServiceProvider } from '../../providers/face-service/face-service';
 
 @IonicPage()
 @Component({
@@ -7,13 +9,38 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'person-group-detail.html',
 })
 export class PersonGroupDetailPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    console.log(navParams.get('personGroup'));
+  personGroup: any = {};
+  persons: any;
+  constructor(public faceServiceProvider: FaceServiceProvider, public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams) {
+    this.personGroup = navParams.get('personGroup');
+    this.getListPerson(this.personGroup.personGroupId);
   }
 
   ionViewDidLoad() {
-    
+
+  }
+
+  getListPerson(personGroupId) {
+    this.faceServiceProvider.GetListPerson(personGroupId).then(data => {
+      console.log(data);
+      this.persons = data;
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
+  createPerson() {
+    let modal = this.modalCtrl.create(CreatePersonModalPage, {}, { enableBackdropDismiss: false });
+    modal.onDidDismiss(res => {
+      if (res) {
+        this.faceServiceProvider.CreatePerson(this.personGroup.personGroupId, res).then(data => {
+          this.getListPerson(this.personGroup.personGroupId);
+        }).catch(err => {
+          console.log(err);
+        });
+      }
+    });
+    modal.present();
   }
 
 }
