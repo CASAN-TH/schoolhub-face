@@ -1,0 +1,22 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons start>
+      <button #dismissbtn ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>addFace</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <video id="video" preload="auto" autoplay [style.width]="getWidth()"></video>
+  <canvas #canvas></canvas>
+</ion-content>
+
+<ion-footer>
+  <div #countNumber text-center><h1>1</h1></div>
+</ion-footer>

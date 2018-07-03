@@ -10,6 +10,7 @@ import { SettingGroupPage } from '../pages/setting-group/setting-group';
 import { HttpClientModule  } from '@angular/common/http';
 import { PersonGroupDetailPage } from '../pages/person-group-detail/person-group-detail';
 import { CreatePersonModalPage } from '../pages/create-person-modal/create-person-modal';
+import { AddFacePage } from '../pages/add-face/add-face';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { CreatePersonModalPage } from '../pages/create-person-modal/create-perso
     HomePage,
     SettingGroupPage,
     PersonGroupDetailPage,
-    CreatePersonModalPage
+    CreatePersonModalPage,
+    AddFacePage
   ],
   imports: [
     HttpClientModule,
@@ -30,7 +32,8 @@ import { CreatePersonModalPage } from '../pages/create-person-modal/create-perso
     HomePage,
     SettingGroupPage,
     PersonGroupDetailPage,
-    CreatePersonModalPage
+    CreatePersonModalPage,
+    AddFacePage
   ],
   providers: [
     StatusBar,

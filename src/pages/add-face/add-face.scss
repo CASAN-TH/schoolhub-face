@@ -1,0 +1,10 @@
+page-add-face {
+    video,
+    canvas {
+        position: absolute;
+        margin: 0 auto;
+    }
+    canvas {
+        z-index: 999;
+    }
+}
