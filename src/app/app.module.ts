@@ -8,12 +8,14 @@ import { HomePage } from '../pages/home/home';
 import { FaceServiceProvider } from '../providers/face-service/face-service';
 import { SettingGroupPage } from '../pages/setting-group/setting-group';
 import { HttpClientModule  } from '@angular/common/http';
+import { PersonGroupDetailPage } from '../pages/person-group-detail/person-group-detail';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    SettingGroupPage
+    SettingGroupPage,
+    PersonGroupDetailPage
   ],
   imports: [
     HttpClientModule,
@@ -24,7 +26,8 @@ import { HttpClientModule  } from '@angular/common/http';
   entryComponents: [
     MyApp,
     HomePage,
-    SettingGroupPage
+    SettingGroupPage,
+    PersonGroupDetailPage
   ],
   providers: [
     StatusBar,

@@ -7,12 +7,27 @@
 <ion-header>
 
   <ion-navbar>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>createPersonGroupModal</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="save()">Done</button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <ion-item>
+    <ion-label floating>PersonGroup Name</ion-label>
+    <ion-input type="text" [(ngModel)]="personGroupData.name"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>PersonGroup Description</ion-label>
+    <ion-input type="text" [(ngModel)]="personGroupData.userData"></ion-input>
+  </ion-item>
 </ion-content>
