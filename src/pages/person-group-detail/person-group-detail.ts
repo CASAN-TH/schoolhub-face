@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angu
 import { CreatePersonModalPage } from '../create-person-modal/create-person-modal';
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
 import { AddFacePage } from '../add-face/add-face';
+import firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -35,14 +36,29 @@ export class PersonGroupDetailPage {
     modal.onDidDismiss(res => {
       if (res) {
         this.faceServiceProvider.CreatePerson(this.personGroup.personGroupId, res).then(data => {
-          let modal2 = this.modalCtrl.create(AddFacePage,{}, { enableBackdropDismiss: false });
-          modal2.onDidDismiss(res2 =>{
-            if(res2){
-
+          let person: any = data;
+          let modal2 = this.modalCtrl.create(AddFacePage, {}, { enableBackdropDismiss: false });
+          modal2.onDidDismiss(res2 => {
+            if (res2) {
+              res2.forEach(face => {
+                let storageRef = firebase.storage().ref();
+                const filename = Math.floor(Date.now() / 1000);
+                const imageRef = storageRef.child(`images/${filename}.jpg`);
+                imageRef.putString(face, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
+                  imageRef.getDownloadURL().then(url => {
+                    this.faceServiceProvider.AddPersonFace(this.personGroup.personGroupId, person.personId, { url: url }).then(data => {
+                      console.log(data);
+                    }).catch(err => {
+                      console.log(err);
+                    });
+                  }).catch(err => {
+                    console.log(err);
+                  });
+                });
+              });
             }
           });
           modal2.present();
-          //this.getListPerson(this.personGroup.personGroupId);
         }).catch(err => {
           console.log(err);
         });

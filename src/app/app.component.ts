@@ -2,7 +2,6 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { HomePage } from '../pages/home/home';
 import 'tracking/build/tracking';
 import 'tracking/build/data/face';
 import firebase from 'firebase';
@@ -22,16 +21,16 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
 
-      // const firebaseConfig = {
-      //   apiKey: 'AIzaSyAKkCULXo1SNuBRN4KRzHl9D2DxV8LzZWE',
-      //   authDomain: 'testdev-475e6.firebaseapp.com',
-      //   databaseURL: 'testdev-475e6.firebaseio.com',
-      //   storageBucket: 'testdev-475e6.appspot.com',
-      //   messagingSenderId: '307498376583'
+      const firebaseConfig = {
+        apiKey: 'AIzaSyAKkCULXo1SNuBRN4KRzHl9D2DxV8LzZWE',
+        authDomain: 'testdev-475e6.firebaseapp.com',
+        databaseURL: 'testdev-475e6.firebaseio.com',
+        storageBucket: 'testdev-475e6.appspot.com',
+        messagingSenderId: '307498376583'
 
-      // };
+      };
 
-      // firebase.initializeApp(firebaseConfig);
+      firebase.initializeApp(firebaseConfig);
 
       // let canvas: any = this.canvas.nativeElement;
       // let context: any = canvas.getContext('2d');

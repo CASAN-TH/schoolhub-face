@@ -30,4 +30,12 @@ export class FaceServiceProvider {
     return this.http.post(this.uriBase + '/persongroups/' + personGroupId + '/persons', body, { headers: this.headers }).toPromise();
   }
 
+  AddPersonFace(personGroupId, personId, body) {
+    return this.http.post(this.uriBase + '/persongroups/' + personGroupId + '/persons/' + personId + '/persistedFaces', body, { headers: this.headers }).toPromise();
+  }
+
+  TrainPersonGroup(personGroupId) {
+    return this.http.post(this.uriBase + '/persongroups/' + personGroupId + '/train', {}, { headers: this.headers }).toPromise();
+  }
+
 }
