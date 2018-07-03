@@ -29,6 +29,7 @@ export class AddFacePage {
     let task = tracking.track('#video', tracker, { camera: true });
     var countNum = 0;
     var faces = [];
+    window.localStorage.removeItem('faces');
     tracker.on('track', function (event) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       if (event.data.length === 0) {
