@@ -61,7 +61,11 @@ export class MyApp {
           const filename = Math.floor(Date.now() / 1000);
           const imageRef = storageRef.child(`images/${filename}.jpg`);
           imageRef.putString(img.src, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
-            console.log(snapshot);
+            imageRef.getDownloadURL().then(url => {
+              console.log(url);
+            }).catch(err => {
+              console.log(err);
+            });
           });
           /////////////////////////////////////////
           event.data.forEach(function (rect) {
