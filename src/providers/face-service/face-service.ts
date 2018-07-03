@@ -42,4 +42,9 @@ export class FaceServiceProvider {
     return this.http.get(this.uriBase + '/persongroups/' + personGroupId + '/training', { headers: this.headers }).toPromise();
   }
 
+  Detect(body) {
+    return this.http.post(this.uriBase + '/detect', body, { headers: this.headers }).toPromise();
+
+  }
+
 }

@@ -2,8 +2,11 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import 'tracking/build/tracking';
 import 'tracking/build/data/face';
+import { FaceServiceProvider } from '../../providers/face-service/face-service';
+import firebase from 'firebase';
 // import 'tracking/build/data/eye';
 // import 'tracking/build/data/mouth';
+
 declare var tracking: any;
 @Component({
   selector: 'page-home',
@@ -11,7 +14,7 @@ declare var tracking: any;
 })
 export class HomePage {
   @ViewChild('canvas') canvas: ElementRef;
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
 
   }
 
@@ -47,6 +50,7 @@ export class HomePage {
           }
           if (countNumber < 5) {
             countNumber++;
+            console.log(countNumber);
           }
           else {
             window.localStorage.setItem('faces', JSON.stringify(faces));
@@ -56,6 +60,33 @@ export class HomePage {
         });
       }
     });
+  }
+
+  testClick() {
+    let faces = JSON.parse(window.localStorage.getItem('faces'));
+    let faceIDs = [];
+    faces.forEach(face => {
+      let storageRef = firebase.storage().ref();
+      const filename = Math.floor(Date.now() / 1000);
+      const imageRef = storageRef.child(`images/${filename}.jpg`);
+      imageRef.putString(face, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
+        imageRef.getDownloadURL().then(url => {
+          this.faceServiceProvider.Detect({ url: url }).then(res => {
+            let data: any = res;
+            data.forEach(itm => {
+              faceIDs.push(itm.faceId);
+            });
+            console.log(faceIDs);
+          }).catch(err => {
+            console.log(err);
+          });
+        }).catch(err => {
+          console.log(err);
+        });
+      });
+      
+    });
+   
   }
 
   getWidth() {
