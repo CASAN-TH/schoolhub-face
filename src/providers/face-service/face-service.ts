@@ -38,4 +38,8 @@ export class FaceServiceProvider {
     return this.http.post(this.uriBase + '/persongroups/' + personGroupId + '/train', {}, { headers: this.headers }).toPromise();
   }
 
+  GetPersonGroupTrainingStatus(personGroupId) {
+    return this.http.get(this.uriBase + '/persongroups/' + personGroupId + '/training', { headers: this.headers }).toPromise();
+  }
+
 }

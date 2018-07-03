@@ -67,4 +67,29 @@ export class PersonGroupDetailPage {
     modal.present();
   }
 
+  train() {
+    this.faceServiceProvider.TrainPersonGroup(this.personGroup.personGroupId).then(data => {
+      this.getStatusRecuring();
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
+  getStatusRecuring() {
+    this.faceServiceProvider.GetPersonGroupTrainingStatus(this.personGroup.personGroupId).then(res => {
+      let data: any = res;
+      if (data.status === 'running') {
+        this.getStatusRecuring();
+      }
+      else {
+        console.log(data.status);
+        if (data.status === 'succeeded') {
+
+        }
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
 }

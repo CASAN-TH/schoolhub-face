@@ -10,10 +10,10 @@
 <ion-content padding>
   <ion-list>
     <button ion-item *ngFor="let personGroup of personGroups" (click)="gotoDetail(personGroup)">
-        <h2>{{ personGroup.name }}</h2>
-        <p>{{ personGroup.userData }}</p>
+      <h2>{{ personGroup.name }}</h2>
+      <p>{{ personGroup.userData }}</p>
     </button>
-    
+
   </ion-list>
   <ion-fab bottom right>
     <button ion-fab (click)="createPersonGroup()">
