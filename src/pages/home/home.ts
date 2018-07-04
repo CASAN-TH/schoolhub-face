@@ -45,17 +45,12 @@ export class HomePage {
         var img = new Image();
         img.src = _canvas.toDataURL();
         event.data.forEach(function (rect) {
-          if (faces.length < 5) {
-            faces.push(img.src);
-          }
-          if (countNumber < 5) {
-            countNumber++;
-            console.log(countNumber);
-          }
-          else {
+          faces.push(img.src);
+          if (faces.length === 2) {
+
             window.localStorage.setItem('faces', JSON.stringify(faces));
-            // let face = JSON.parse(window.localStorage.getItem('faces'));
-            // console.log(face);
+            let face = JSON.parse(window.localStorage.getItem('faces'));
+            console.log(face);
           }
         });
       }
@@ -76,7 +71,20 @@ export class HomePage {
             data.forEach(itm => {
               faceIDs.push(itm.faceId);
             });
-            console.log(faceIDs);
+
+            this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: 'aaa' }).then(res => {
+              let cadidates: any = res;
+              cadidates.forEach(itm => {
+                if (itm.candidates) {
+                  itm.candidates.forEach(element => {
+                    console.log(element.personId);
+
+                  });
+                }
+              });
+            }).catch(err => {
+              console.log(err);
+            });
           }).catch(err => {
             console.log(err);
           });
@@ -84,9 +92,7 @@ export class HomePage {
           console.log(err);
         });
       });
-      
     });
-   
   }
 
   getWidth() {

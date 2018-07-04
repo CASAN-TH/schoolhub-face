@@ -44,7 +44,10 @@ export class FaceServiceProvider {
 
   Detect(body) {
     return this.http.post(this.uriBase + '/detect', body, { headers: this.headers }).toPromise();
+  }
 
+  Identify(body) {
+    return this.http.post(this.uriBase + '/identify', body, { headers: this.headers }).toPromise();
   }
 
 }
