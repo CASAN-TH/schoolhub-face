@@ -7,6 +7,7 @@ import firebase from 'firebase';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { LoginPage } from '../login/login';
 import { ClassField } from '@angular/compiler/src/output/output_ast';
+import { AttendantServiceProvider } from '../../providers/attendant-service/attendant-service';
 // import 'tracking/build/data/eye';
 // import 'tracking/build/data/mouth';
 
@@ -19,7 +20,7 @@ export class HomePage {
   personGroupId: any;
   person: any = {};
   faces: any;
-  constructor(public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
+  constructor(public attendantServiceProvider: AttendantServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
     if (this.auth.authenticated()) {
       this.personGroupId = this.auth.Uesr().schoolid;
     }
@@ -51,7 +52,7 @@ export class HomePage {
           var img = new Image();
           img.src = _canvas.toDataURL();
           window.localStorage.setItem('face', img.src);
-          
+
         });
       }
     });
@@ -61,7 +62,7 @@ export class HomePage {
   }
 
   theLoop() {
-    this.person ={}
+    this.person = {}
     let face = window.localStorage.getItem('face');
     window.localStorage.removeItem('face');
     //console.log(face);
@@ -74,12 +75,13 @@ export class HomePage {
   }
 
   detect(face) {
-   
+
     let storageRef = firebase.storage().ref();
     const filename = Math.floor(Date.now() / 1000);
     const imageRef = storageRef.child(`images/${filename}.jpg`);
     imageRef.putString(face, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
       imageRef.getDownloadURL().then(url => {
+        console.log(url);
         this.faceServiceProvider.Detect({ url: url }).then(res => {
           let data: any = res;
           console.log(data);
@@ -96,6 +98,15 @@ export class HomePage {
                     this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
                       this.person = res;
                       console.log(this.person);
+                      let bodyReq = {
+                        image: url,
+                        citizenid: this.person.userData
+                      };
+                      this.attendantServiceProvider.Checkin(bodyReq).then(res => {
+                        console.log(res);
+                      }).catch(err => {
+                        console.log(err);
+                      });
                     }).catch(err => {
                       //console.log(err);
                     });

@@ -23,8 +23,11 @@ export class LoginPage {
   login() {
     this.auth.Signin(this.credencial).then(res => {
       let data: any = res;
+     
       window.localStorage.setItem('token', data.token);
+      console.log(window.localStorage.getItem('token'));
       let user: any = this.auth.Uesr();
+      console.log(user);
       this.faceServiceProvider.CreatePersonGroup(user.schoolid, { name: user.schoolid, userData: user.schoolid }).then(res => {
         this.navCtrl.setRoot(HomePage);
       }).catch(err => {

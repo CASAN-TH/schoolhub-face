@@ -14,7 +14,7 @@ import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 export class PersonGroupDetailPage {
   personGroup: any = {};
   persons: any;
-  constructor(public auth: AuthServiceProvider,public faceServiceProvider: FaceServiceProvider, public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public auth: AuthServiceProvider, public faceServiceProvider: FaceServiceProvider, public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams) {
     this.personGroup.personGroupId = this.auth.Uesr().schoolid;
     this.getListPerson(this.personGroup.personGroupId);
   }
@@ -57,6 +57,8 @@ export class PersonGroupDetailPage {
                   });
                 });
               });
+
+              this.getListPerson(this.personGroup.personGroupId);
             }
           });
           modal2.present();

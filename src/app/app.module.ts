@@ -13,6 +13,7 @@ import { CreatePersonModalPage } from '../pages/create-person-modal/create-perso
 import { AddFacePage } from '../pages/add-face/add-face';
 import { LoginPage } from '../pages/login/login';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
+import { AttendantServiceProvider } from '../providers/attendant-service/attendant-service';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FaceServiceProvider,
-    AuthServiceProvider
+    AuthServiceProvider,
+    AttendantServiceProvider
   ]
 })
 export class AppModule {}
