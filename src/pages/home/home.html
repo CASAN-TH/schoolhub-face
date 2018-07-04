@@ -1,12 +1,11 @@
 <ion-header>
     <ion-navbar>
         <ion-buttons start>
-            <button ion-button (click)="testClick()">Test</button>
+            <button ion-button menuToggle icon-only>
+                <ion-icon name='menu'></ion-icon>
+            </button>
         </ion-buttons>
-        <ion-title>title</ion-title>
-        <ion-buttons end>
-            <button ion-button (click)="logout()">Logout</button>
-        </ion-buttons>
+        <ion-title>Home</ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content>
@@ -22,10 +21,10 @@
         <ion-col>
             <ion-card>
                 <ion-card-header>
-                    {{person.name}}
+                    ชื่อ {{person.name || 'ไม่รู้จัก'}}
                 </ion-card-header>
                 <ion-card-content>
-                    {{person.userData}}
+                    เลขที่บัตร {{person.userData || 'ไม่รู้จัก'}}
                 </ion-card-content>
             </ion-card>
         </ion-col>

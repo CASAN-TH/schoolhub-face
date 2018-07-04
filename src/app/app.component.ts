@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import firebase from 'firebase';
@@ -13,6 +13,7 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 })
 export class MyApp {
   rootPage: any = LoginPage;
+  @ViewChild(Nav) nav;
   constructor(auth: AuthServiceProvider, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       statusBar.styleDefault();
@@ -34,5 +35,20 @@ export class MyApp {
       }
     });
   }
+
+  openHome() {
+    this.nav.setRoot(HomePage);
+  }
+
+  logout() {
+    window.localStorage.removeItem('token');
+    this.nav.setRoot(LoginPage);
+  }
+
+  openPagePersonGroupDetail() {
+    this.nav.setRoot(PersonGroupDetailPage);
+  }
+
+
 }
 

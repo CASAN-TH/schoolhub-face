@@ -5,9 +5,9 @@
         <ion-icon name="close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Create Person</ion-title>
+    <ion-title>สร้างบุคคล</ion-title>
     <ion-buttons end>
-      <button ion-button (click)="save()">Done</button>
+      <button ion-button (click)="save()">บันทึก</button>
     </ion-buttons>
   </ion-navbar>
 
@@ -16,11 +16,11 @@
 
 <ion-content padding>
   <ion-item>
-    <ion-label floating>Person Name</ion-label>
+    <ion-label floating>ชื่อ</ion-label>
     <ion-input type="text" [(ngModel)]="personData.name"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label floating>Person Description</ion-label>
+    <ion-label floating>เลขที่บัตรประชาชน</ion-label>
     <ion-input type="text" [(ngModel)]="personData.userData"></ion-input>
   </ion-item>
 </ion-content>
