@@ -7,8 +7,24 @@
     </ion-navbar>
 </ion-header>
 <ion-content>
-    <video id="video" preload="auto" autoplay [style.width]="getWidth()"></video>
-    <canvas #canvas></canvas>
+    <ion-row>
+        <ion-col>
+            <video id="video" preload="auto" autoplay [style.width]="getWidth()"></video>
+            <canvas #canvas></canvas>
+        </ion-col>
+    </ion-row>
 </ion-content>
-<!-- <ion-footer text-center>
-</ion-footer> -->
+<ion-footer text-center>
+    <ion-row>
+        <ion-col>
+            <ion-card>
+                <ion-card-header>
+                    {{person.name}}
+                </ion-card-header>
+                <ion-card-content>
+                    {{person.userData}}
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
+    </ion-row>
+</ion-footer>

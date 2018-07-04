@@ -14,6 +14,7 @@ declare var tracking: any;
 })
 export class HomePage {
   @ViewChild('canvas') canvas: ElementRef;
+  person: any = {};
   constructor(public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
 
   }
@@ -77,8 +78,12 @@ export class HomePage {
               cadidates.forEach(itm => {
                 if (itm.candidates) {
                   itm.candidates.forEach(element => {
-                    console.log(element.personId);
-
+                    this.faceServiceProvider.GetPerson('aaa', element.personId).then(res => {
+                      this.person = res;
+                      console.log(this.person);
+                    }).catch(err => {
+                      console.log(err);
+                    });
                   });
                 }
               });

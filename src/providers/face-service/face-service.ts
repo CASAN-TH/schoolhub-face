@@ -50,4 +50,8 @@ export class FaceServiceProvider {
     return this.http.post(this.uriBase + '/identify', body, { headers: this.headers }).toPromise();
   }
 
+  GetPerson(personGroupId: string, personId: string) {
+    return this.http.get(this.uriBase + '/persongroups/' + personGroupId + '/persons/' + personId, { headers: this.headers }).toPromise();
+  }
+
 }
