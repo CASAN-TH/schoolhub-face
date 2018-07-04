@@ -4,6 +4,8 @@ import 'tracking/build/tracking';
 import 'tracking/build/data/face';
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
 import firebase from 'firebase';
+import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
+import { LoginPage } from '../login/login';
 // import 'tracking/build/data/eye';
 // import 'tracking/build/data/mouth';
 
@@ -13,17 +15,15 @@ declare var tracking: any;
   templateUrl: 'home.html'
 })
 export class HomePage {
-  @ViewChild('canvas') canvas: ElementRef;
+  personGroupId: any;
   person: any = {};
-  constructor(public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
-
+  constructor(public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
+    if (this.auth.authenticated()) {
+      this.personGroupId = this.auth.Uesr().schoolid;
+    }
   }
 
   ionViewDidLoad() {
-    let canvas: any = this.canvas.nativeElement;
-    let context: any = canvas.getContext('2d');
-    context.strokeStyle = '#00e000';
-    context.strokeRect(100, 10, 50, 50);
     let tracker = new tracking.ObjectTracker('face');
     tracker.setInitialScale(4);
     tracker.setStepSize(2);
@@ -33,7 +33,6 @@ export class HomePage {
     var countNumber = 0;
     window.localStorage.removeItem('faces');
     tracker.on('track', function (event) {
-      context.clearRect(0, 0, canvas.width, canvas.height);
       if (event.data.length === 0) {
         // No colors were detected in this frame.
       } else {
@@ -56,11 +55,13 @@ export class HomePage {
         });
       }
     });
+
+    this.train();
   }
 
   testClick() {
     let faces = JSON.parse(window.localStorage.getItem('faces'));
-    let faceIDs = [];
+    // let faceIDs = [];
     faces.forEach(face => {
       let storageRef = firebase.storage().ref();
       const filename = Math.floor(Date.now() / 1000);
@@ -69,27 +70,33 @@ export class HomePage {
         imageRef.getDownloadURL().then(url => {
           this.faceServiceProvider.Detect({ url: url }).then(res => {
             let data: any = res;
-            data.forEach(itm => {
-              faceIDs.push(itm.faceId);
-            });
-
-            this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: 'aaa' }).then(res => {
-              let cadidates: any = res;
-              cadidates.forEach(itm => {
-                if (itm.candidates) {
-                  itm.candidates.forEach(element => {
-                    this.faceServiceProvider.GetPerson('aaa', element.personId).then(res => {
-                      this.person = res;
-                      console.log(this.person);
-                    }).catch(err => {
-                      console.log(err);
+            console.log(data);
+            // data.forEach(itm => {
+            //   faceIDs.push(itm.faceId);
+            // });
+            this.faceServiceProvider.PushFaceIds(data).then(faceIDs => {
+              console.log(faceIDs);
+              this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: this.personGroupId }).then(res => {
+                let cadidates: any = res;
+                cadidates.forEach(itm => {
+                  if (itm.candidates) {
+                    itm.candidates.forEach(element => {
+                      this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
+                        this.person = res;
+                        console.log(this.person);
+                      }).catch(err => {
+                        console.log(err);
+                      });
                     });
-                  });
-                }
+                  }
+                });
+              }).catch(err => {
+                console.log(err);
               });
             }).catch(err => {
-              console.log(err);
+
             });
+
           }).catch(err => {
             console.log(err);
           });
@@ -98,6 +105,36 @@ export class HomePage {
         });
       });
     });
+  }
+
+  train() {
+    this.faceServiceProvider.TrainPersonGroup(this.personGroupId).then(data => {
+      this.getStatusRecuring();
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
+  getStatusRecuring() {
+    this.faceServiceProvider.GetPersonGroupTrainingStatus(this.personGroupId).then(res => {
+      let data: any = res;
+      if (data.status === 'running') {
+        this.getStatusRecuring();
+      }
+      else {
+        console.log(data.status);
+        if (data.status === 'succeeded') {
+
+        }
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
+  logout() {
+    window.localStorage.removeItem('token');
+    this.navCtrl.setRoot(LoginPage);
   }
 
   getWidth() {

@@ -11,6 +11,8 @@ import { HttpClientModule  } from '@angular/common/http';
 import { PersonGroupDetailPage } from '../pages/person-group-detail/person-group-detail';
 import { CreatePersonModalPage } from '../pages/create-person-modal/create-person-modal';
 import { AddFacePage } from '../pages/add-face/add-face';
+import { LoginPage } from '../pages/login/login';
+import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { AddFacePage } from '../pages/add-face/add-face';
     SettingGroupPage,
     PersonGroupDetailPage,
     CreatePersonModalPage,
-    AddFacePage
+    AddFacePage,
+    LoginPage
   ],
   imports: [
     HttpClientModule,
@@ -33,13 +36,15 @@ import { AddFacePage } from '../pages/add-face/add-face';
     SettingGroupPage,
     PersonGroupDetailPage,
     CreatePersonModalPage,
-    AddFacePage
+    AddFacePage,
+    LoginPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    FaceServiceProvider
+    FaceServiceProvider,
+    AuthServiceProvider
   ]
 })
 export class AppModule {}

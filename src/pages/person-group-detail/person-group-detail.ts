@@ -4,6 +4,7 @@ import { CreatePersonModalPage } from '../create-person-modal/create-person-moda
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
 import { AddFacePage } from '../add-face/add-face';
 import firebase from 'firebase';
+import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 
 @IonicPage()
 @Component({
@@ -13,8 +14,8 @@ import firebase from 'firebase';
 export class PersonGroupDetailPage {
   personGroup: any = {};
   persons: any;
-  constructor(public faceServiceProvider: FaceServiceProvider, public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams) {
-    this.personGroup = navParams.get('personGroup');
+  constructor(public auth: AuthServiceProvider,public faceServiceProvider: FaceServiceProvider, public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams) {
+    this.personGroup.personGroupId = this.auth.Uesr().schoolid;
     this.getListPerson(this.personGroup.personGroupId);
   }
 

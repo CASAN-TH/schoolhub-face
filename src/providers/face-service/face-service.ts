@@ -54,4 +54,14 @@ export class FaceServiceProvider {
     return this.http.get(this.uriBase + '/persongroups/' + personGroupId + '/persons/' + personId, { headers: this.headers }).toPromise();
   }
 
+  PushFaceIds(faces: any) {
+    let faceIDs: any = [];
+    faces.forEach(face => {
+      faceIDs.push(face.faceId);
+    });
+    return new Promise((resove, reject) => {
+      resove(faceIDs);
+    })
+  }
+
 }
