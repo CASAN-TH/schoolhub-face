@@ -26,7 +26,7 @@ export class AuthServiceProvider {
 
   Uesr() {
     if (this.authenticated()) {
-      console.log(window.localStorage.getItem('token'));
+      // console.log(window.localStorage.getItem('token'));
       return this.jwt.decodeToken(window.localStorage.getItem('token'))
     } else {
       return null;

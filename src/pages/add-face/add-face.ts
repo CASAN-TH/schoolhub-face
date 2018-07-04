@@ -13,33 +13,33 @@ export class AddFacePage {
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
   }
   ionViewDidLoad() {
-    let tracker = new tracking.ObjectTracker('face');
-    tracker.setInitialScale(4);
-    tracker.setStepSize(2);
-    tracker.setEdgesDensity(0.1);
-    let task = tracking.track('#video', tracker, { camera: true });
-    window.localStorage.removeItem('faces');
-    tracker.on('track', function (event) {
-      if (event.data.length === 0) {
-        // No colors were detected in this frame.
-      } else {
-        var _video: any = document.querySelector('video');
-        var _canvas: any = document.createElement('canvas');
-        _canvas.height = _video.videoHeight;
-        _canvas.width = _video.videoWidth;
-        var ctx = _canvas.getContext('2d');
+    // let tracker = new tracking.ObjectTracker('face');
+    // tracker.setInitialScale(4);
+    // tracker.setStepSize(2);
+    // tracker.setEdgesDensity(0.1);
+    // let task = tracking.track('#video', tracker, { camera: true });
+    // window.localStorage.removeItem('faces');
+    // tracker.on('track', function (event) {
+    //   if (event.data.length === 0) {
+    //     // No colors were detected in this frame.
+    //   } else {
+    //     var _video: any = document.querySelector('video');
+    //     var _canvas: any = document.createElement('canvas');
+    //     _canvas.height = _video.videoHeight;
+    //     _canvas.width = _video.videoWidth;
+    //     var ctx = _canvas.getContext('2d');
 
 
-        event.data.forEach(function (rect) {
-          ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
-          var img = new Image();
-          img.src = _canvas.toDataURL();
-          window.localStorage.setItem('face', img.src);
+    //     event.data.forEach(function (rect) {
+    //       ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
+    //       var img = new Image();
+    //       img.src = _canvas.toDataURL();
+    //       window.localStorage.setItem('face', img.src);
 
-        });
-      }
-    });
-    this.theLoop();
+    //     });
+    //   }
+    // });
+   // this.theLoop();
   }
 
   theLoop() {

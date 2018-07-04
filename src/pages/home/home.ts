@@ -20,45 +20,45 @@ export class HomePage {
   personGroupId: any;
   person: any = {};
   faces: any;
+  tracker: any;
+  task: any;
   constructor(public attendantServiceProvider: AttendantServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
     if (this.auth.authenticated()) {
       this.personGroupId = this.auth.Uesr().schoolid;
     }
+    this.tracker = new tracking.ObjectTracker('face');
+    this.tracker.setInitialScale(4);
+    this.tracker.setStepSize(2);
+    this.tracker.setEdgesDensity(0.1);
   }
 
   ionViewDidLoad() {
-    let tracker = new tracking.ObjectTracker('face');
-    tracker.setInitialScale(4);
-    tracker.setStepSize(2);
-    tracker.setEdgesDensity(0.1);
-    let task = tracking.track('#video', tracker, { camera: true });
-    var faces = [];
-    var countNumber = 0;
-    window.localStorage.removeItem('faces');
-    tracker.on('track', function (event) {
+   
+   
+    this.task = tracking.track('#video', this.tracker, { camera: true });
+    this.tracker.on('track', event => {
       if (event.data.length === 0) {
-        // No colors were detected in this frame.
+
       } else {
         var _video: any = document.querySelector('video');
         var _canvas: any = document.createElement('canvas');
         _canvas.height = _video.videoHeight;
         _canvas.width = _video.videoWidth;
         var ctx = _canvas.getContext('2d');
-
-
-        event.data.forEach(function (rect) {
-
+        event.data.forEach(rect => {
           ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
           var img = new Image();
           img.src = _canvas.toDataURL();
           window.localStorage.setItem('face', img.src);
-
+         console.log('object');
         });
+       
       }
-    });
-
+      this.task.stop();
+    })
+    
     this.train();
-    this.theLoop();
+    //this.theLoop();
   }
 
   theLoop() {
@@ -149,7 +149,7 @@ export class HomePage {
         this.getStatusRecuring();
       }
       else {
-        console.log(data.status);
+        // console.log(data.status);
         if (data.status === 'succeeded') {
 
         }

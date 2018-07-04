@@ -1,10 +1,8 @@
 <ion-header>
     <ion-navbar>
-        <ion-buttons start>
-            <button ion-button menuToggle icon-only>
-                <ion-icon name='menu'></ion-icon>
-            </button>
-        </ion-buttons>
+        <button ion-button menuToggle icon-only>
+            <ion-icon name='menu'></ion-icon>
+        </button>
         <ion-title>Home</ion-title>
     </ion-navbar>
 </ion-header>
@@ -12,7 +10,6 @@
     <ion-row>
         <ion-col>
             <video id="video" preload="auto" autoplay [style.width]="getWidth()"></video>
-            <canvas #canvas></canvas>
         </ion-col>
     </ion-row>
 </ion-content>

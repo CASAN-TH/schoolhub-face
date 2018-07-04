@@ -1,10 +1,6 @@
 page-home {
-    video,
-    canvas {
+    video {
         position: absolute;
         margin: 0 auto;
-    }
-    canvas {
-        z-index: 999;
     }
 }
