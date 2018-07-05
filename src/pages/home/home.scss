@@ -3,4 +3,10 @@ page-home {
         position: absolute;
         margin: 0 auto;
     }
+    .col {
+        padding: 0px !important;
+    }
+    .footer-md::before {
+        background-image: none;
+    }
 }
