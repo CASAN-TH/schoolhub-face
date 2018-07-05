@@ -13,33 +13,36 @@ export class AddFacePage {
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
   }
   ionViewDidLoad() {
-    // let tracker = new tracking.ObjectTracker('face');
-    // tracker.setInitialScale(4);
-    // tracker.setStepSize(2);
-    // tracker.setEdgesDensity(0.1);
-    // let task = tracking.track('#video', tracker, { camera: true });
-    // window.localStorage.removeItem('faces');
-    // tracker.on('track', function (event) {
-    //   if (event.data.length === 0) {
-    //     // No colors were detected in this frame.
-    //   } else {
-    //     var _video: any = document.querySelector('video');
-    //     var _canvas: any = document.createElement('canvas');
-    //     _canvas.height = _video.videoHeight;
-    //     _canvas.width = _video.videoWidth;
-    //     var ctx = _canvas.getContext('2d');
+    this.faceDetecting();
+    this.theLoop();
+  }
 
+  faceDetecting() {
+    const tracker = new tracking.ObjectTracker('face');
+    tracker.setInitialScale(4);
+    tracker.setStepSize(0.5);
+    tracker.setEdgesDensity(0);
+    const trackingTask = tracking.track('#video', tracker, { camera: true });
+    trackingTask.run();
+    // on tracker start, if we found face (event.data)
+    tracker.on('track', function (event) {
 
-    //     event.data.forEach(function (rect) {
-    //       ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
-    //       var img = new Image();
-    //       img.src = _canvas.toDataURL();
-    //       window.localStorage.setItem('face', img.src);
-
-    //     });
-    //   }
-    // });
-   // this.theLoop();
+      //console.log(event);
+      if (event.data.length > 0) {
+        var _video: any = document.querySelector('video');
+        var _canvas: any = document.createElement('canvas');
+        _canvas.height = _video.videoHeight;
+        _canvas.width = _video.videoWidth;
+        var ctx = _canvas.getContext('2d');
+        ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
+        var img = new Image();
+        img.src = _canvas.toDataURL();
+        window.localStorage.setItem('face', img.src);
+        setTimeout(() => {
+          trackingTask.stop();
+        }, 2500);
+      }
+    });
   }
 
   theLoop() {
@@ -50,6 +53,7 @@ export class AddFacePage {
     if (face) {
       if(this.presonFaces.length < 5){
         this.presonFaces.push(face);
+        this.faceDetecting();
       }else{
         this.viewCtrl.dismiss(this.presonFaces);
       }

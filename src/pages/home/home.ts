@@ -88,37 +88,40 @@ export class HomePage {
           // data.forEach(itm => {
           //   faceIDs.push(itm.faceId);
           // });
-          this.faceServiceProvider.PushFaceIds(data).then(faceIDs => {
-            console.log(faceIDs);
-            this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: this.personGroupId }).then(res => {
-              let cadidates: any = res;
-              cadidates.forEach(itm => {
-                if (itm.candidates) {
-                  itm.candidates.forEach(element => {
-                    this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
-                      this.person = res;
-                      
-                      let bodyReq = {
-                        image: url,
-                        citizenid: this.person.userData
-                      };
-                      this.attendantServiceProvider.Checkin(bodyReq).then(res => {
-                        console.log(res);
+          if(data.length > 0){
+            this.faceServiceProvider.PushFaceIds(data).then(faceIDs => {
+              console.log(faceIDs);
+              this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: this.personGroupId }).then(res => {
+                let cadidates: any = res;
+                cadidates.forEach(itm => {
+                  if (itm.candidates) {
+                    itm.candidates.forEach(element => {
+                      this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
+                        this.person = res;
+                        
+                        let bodyReq = {
+                          image: url,
+                          citizenid: this.person.userData
+                        };
+                        this.attendantServiceProvider.Checkin(bodyReq).then(res => {
+                          console.log(res);
+                        }).catch(err => {
+                          console.log(err);
+                        });
                       }).catch(err => {
-                        console.log(err);
+                        //console.log(err);
                       });
-                    }).catch(err => {
-                      //console.log(err);
                     });
-                  });
-                }
+                  }
+                });
+              }).catch(err => {
+                //console.log(err);
               });
             }).catch(err => {
-              //console.log(err);
+  
             });
-          }).catch(err => {
-
-          });
+          }
+          
 
         }).catch(err => {
           //console.log(err);
