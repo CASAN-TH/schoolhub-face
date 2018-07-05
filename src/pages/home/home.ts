@@ -79,7 +79,7 @@ export class HomePage {
       //console.log(face);
       if (face) {
         console.log('detect');
-        this.detect(face)
+        this.detect2(face)
       } else {
         console.log('no face');
         
@@ -198,6 +198,84 @@ export class HomePage {
       }).catch(err => {
         //console.log(err);
       });
+    });
+  }
+
+  detect2(face) {
+    console.log('in detecting');
+    this.faceServiceProvider.DetectStream(face).then(res => {
+      console.log('Detect success');
+      let data: any = res;
+      if (data.length > 0) {
+        console.log('found ' + data.length + ' face(s)');
+        this.faceServiceProvider.PushFaceIds(data).then(faceIDs => {
+          console.log(faceIDs);
+          this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: this.personGroupId }).then(res => {
+            let cadidates: any = res;
+            console.log('Identify success');
+            if (cadidates) {
+              cadidates.forEach(itm => {
+                if (itm.candidates) {
+                  if (itm.candidates.length > 0) {
+                    console.log('found ' + itm.candidates.length + ' person(s)');
+                    itm.candidates.forEach(element => {
+                      if (this.currentPerson !== element.personId) {
+                        this.currentPerson = element.personId;
+                        this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
+                          this.person = res;
+                          this.person.image = face;
+
+                          let bodyReq = {
+                            image: face,
+                            citizenid: this.person.userData
+                          };
+
+                          let modal = this.modalCtrl.create(CompletePage, { person: this.person });
+                          modal.onDidDismiss(res => {
+                            this.faceDetecting();
+                          });
+                          modal.present();
+
+                          // this.attendantServiceProvider.Checkin(bodyReq).then(res => {
+                          //   console.log(res);
+                          // }).catch(err => {
+                          //   console.log(err);
+                          // });
+                        }).catch(err => {
+                          //console.log(err);
+                        });
+                      } else {
+                        this.faceDetecting();
+                      }
+
+                    });
+                  } else {
+                    this.faceDetecting();
+                  }
+
+                }
+                else {
+                  this.faceDetecting();
+                }
+              });
+            } else {
+              this.faceDetecting();
+            }
+          }).catch(err => {
+            //console.log(err);
+            this.faceDetecting();
+          });
+        }).catch(err => {
+          this.faceDetecting();
+        });
+      } else {
+        this.faceDetecting();
+      }
+
+
+    }).catch(err => {
+      //console.log(err);
+      this.faceDetecting();
     });
   }
 

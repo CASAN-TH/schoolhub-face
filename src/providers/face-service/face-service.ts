@@ -8,6 +8,12 @@ export class FaceServiceProvider {
     'Content-Type': 'application/json',
     'Ocp-Apim-Subscription-Key': '46547dfcc3d3423c94cce3949093462b'
   });
+
+  headersStream: any = new HttpHeaders({
+    'Content-Type': 'application/octet-stream',
+    'Ocp-Apim-Subscription-Key': '46547dfcc3d3423c94cce3949093462b'
+  });
+
   uriBase = 'https://southeastasia.api.cognitive.microsoft.com/face/v1.0';
 
   constructor(public http: HttpClient) {
@@ -44,6 +50,28 @@ export class FaceServiceProvider {
 
   Detect(body) {
     return this.http.post(this.uriBase + '/detect', body, { headers: this.headers }).toPromise();
+  }
+
+  makeblob(dataURL) {
+    const BASE64_MARKER = ';base64,';
+    const parts = dataURL.split(BASE64_MARKER);
+    const contentType = parts[0].split(':')[1];
+    const raw = window.atob(parts[1]);
+    const rawLength = raw.length;
+    const uInt8Array = new Uint8Array(rawLength);
+
+    for (let i = 0; i < rawLength; ++i) {
+      uInt8Array[i] = raw.charCodeAt(i);
+    }
+
+    return new Blob([uInt8Array], { type: contentType });
+  }
+
+  DetectStream(body) {
+
+    var payload = this.makeblob(body);
+
+    return this.http.post(this.uriBase + '/detect', payload, { headers: this.headersStream }).toPromise();
   }
 
   Identify(body) {
