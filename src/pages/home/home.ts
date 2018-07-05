@@ -20,6 +20,7 @@ declare var tracking: any;
 export class HomePage {
   personGroupId: any;
   person: any = {};
+  currentPerson: any;
 
   constructor(public modalCtrl: ModalController, public attendantServiceProvider: AttendantServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
     if (this.auth.authenticated()) {
@@ -113,26 +114,30 @@ export class HomePage {
                 cadidates.forEach(itm => {
                   if (itm.candidates) {
                     itm.candidates.forEach(element => {
-                      this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
-                        this.person = res;
-                        this.person.image = url;
+                      if (this.currentPerson !== element.personId) {
+                        this.currentPerson = element.personId;
+                        this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
+                          this.person = res;
+                          this.person.image = url;
 
-                        let bodyReq = {
-                          image: url,
-                          citizenid: this.person.userData
-                        };
+                          let bodyReq = {
+                            image: url,
+                            citizenid: this.person.userData
+                          };
 
-                        let modal = this.modalCtrl.create(CompletePage, { person: this.person });
-                        modal.present();
+                          let modal = this.modalCtrl.create(CompletePage, { person: this.person });
+                          modal.present();
 
-                        this.attendantServiceProvider.Checkin(bodyReq).then(res => {
-                          console.log(res);
+                          this.attendantServiceProvider.Checkin(bodyReq).then(res => {
+                            console.log(res);
+                          }).catch(err => {
+                            console.log(err);
+                          });
                         }).catch(err => {
-                          console.log(err);
+                          //console.log(err);
                         });
-                      }).catch(err => {
-                        //console.log(err);
-                      });
+                      }
+
                     });
                   }
                 });
