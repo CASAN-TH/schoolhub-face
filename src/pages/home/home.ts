@@ -19,17 +19,12 @@ declare var tracking: any;
 export class HomePage {
   personGroupId: any;
   person: any = {};
-  faces: any;
-  tracker: any;
-  task: any;
+  
   constructor(public attendantServiceProvider: AttendantServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
     if (this.auth.authenticated()) {
       this.personGroupId = this.auth.Uesr().schoolid;
     }
-    // this.tracker = new tracking.ObjectTracker('face');
-    // this.tracker.setInitialScale(4);
-    // this.tracker.setStepSize(2);
-    // this.tracker.setEdgesDensity(0.1);
+    
   }
 
   ionViewDidLoad() {
@@ -76,7 +71,7 @@ export class HomePage {
     }
     setTimeout(() => {
       this.theLoop();
-    }, 6000);
+    }, 10000);
   }
 
   detect(face) {
@@ -86,10 +81,10 @@ export class HomePage {
     const imageRef = storageRef.child(`images/${filename}.jpg`);
     imageRef.putString(face, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
       imageRef.getDownloadURL().then(url => {
-        console.log(url);
+        
         this.faceServiceProvider.Detect({ url: url }).then(res => {
           let data: any = res;
-          console.log(data);
+          this.faceDetecting();
           // data.forEach(itm => {
           //   faceIDs.push(itm.faceId);
           // });
@@ -102,7 +97,7 @@ export class HomePage {
                   itm.candidates.forEach(element => {
                     this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
                       this.person = res;
-                      console.log(this.person);
+                      
                       let bodyReq = {
                         image: url,
                         citizenid: this.person.userData
