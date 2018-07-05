@@ -13,8 +13,8 @@ export class AddFacePage {
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
   }
   ionViewDidLoad() {
-    this.faceDetecting();
-    this.theLoop();
+    // this.faceDetecting();
+    // this.theLoop();
   }
 
   faceDetecting() {
