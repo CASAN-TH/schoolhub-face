@@ -13,8 +13,8 @@ export class AddFacePage {
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
   }
   ionViewDidLoad() {
-    // this.faceDetecting();
-    // this.theLoop();
+    this.faceDetecting();
+    this.theLoop();
   }
 
   faceDetecting() {
@@ -38,10 +38,12 @@ export class AddFacePage {
         var img = new Image();
         img.src = _canvas.toDataURL();
         window.localStorage.setItem('face', img.src);
-        setTimeout(() => {
-          trackingTask.stop();
-        }, 2500);
+        
       }
+
+      setTimeout(() => {
+        trackingTask.stop();
+      }, 2500);
     });
   }
 

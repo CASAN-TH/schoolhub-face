@@ -42,9 +42,9 @@ export class HomePage {
     trackingTask.run();
     // on tracker start, if we found face (event.data)
     tracker.on('track', function (event) {
-
+      console.log('track on');
       //console.log(event);
-      if (event.data.length > 0) {
+      if (event.data.length > 0 && event.data[0].total >= 10) {
         var _video: any = document.querySelector('video');
         var _canvas: any = document.createElement('canvas');
         _canvas.height = _video.videoHeight;
@@ -54,10 +54,21 @@ export class HomePage {
         var img = new Image();
         img.src = _canvas.toDataURL();
         window.localStorage.setItem('face', img.src);
-        setTimeout(() => {
-          trackingTask.stop();
-        }, 2500);
+        
+
+        event.data.forEach(function(rect) {
+          console.log(rect);
+          // context.strokeStyle = '#a64ceb';
+          // context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+          // context.font = '11px Helvetica';
+          // context.fillStyle = "#fff";
+          // context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+          // context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+        });
       }
+      setTimeout(() => {
+        trackingTask.stop();
+      }, 100);
     });
   }
 
@@ -68,6 +79,11 @@ export class HomePage {
     //console.log(face);
     if (face) {
       this.detect(face)
+    }else{
+      console.log('wakeup tracker');
+      setTimeout(() => {
+        this.faceDetecting();
+      }, 5000);
     }
     setTimeout(() => {
       this.theLoop();
