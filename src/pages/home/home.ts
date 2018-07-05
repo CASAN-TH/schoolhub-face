@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ModalController } from 'ionic-angular';
 import 'tracking/build/tracking';
 import 'tracking/build/data/face';
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
@@ -8,6 +8,7 @@ import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { LoginPage } from '../login/login';
 import { ClassField } from '@angular/compiler/src/output/output_ast';
 import { AttendantServiceProvider } from '../../providers/attendant-service/attendant-service';
+import { CompletePage } from '../complete/complete';
 // import 'tracking/build/data/eye';
 // import 'tracking/build/data/mouth';
 
@@ -19,12 +20,12 @@ declare var tracking: any;
 export class HomePage {
   personGroupId: any;
   person: any = {};
-  
-  constructor(public attendantServiceProvider: AttendantServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
+
+  constructor(public modalCtrl: ModalController, public attendantServiceProvider: AttendantServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
     if (this.auth.authenticated()) {
       this.personGroupId = this.auth.Uesr().schoolid;
     }
-    
+
   }
 
   ionViewDidLoad() {
@@ -54,9 +55,9 @@ export class HomePage {
         var img = new Image();
         img.src = _canvas.toDataURL();
         window.localStorage.setItem('face', img.src);
-        
 
-        event.data.forEach(function(rect) {
+
+        event.data.forEach(function (rect) {
           console.log(rect);
           // context.strokeStyle = '#a64ceb';
           // context.strokeRect(rect.x, rect.y, rect.width, rect.height);
@@ -79,7 +80,7 @@ export class HomePage {
     //console.log(face);
     if (face) {
       this.detect(face)
-    }else{
+    } else {
       console.log('wakeup tracker');
       setTimeout(() => {
         this.faceDetecting();
@@ -97,14 +98,14 @@ export class HomePage {
     const imageRef = storageRef.child(`images/${filename}.jpg`);
     imageRef.putString(face, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
       imageRef.getDownloadURL().then(url => {
-        
+
         this.faceServiceProvider.Detect({ url: url }).then(res => {
           let data: any = res;
           this.faceDetecting();
           // data.forEach(itm => {
           //   faceIDs.push(itm.faceId);
           // });
-          if(data.length > 0){
+          if (data.length > 0) {
             this.faceServiceProvider.PushFaceIds(data).then(faceIDs => {
               console.log(faceIDs);
               this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: this.personGroupId }).then(res => {
@@ -114,11 +115,14 @@ export class HomePage {
                     itm.candidates.forEach(element => {
                       this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
                         this.person = res;
-                        
                         let bodyReq = {
                           image: url,
                           citizenid: this.person.userData
                         };
+
+                        let modal = this.modalCtrl.create(CompletePage);
+                        modal.present();
+
                         this.attendantServiceProvider.Checkin(bodyReq).then(res => {
                           console.log(res);
                         }).catch(err => {
@@ -134,10 +138,10 @@ export class HomePage {
                 //console.log(err);
               });
             }).catch(err => {
-  
+
             });
           }
-          
+
 
         }).catch(err => {
           //console.log(err);

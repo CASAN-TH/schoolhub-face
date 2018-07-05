@@ -14,6 +14,7 @@ import { AddFacePage } from '../pages/add-face/add-face';
 import { LoginPage } from '../pages/login/login';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { AttendantServiceProvider } from '../providers/attendant-service/attendant-service';
+import { CompletePage } from '../pages/complete/complete';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { AttendantServiceProvider } from '../providers/attendant-service/attenda
     PersonGroupDetailPage,
     CreatePersonModalPage,
     AddFacePage,
-    LoginPage
+    LoginPage,
+    CompletePage
   ],
   imports: [
     HttpClientModule,
@@ -38,7 +40,8 @@ import { AttendantServiceProvider } from '../providers/attendant-service/attenda
     PersonGroupDetailPage,
     CreatePersonModalPage,
     AddFacePage,
-    LoginPage
+    LoginPage,
+    CompletePage
   ],
   providers: [
     StatusBar,
