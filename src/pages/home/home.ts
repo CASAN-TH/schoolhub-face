@@ -115,12 +115,14 @@ export class HomePage {
                     itm.candidates.forEach(element => {
                       this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
                         this.person = res;
+                        this.person.image = url;
+
                         let bodyReq = {
                           image: url,
                           citizenid: this.person.userData
                         };
 
-                        let modal = this.modalCtrl.create(CompletePage);
+                        let modal = this.modalCtrl.create(CompletePage, { person: this.person });
                         modal.present();
 
                         this.attendantServiceProvider.Checkin(bodyReq).then(res => {

@@ -7,14 +7,15 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
   templateUrl: 'complete.html',
 })
 export class CompletePage {
-
+  person: any = {};
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
+    this.person = navParams.get('person');
   }
 
   ionViewDidLoad() {
     setTimeout(() => {
       this.dismiss();
-    }, 3000);
+    }, 5000);
   }
 
   dismiss() {
