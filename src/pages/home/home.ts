@@ -13,6 +13,7 @@ import { CompletePage } from '../complete/complete';
 // import 'tracking/build/data/mouth';
 
 declare var tracking: any;
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -21,6 +22,7 @@ export class HomePage {
   personGroupId: any;
   person: any = {};
   currentPerson: any;
+  interval:any;
 
   constructor(public modalCtrl: ModalController, public attendantServiceProvider: AttendantServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
     if (this.auth.authenticated()) {
@@ -36,42 +38,42 @@ export class HomePage {
   }
 
   faceDetecting() {
-    const tracker = new tracking.ObjectTracker('face');
-    tracker.setInitialScale(4);
-    tracker.setStepSize(0.5);
-    tracker.setEdgesDensity(0);
-    const trackingTask = tracking.track('#video', tracker, { camera: true });
-    trackingTask.run();
-    // on tracker start, if we found face (event.data)
-    tracker.on('track', function (event) {
-      console.log('track on');
-      //console.log(event);
-      if (event.data.length > 0 && event.data[0].total >= 10) {
-        var _video: any = document.querySelector('video');
-        var _canvas: any = document.createElement('canvas');
-        _canvas.height = _video.videoHeight;
-        _canvas.width = _video.videoWidth;
-        var ctx = _canvas.getContext('2d');
-        ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
-        var img = new Image();
-        img.src = _canvas.toDataURL();
-        window.localStorage.setItem('face', img.src);
-
-
-        event.data.forEach(function (rect) {
-          console.log(rect);
-          // context.strokeStyle = '#a64ceb';
-          // context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-          // context.font = '11px Helvetica';
-          // context.fillStyle = "#fff";
-          // context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
-          // context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
-        });
-      }
-      setTimeout(() => {
-        trackingTask.stop();
-      }, 100);
-    });
+    var _video: any = document.querySelector('video');
+    var _canvas: any = document.createElement('canvas');
+    if(_video){
+      const tracker = new tracking.ObjectTracker('face');
+      tracker.setInitialScale(4);
+      tracker.setStepSize(0.5);
+      tracker.setEdgesDensity(0);
+      const trackingTask = tracking.track('#video', tracker, { camera: true });
+      trackingTask.run();
+      // on tracker start, if we found face (event.data)
+      tracker.on('track', function (event) {
+        console.log('track on');
+        //console.log(event);
+        if (event.data.length > 0 && event.data[0].total >= 10) {
+         
+          _canvas.height = _video.videoHeight;
+          _canvas.width = _video.videoWidth;
+          var ctx = _canvas.getContext('2d');
+          ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
+          var img = new Image();
+          img.src = _canvas.toDataURL();
+          window.localStorage.setItem('face', img.src);
+         
+          event.data.forEach(function (rect) {
+            console.log(rect);
+          });
+          
+        }
+        setTimeout(() => {
+          trackingTask.stop();
+        }, 100);
+      });
+    }else{
+      clearTimeout(this.interval);
+    }
+    
   }
 
   theLoop() {
@@ -87,7 +89,7 @@ export class HomePage {
         this.faceDetecting();
       }, 5000);
     }
-    setTimeout(() => {
+    this.interval = setTimeout(() => {
       this.theLoop();
     }, 10000);
   }
