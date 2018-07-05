@@ -35,36 +35,35 @@ export class HomePage {
   ionViewDidLoad() {
     this.faceDetecting();
     this.train();
-    //this.theLoop();
+    this.theLoop();
   }
 
-  faceDetecting(){
+  faceDetecting() {
     const tracker = new tracking.ObjectTracker('face');
     tracker.setInitialScale(4);
     tracker.setStepSize(0.5);
     tracker.setEdgesDensity(0);
     const trackingTask = tracking.track('#video', tracker, { camera: true });
     trackingTask.run();
-    trackingTask.stop();
     // on tracker start, if we found face (event.data)
-    // tracker.on('track', function (event) {
-      
-    //   //console.log(event);
-    //   // if (event.data.length > 0) {
-    //   //   var _video: any = document.querySelector('video');
-    //   //   var _canvas: any = document.createElement('canvas');
-    //   //   _canvas.height = _video.videoHeight;
-    //   //   _canvas.width = _video.videoWidth;
-    //   //   var ctx = _canvas.getContext('2d');
-    //   //   ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
-    //   //   var img = new Image();
-    //   //   img.src = _canvas.toDataURL();
-    //   //   window.localStorage.setItem('face', img.src);
-    //   // }
-    //   setTimeout(() => {
-    //     trackingTask.stop();
-    //   }, 5500);
-    // });
+    tracker.on('track', function (event) {
+
+      //console.log(event);
+      if (event.data.length > 0) {
+        var _video: any = document.querySelector('video');
+        var _canvas: any = document.createElement('canvas');
+        _canvas.height = _video.videoHeight;
+        _canvas.width = _video.videoWidth;
+        var ctx = _canvas.getContext('2d');
+        ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
+        var img = new Image();
+        img.src = _canvas.toDataURL();
+        window.localStorage.setItem('face', img.src);
+        setTimeout(() => {
+          trackingTask.stop();
+        }, 2500);
+      }
+    });
   }
 
   theLoop() {
