@@ -42,19 +42,10 @@ export class PersonGroupDetailPage {
           modal2.onDidDismiss(res2 => {
             if (res2) {
               res2.forEach(face => {
-                let storageRef = firebase.storage().ref();
-                const filename = Math.floor(Date.now() / 1000);
-                const imageRef = storageRef.child(`images/${filename}.jpg`);
-                imageRef.putString(face, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
-                  imageRef.getDownloadURL().then(url => {
-                    this.faceServiceProvider.AddPersonFace(this.personGroup.personGroupId, person.personId, { url: url }).then(data => {
-                      console.log(data);
-                    }).catch(err => {
-                      console.log(err);
-                    });
-                  }).catch(err => {
-                    console.log(err);
-                  });
+                this.faceServiceProvider.AddPersonFaceStream(this.personGroup.personGroupId, person.personId, face).then(data => {
+                  console.log(data);
+                }).catch(err => {
+                  console.log(err);
                 });
               });
 

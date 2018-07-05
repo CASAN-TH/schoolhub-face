@@ -40,6 +40,11 @@ export class FaceServiceProvider {
     return this.http.post(this.uriBase + '/persongroups/' + personGroupId + '/persons/' + personId + '/persistedFaces', body, { headers: this.headers }).toPromise();
   }
 
+  AddPersonFaceStream(personGroupId, personId, body) {
+    var payload = this.makeblob(body);
+    return this.http.post(this.uriBase + '/persongroups/' + personGroupId + '/persons/' + personId + '/persistedFaces', payload, { headers: this.headersStream }).toPromise();
+  }
+
   TrainPersonGroup(personGroupId) {
     return this.http.post(this.uriBase + '/persongroups/' + personGroupId + '/train', {}, { headers: this.headers }).toPromise();
   }
