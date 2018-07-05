@@ -41,7 +41,9 @@ export class HomePage {
   faceDetecting() {
     var _video: any = document.querySelector('video');
     var _canvas: any = document.createElement('canvas');
-    if (_video) {
+    
+    if (_video && _canvas) {
+      clearTimeout(this.interval);
       const tracker = new tracking.ObjectTracker('face');
       tracker.setInitialScale(4);
       tracker.setStepSize(0.5);
@@ -70,24 +72,28 @@ export class HomePage {
           trackingTask.stop();
         }, 100);
       });
+
+
+      this.interval = setTimeout(() => {
+        let face = window.localStorage.getItem('face');
+        window.localStorage.removeItem('face');
+        //console.log(face);
+        if (face) {
+          console.log('detect');
+          this.noFaceCount = 0;
+          this.detect2(face)
+        } else {
+          console.log('no face');
+          
+          this.faceDetecting();
+        }
+      }, 1000);
     }
     //tracker stop just get face for detect
     //console.log('detect');
-    this.interval = setTimeout(() => {
-      let face = window.localStorage.getItem('face');
-      window.localStorage.removeItem('face');
-      //console.log(face);
-      if (face) {
-        console.log('detect');
-        this.detect2(face)
-      } else {
-        console.log('no face');
-        
-        this.faceDetecting();
-      }
-    }, 1000);
+    
 
-    if (this.noFaceCount <= 50) {
+    if (this.noFaceCount <= 20) {
       this.noFaceCount++;
     }else{
       clearTimeout(this.interval);
