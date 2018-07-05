@@ -15,6 +15,7 @@ import { LoginPage } from '../pages/login/login';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { AttendantServiceProvider } from '../providers/attendant-service/attendant-service';
 import { CompletePage } from '../pages/complete/complete';
+import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { CompletePage } from '../pages/complete/complete';
     CreatePersonModalPage,
     AddFacePage,
     LoginPage,
-    CompletePage
+    CompletePage,
+    ScreenSaverPage
   ],
   imports: [
     HttpClientModule,
@@ -41,7 +43,8 @@ import { CompletePage } from '../pages/complete/complete';
     CreatePersonModalPage,
     AddFacePage,
     LoginPage,
-    CompletePage
+    CompletePage,
+    ScreenSaverPage
   ],
   providers: [
     StatusBar,
