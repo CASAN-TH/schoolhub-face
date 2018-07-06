@@ -260,11 +260,11 @@ export class HomePage {
                           });
                           modal.present();
 
-                          // this.attendantServiceProvider.Checkin(bodyReq).then(res => {
-                          //   console.log(res);
-                          // }).catch(err => {
-                          //   console.log(err);
-                          // });
+                          this.attendantServiceProvider.Checkin(bodyReq).then(res => {
+                            console.log(res);
+                          }).catch(err => {
+                            console.log(err);
+                          });
                         }).catch(err => {
                           //console.log(err);
                         });
