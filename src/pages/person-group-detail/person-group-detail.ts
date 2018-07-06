@@ -25,10 +25,15 @@ export class PersonGroupDetailPage {
 
   getListPerson(personGroupId) {
     this.faceServiceProvider.GetListPerson(personGroupId).then(data => {
-      console.log(data);
       this.persons = data;
     }).catch(err => {
-      console.log(err);
+      //console.log(err);
+      this.faceServiceProvider.CreatePersonGroup(personGroupId, { name: personGroupId, userData: personGroupId }).then(res => {
+        console.log('create new group success..');
+        this.getListPerson(personGroupId);
+      }).catch(err => {
+        console.log(err);
+      });
     });
   }
 
@@ -41,9 +46,15 @@ export class PersonGroupDetailPage {
           let modal2 = this.modalCtrl.create(AddFacePage, {}, { enableBackdropDismiss: false });
           modal2.onDidDismiss(res2 => {
             if (res2) {
+              let cnt = 0;
               res2.forEach(face => {
                 this.faceServiceProvider.AddPersonFaceStream(this.personGroup.personGroupId, person.personId, face).then(data => {
                   console.log(data);
+                  if (cnt < res2.length) {
+                    cnt++;
+                  } else {
+                    this.train();
+                  }
                 }).catch(err => {
                   console.log(err);
                 });

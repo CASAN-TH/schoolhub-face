@@ -52,12 +52,18 @@ export class HomePage {
   }
 
   initTracking() {
-    this.dataServiceProvider.info('initail traking task');
-    tracker = new tracking.ObjectTracker('face');
-    tracker.setInitialScale(4);
-    tracker.setStepSize(0.5);
-    tracker.setEdgesDensity(0);
-    trackingTask = tracking.track('#video', tracker, { camera: true });
+    var _video: any = document.querySelector('video');
+    if (_video) {
+      this.dataServiceProvider.info('initail traking task');
+      tracker = new tracking.ObjectTracker('face');
+      tracker.setInitialScale(4);
+      tracker.setStepSize(0.5);
+      tracker.setEdgesDensity(0);
+      trackingTask = tracking.track('#video', tracker, { camera: true });
+    } else {
+      clearTimeout(this.interval);
+    }
+
   }
 
   Tracking() {
@@ -69,13 +75,15 @@ export class HomePage {
       if (event.data.length > 0 && event.data[0].total > 1) {
         var _video: any = document.querySelector('video');
         var _canvas: any = document.createElement('canvas');
-        _canvas.height = _video.videoHeight;
-        _canvas.width = _video.videoWidth;
-        var ctx = _canvas.getContext('2d');
-        ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
-        var img = new Image();
-        img.src = _canvas.toDataURL();
-        window.localStorage.setItem('face', img.src);
+        if (_video) {
+          _canvas.height = _video.videoHeight;
+          _canvas.width = _video.videoWidth;
+          var ctx = _canvas.getContext('2d');
+          ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
+          var img = new Image();
+          img.src = _canvas.toDataURL();
+          window.localStorage.setItem('face', img.src);
+        }
 
         event.data.forEach(function (rect) {
           //console.log(rect);
