@@ -45,6 +45,10 @@ export class HomePage {
     //this.theLoop();
   }
 
+  ionViewWillLeave(){
+    clearTimeout(this.interval);
+  }
+
   initTracking() {
     console.log('initail traking task');
     tracker = new tracking.ObjectTracker('face');
@@ -72,7 +76,7 @@ export class HomePage {
         window.localStorage.setItem('face', img.src);
 
         event.data.forEach(function (rect) {
-          console.log(rect);
+          //console.log(rect);
         });
 
       }
@@ -92,28 +96,16 @@ export class HomePage {
         this.detect2(face)
       } else {
         console.log('no face');
-
         this.Tracking();
       }
-    }, 1000);
-  }
+    }, 3000);
 
-  faceDetecting() {
-
-    clearTimeout(this.interval);
-    this.initTracking();
-    this.Tracking();
-
-
-
-
-    // if (this.noFaceCount <= 20) {
-    //   this.noFaceCount++;
-    // } else {
-    //   clearTimeout(this.interval);
-    //   this.navCtrl.setRoot(ScreenSaverPage);
-    // }
-
+    if (this.noFaceCount <= 20) {
+      this.noFaceCount++;
+    } else {
+      clearTimeout(this.interval);
+      this.navCtrl.setRoot(ScreenSaverPage);
+    }
   }
 
 
@@ -155,7 +147,8 @@ export class HomePage {
 
                               let modal = this.modalCtrl.create(CompletePage, { person: this.person });
                               modal.onDidDismiss(res => {
-                                this.faceDetecting();
+                                //this.faceDetecting();
+                                this.Tracking();
                               });
                               modal.present();
 
@@ -168,39 +161,47 @@ export class HomePage {
                               //console.log(err);
                             });
                           } else {
-                            this.faceDetecting();
+                            //this.faceDetecting();
+                            this.Tracking();
                           }
 
                         });
                       } else {
-                        this.faceDetecting();
+                        //this.faceDetecting();
+                        this.Tracking();
                       }
 
                     }
                     else {
-                      this.faceDetecting();
+                      //this.faceDetecting();
+                      this.Tracking();
                     }
                   });
                 } else {
-                  this.faceDetecting();
+                  //this.faceDetecting();
+                  this.Tracking();
                 }
               }).catch(err => {
-                //console.log(err);
-                this.faceDetecting();
+                //this.faceDetecting();
+                this.Tracking();
               });
             }).catch(err => {
-              this.faceDetecting();
+              //this.faceDetecting();
+              this.Tracking();
             });
           } else {
-            this.faceDetecting();
+            //this.faceDetecting();
+            this.Tracking();
           }
 
 
         }).catch(err => {
-          //console.log(err);
+          //this.faceDetecting();
+          this.Tracking();
         });
       }).catch(err => {
-        //console.log(err);
+        //this.faceDetecting();
+        this.Tracking();
       });
     });
   }
@@ -288,14 +289,11 @@ export class HomePage {
 
     }).catch(err => {
       //console.log(err);
-      this.faceDetecting();
+      //this.faceDetecting();
+      this.Tracking();
     });
   }
 
-  testClick() {
-    let face = window.localStorage.getItem('face');
-    this.detect(face);
-  }
 
   train() {
     this.faceServiceProvider.TrainPersonGroup(this.personGroupId).then(data => {
