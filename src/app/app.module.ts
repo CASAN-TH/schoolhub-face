@@ -16,6 +16,8 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { AttendantServiceProvider } from '../providers/attendant-service/attendant-service';
 import { CompletePage } from '../pages/complete/complete';
 import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
+import { DataServiceProvider } from '../providers/data-service/data-service';
+import { MessageComponent } from '../components/message/message';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
     AddFacePage,
     LoginPage,
     CompletePage,
-    ScreenSaverPage
+    ScreenSaverPage,
+    MessageComponent
   ],
   imports: [
     HttpClientModule,
@@ -44,7 +47,8 @@ import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
     AddFacePage,
     LoginPage,
     CompletePage,
-    ScreenSaverPage
+    ScreenSaverPage,
+    MessageComponent
   ],
   providers: [
     StatusBar,
@@ -52,7 +56,8 @@ import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FaceServiceProvider,
     AuthServiceProvider,
-    AttendantServiceProvider
+    AttendantServiceProvider,
+    DataServiceProvider
   ]
 })
 export class AppModule {}

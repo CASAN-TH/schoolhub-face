@@ -10,6 +10,7 @@ import { ClassField } from '@angular/compiler/src/output/output_ast';
 import { AttendantServiceProvider } from '../../providers/attendant-service/attendant-service';
 import { CompletePage } from '../complete/complete';
 import { ScreenSaverPage } from '../screen-saver/screen-saver';
+import { DataServiceProvider } from '../../providers/data-service/data-service';
 // import 'tracking/build/data/eye';
 // import 'tracking/build/data/mouth';
 
@@ -27,7 +28,7 @@ export class HomePage {
   currentPerson: any;
   interval: any;
   noFaceCount: number = 0;
-  constructor(public modalCtrl: ModalController, public attendantServiceProvider: AttendantServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
+  constructor(private dataServiceProvider: DataServiceProvider, public modalCtrl: ModalController, public attendantServiceProvider: AttendantServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
     if (this.auth.authenticated()) {
       this.personGroupId = this.auth.Uesr().schoolid;
     }
@@ -45,12 +46,12 @@ export class HomePage {
     //this.theLoop();
   }
 
-  ionViewWillLeave(){
+  ionViewWillLeave() {
     clearTimeout(this.interval);
   }
 
   initTracking() {
-    console.log('initail traking task');
+    this.dataServiceProvider.info('initail traking task');
     tracker = new tracking.ObjectTracker('face');
     tracker.setInitialScale(4);
     tracker.setStepSize(0.5);
@@ -89,13 +90,12 @@ export class HomePage {
     this.interval = setTimeout(() => {
       let face = window.localStorage.getItem('face');
       window.localStorage.removeItem('face');
-      //console.log(face);
       if (face) {
-        console.log('detect');
+        this.dataServiceProvider.success('detect');
         this.noFaceCount = 0;
         this.detect2(face)
       } else {
-        console.log('no face');
+        this.dataServiceProvider.warning('no face');
         this.Tracking();
       }
     }, 3000);
@@ -111,28 +111,25 @@ export class HomePage {
 
 
   detect(face) {
-    console.log('in detecting');
     let storageRef = firebase.storage().ref();
     const filename = Math.floor(Date.now() / 1000);
     const imageRef = storageRef.child(`images/${filename}.jpg`);
     imageRef.putString(face, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
       imageRef.getDownloadURL().then(url => {
-        console.log('firebase success');
         this.faceServiceProvider.Detect({ url: url }).then(res => {
-          console.log('Detect success');
+          this.dataServiceProvider.success('Detect success');
           let data: any = res;
           if (data.length > 0) {
-            console.log('found ' + data.length + ' face(s)');
+            this.dataServiceProvider.info('found ' + data.length + ' face(s)');
             this.faceServiceProvider.PushFaceIds(data).then(faceIDs => {
-              console.log(faceIDs);
               this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: this.personGroupId }).then(res => {
                 let cadidates: any = res;
-                console.log('Identify success');
+                this.dataServiceProvider.success('Identify success');
                 if (cadidates) {
                   cadidates.forEach(itm => {
                     if (itm.candidates) {
                       if (itm.candidates.length > 0) {
-                        console.log('found ' + itm.candidates.length + ' person(s)');
+                        this.dataServiceProvider.success('found ' + itm.candidates.length + ' person(s)');
                         itm.candidates.forEach(element => {
                           if (this.currentPerson !== element.personId) {
                             this.currentPerson = element.personId;
@@ -153,12 +150,12 @@ export class HomePage {
                               modal.present();
 
                               this.attendantServiceProvider.Checkin(bodyReq).then(res => {
-                                console.log(res);
+                                this.dataServiceProvider.success('Checkin Success');
                               }).catch(err => {
-                                console.log(err);
+                                this.dataServiceProvider.error(JSON.stringify(err));
                               });
                             }).catch(err => {
-                              //console.log(err);
+                              this.dataServiceProvider.error(JSON.stringify(err));
                             });
                           } else {
                             //this.faceDetecting();
@@ -207,22 +204,21 @@ export class HomePage {
   }
 
   detect2(face) {
-    console.log('in detecting');
     this.faceServiceProvider.DetectStream(face).then(res => {
-      console.log('Detect success');
+      this.dataServiceProvider.success('Detect success');
       let data: any = res;
       if (data.length > 0) {
-        console.log('found ' + data.length + ' face(s)');
+        this.dataServiceProvider.success('found ' + data.length + ' face(s)');
         this.faceServiceProvider.PushFaceIds(data).then(faceIDs => {
-          console.log(faceIDs);
+          this.dataServiceProvider.success(faceIDs);
           this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: this.personGroupId }).then(res => {
             let cadidates: any = res;
-            console.log('Identify success');
+            this.dataServiceProvider.success('Identify success');
             if (cadidates) {
               cadidates.forEach(itm => {
                 if (itm.candidates) {
                   if (itm.candidates.length > 0) {
-                    console.log('found ' + itm.candidates.length + ' person(s)');
+                    this.dataServiceProvider.success('found ' + itm.candidates.length + ' person(s)');
                     itm.candidates.forEach(element => {
                       if (this.currentPerson !== element.personId) {
                         this.currentPerson = element.personId;
@@ -252,7 +248,7 @@ export class HomePage {
                         });
                       } else {
                         //this.faceDetecting();
-                        console.log('Same Person : ' + this.currentPerson);
+                        this.dataServiceProvider.warning('Same Person : ' + this.currentPerson);
                         this.Tracking();
                       }
 
@@ -299,7 +295,7 @@ export class HomePage {
     this.faceServiceProvider.TrainPersonGroup(this.personGroupId).then(data => {
       this.getStatusRecuring();
     }).catch(err => {
-      console.log(err);
+      this.dataServiceProvider.error(JSON.stringify(err));
     });
   }
 
@@ -316,7 +312,7 @@ export class HomePage {
         }
       }
     }).catch(err => {
-      console.log(err);
+      this.dataServiceProvider.error(JSON.stringify(err));
     });
   }
 
