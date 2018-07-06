@@ -103,7 +103,7 @@ export class HomePage {
       let face = window.localStorage.getItem('face');
       window.localStorage.removeItem('face');
       if (face) {
-        this.dataServiceProvider.success('ดำเนินการตรวจสอบใบหน้า...');
+        this.dataServiceProvider.info('ดำเนินการตรวจสอบใบหน้า...');
         this.noFaceCount = 0;
         this.detect2(face)
       } else {
@@ -232,7 +232,7 @@ export class HomePage {
     this.faceServiceProvider.DetectStream(face).then(res => {
       let data: any = res;
       if (data.length > 0) {
-        this.dataServiceProvider.success('ตรวจสอบข้อมมูล ใบหน้า ' + data.length + ' ใบหน้า');
+        this.dataServiceProvider.info('ตรวจสอบข้อมมูล ใบหน้า ' + data.length + ' ใบหน้า');
         this.faceServiceProvider.PushFaceIds(data).then(faceIDs => {
           this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: this.personGroupId }).then(res => {
             let cadidates: any = res;
@@ -240,10 +240,10 @@ export class HomePage {
               cadidates.forEach(itm => {
                 if (itm.candidates) {
                   if (itm.candidates.length > 0) {
-                    this.dataServiceProvider.success('พบข้อมูลเจ้าของใบหน้า ' + itm.candidates.length + ' ข้อมูล');
+                    this.dataServiceProvider.info('พบข้อมูลเจ้าของใบหน้า ' + itm.candidates.length + ' ข้อมูล');
                     itm.candidates.forEach(element => {
                       if (this.currentPerson !== element.personId) {
-                        this.currentPerson = element.personId;
+                        
                         this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
                           this.person = res;
                           this.person.image = face;
@@ -252,7 +252,9 @@ export class HomePage {
                             image: face,
                             citizenid: this.person.userData
                           };
+                          this.dataServiceProvider.info('ดำเนินการบันทึกข้อมูลการลงเวลา...');
                           this.attendantServiceProvider.Checkin(bodyReq).then(res => {
+                            this.currentPerson = element.personId;
                             let modal = this.modalCtrl.create(CompletePage, { person: this.person });
                             modal.onDidDismiss(res => {
                               //this.faceDetecting();
@@ -261,6 +263,7 @@ export class HomePage {
                             modal.present();
                           }).catch(err => {
                             this.dataServiceProvider.error('บันทึกข้อมูลลงเวลาไม่สำเร็จ!!');
+                            this.Tracking();
                           });
                         }).catch(err => {
                           this.showNoDataFound(face);
