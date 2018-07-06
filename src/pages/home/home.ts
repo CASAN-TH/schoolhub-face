@@ -260,7 +260,7 @@ export class HomePage {
                             });
                             modal.present();
                           }).catch(err => {
-                            this.showNoDataFound(face);
+                            this.dataServiceProvider.error('บันทึกข้อมูลลงเวลาไม่สำเร็จ!!');
                           });
                         }).catch(err => {
                           this.showNoDataFound(face);
