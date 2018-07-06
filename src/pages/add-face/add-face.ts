@@ -34,7 +34,7 @@ export class AddFacePage {
     // on tracker start, if we found face (event.data)
     tracker.on('track', function (event) {
       console.log('tracking in Run()');
-      if (event.data.length > 0 && event.data[0].total > 1) {
+      if (event.data.length > 0 && event.data[0].total > 0) {
         var _video: any = document.querySelector('video');
         var _canvas: any = document.createElement('canvas');
         _canvas.height = _video.videoHeight;
@@ -63,7 +63,7 @@ export class AddFacePage {
       if (face) {
         this.presonFaces.push(face);
         console.log(this.presonFaces.length);
-        if(this.presonFaces.length > 10){
+        if(this.presonFaces.length >=3){
           clearTimeout(this.interval);
           this.dismiss();
         }else{

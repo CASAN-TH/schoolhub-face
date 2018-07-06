@@ -67,12 +67,13 @@ export class HomePage {
   }
 
   Tracking() {
-    clearTimeout(this.interval);
+    
     trackingTask.run();
     // on tracker start, if we found face (event.data)
     tracker.on('track', function (event) {
       console.log('tracking in Run()');
       if (event.data.length > 0 && event.data[0].total > 5) {
+    
         var _video: any = document.querySelector('video');
         var _canvas: any = document.createElement('canvas');
         if (_video) {
@@ -82,32 +83,34 @@ export class HomePage {
           ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
           var img = new Image();
           img.src = _canvas.toDataURL();
-          window.localStorage.setItem('face', img.src);
+          if(!window.localStorage.getItem('face')){
+            window.localStorage.setItem('face', img.src);
+          }
         }
 
         event.data.forEach(function (rect) {
-          console.log(rect);
+          //console.log(rect);
         });
 
       }
       setTimeout(() => {
         trackingTask.stop();
-      }, 100);
+      }, 10);
     });
 
-
+    clearTimeout(this.interval);
     this.interval = setTimeout(() => {
       let face = window.localStorage.getItem('face');
       window.localStorage.removeItem('face');
       if (face) {
-        this.dataServiceProvider.success('detect');
+        this.dataServiceProvider.success('ดำเนินการตรวจสอบใบหน้า...');
         this.noFaceCount = 0;
         this.detect2(face)
       } else {
-        this.dataServiceProvider.warning('no face');
+        this.dataServiceProvider.warning('ค้นหาใบหน้า...');
         this.Tracking();
       }
-    }, 3000);
+    }, 2000);
 
     if (this.noFaceCount <= 20) {
       this.noFaceCount++;
@@ -227,21 +230,17 @@ export class HomePage {
   }
   detect2(face) {
     this.faceServiceProvider.DetectStream(face).then(res => {
-      this.dataServiceProvider.success('Face Scaning...');
       let data: any = res;
       if (data.length > 0) {
-        this.dataServiceProvider.success('found ' + data.length + ' face(s)');
+        this.dataServiceProvider.success('ตรวจสอบข้อมมูล ใบหน้า ' + data.length + ' ใบหน้า');
         this.faceServiceProvider.PushFaceIds(data).then(faceIDs => {
-          this.dataServiceProvider.success(faceIDs);
           this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: this.personGroupId }).then(res => {
             let cadidates: any = res;
-            this.dataServiceProvider.success('Identify success');
             if (cadidates) {
-              this.dataServiceProvider.success('cadidates success');
               cadidates.forEach(itm => {
                 if (itm.candidates) {
                   if (itm.candidates.length > 0) {
-                    this.dataServiceProvider.success('found ' + itm.candidates.length + ' person(s)');
+                    this.dataServiceProvider.success('พบข้อมูลเจ้าของใบหน้า ' + itm.candidates.length + ' ข้อมูล');
                     itm.candidates.forEach(element => {
                       if (this.currentPerson !== element.personId) {
                         this.currentPerson = element.personId;
@@ -270,8 +269,7 @@ export class HomePage {
                           //console.log(err);
                         });
                       } else {
-                        //this.faceDetecting();
-                        this.dataServiceProvider.warning('Same Person : ' + this.currentPerson);
+                        this.dataServiceProvider.warning('พบการบันทึกลงเวลาแล้ว!!');
                         this.Tracking();
                       }
 
