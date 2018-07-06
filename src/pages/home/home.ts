@@ -11,6 +11,7 @@ import { AttendantServiceProvider } from '../../providers/attendant-service/atte
 import { CompletePage } from '../complete/complete';
 import { ScreenSaverPage } from '../screen-saver/screen-saver';
 import { DataServiceProvider } from '../../providers/data-service/data-service';
+import { NoDataPage } from '../no-data/no-data';
 // import 'tracking/build/data/eye';
 // import 'tracking/build/data/mouth';
 
@@ -159,12 +160,18 @@ export class HomePage {
                             });
                           } else {
                             //this.faceDetecting();
+
+
                             this.Tracking();
                           }
 
                         });
                       } else {
                         //this.faceDetecting();
+
+
+
+
                         this.Tracking();
                       }
 
@@ -203,6 +210,13 @@ export class HomePage {
     });
   }
 
+  showNoDataFound(face) {
+    let modal = this.modalCtrl.create(NoDataPage, { face: face });
+    modal.present();
+    modal.onDidDismiss(res => {
+      this.Tracking();
+    });
+  }
   detect2(face) {
     this.faceServiceProvider.DetectStream(face).then(res => {
       this.dataServiceProvider.success('Detect success');
@@ -215,6 +229,7 @@ export class HomePage {
             let cadidates: any = res;
             this.dataServiceProvider.success('Identify success');
             if (cadidates) {
+              this.dataServiceProvider.success('cadidates success');
               cadidates.forEach(itm => {
                 if (itm.candidates) {
                   if (itm.candidates.length > 0) {
@@ -255,23 +270,23 @@ export class HomePage {
                     });
                   } else {
                     //this.faceDetecting();
+
+
                     this.Tracking();
                   }
 
                 }
                 else {
-                  //this.faceDetecting();
-                  this.Tracking();
+                  this.showNoDataFound(face);
                 }
               });
             } else {
-              //this.faceDetecting();
-              this.Tracking();
+
+              this.showNoDataFound(face);
+
             }
           }).catch(err => {
-            //console.log(err);
-            //this.faceDetecting();
-            this.Tracking();
+            this.showNoDataFound(face);
           });
         }).catch(err => {
           //this.faceDetecting();
