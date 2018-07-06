@@ -72,7 +72,7 @@ export class HomePage {
     // on tracker start, if we found face (event.data)
     tracker.on('track', function (event) {
       console.log('tracking in Run()');
-      if (event.data.length > 0 && event.data[0].total > 1) {
+      if (event.data.length > 0 && event.data[0].total > 5) {
         var _video: any = document.querySelector('video');
         var _canvas: any = document.createElement('canvas');
         if (_video) {
@@ -86,7 +86,7 @@ export class HomePage {
         }
 
         event.data.forEach(function (rect) {
-          //console.log(rect);
+          console.log(rect);
         });
 
       }
@@ -107,7 +107,7 @@ export class HomePage {
         this.dataServiceProvider.warning('no face');
         this.Tracking();
       }
-    }, 5000);
+    }, 3000);
 
     if (this.noFaceCount <= 20) {
       this.noFaceCount++;
