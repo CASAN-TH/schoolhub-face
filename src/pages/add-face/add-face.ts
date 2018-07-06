@@ -3,32 +3,38 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 import 'tracking/build/tracking';
 import 'tracking/build/data/face';
 declare var tracking: any;
+var tracker: any;
+var trackingTask: any;
 @IonicPage()
 @Component({
   selector: 'page-add-face',
   templateUrl: 'add-face.html',
 })
 export class AddFacePage {
+  interval: any;
   presonFaces:any=[];
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
   }
   ionViewDidLoad() {
-    this.faceDetecting();
-    this.theLoop();
+    this.initTracking();
+    this.Tracking();
   }
-
-  faceDetecting() {
-    const tracker = new tracking.ObjectTracker('face');
+  initTracking() {
+    console.log('initail traking task');
+    tracker = new tracking.ObjectTracker('face');
     tracker.setInitialScale(4);
     tracker.setStepSize(0.5);
     tracker.setEdgesDensity(0);
-    const trackingTask = tracking.track('#video', tracker, { camera: true });
+    trackingTask = tracking.track('#video', tracker, { camera: true });
+  }
+
+  Tracking() {
+    clearTimeout(this.interval);
     trackingTask.run();
     // on tracker start, if we found face (event.data)
     tracker.on('track', function (event) {
-
-      //console.log(event);
-      if (event.data.length > 0) {
+      console.log('tracking in Run()');
+      if (event.data.length > 0 && event.data[0].total > 1) {
         var _video: any = document.querySelector('video');
         var _canvas: any = document.createElement('canvas');
         _canvas.height = _video.videoHeight;
@@ -38,37 +44,43 @@ export class AddFacePage {
         var img = new Image();
         img.src = _canvas.toDataURL();
         window.localStorage.setItem('face', img.src);
-        
-      }
 
+        event.data.forEach(function (rect) {
+          console.log(rect);
+        });
+
+      }
       setTimeout(() => {
         trackingTask.stop();
-      }, 2500);
+      }, 100);
     });
-  }
 
-  theLoop() {
-   
-    let face = window.localStorage.getItem('face');
-    window.localStorage.removeItem('face');
-    
-    if (face) {
-      if(this.presonFaces.length < 5){
+
+    this.interval = setTimeout(() => {
+      let face = window.localStorage.getItem('face');
+      window.localStorage.removeItem('face');
+      //console.log(face);
+      if (face) {
         this.presonFaces.push(face);
-        this.faceDetecting();
-      }else{
-        this.viewCtrl.dismiss(this.presonFaces);
+        console.log(this.presonFaces.length);
+        if(this.presonFaces.length > 10){
+          clearTimeout(this.interval);
+          this.dismiss();
+        }else{
+          this.Tracking();
+        }
+      } else {
+        console.log('no face');
+        this.Tracking();
       }
-     
-    }
-    setTimeout(() => {
-      this.theLoop();
     }, 3000);
+
+    
   }
+ 
 
   dismiss() {
-    let faces: any = JSON.parse(window.localStorage.getItem('faces'));
-    this.viewCtrl.dismiss(faces);
+    this.viewCtrl.dismiss(this.presonFaces);
   }
 
   getWidth() {
