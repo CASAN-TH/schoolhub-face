@@ -67,13 +67,13 @@ export class HomePage {
   }
 
   Tracking() {
-    
+
     trackingTask.run();
     // on tracker start, if we found face (event.data)
     tracker.on('track', function (event) {
       console.log('tracking in Run()');
       if (event.data.length > 0 && event.data[0].total > 5) {
-    
+
         var _video: any = document.querySelector('video');
         var _canvas: any = document.createElement('canvas');
         if (_video) {
@@ -83,7 +83,7 @@ export class HomePage {
           ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
           var img = new Image();
           img.src = _canvas.toDataURL();
-          if(!window.localStorage.getItem('face')){
+          if (!window.localStorage.getItem('face')) {
             window.localStorage.setItem('face', img.src);
           }
         }
@@ -252,21 +252,18 @@ export class HomePage {
                             image: face,
                             citizenid: this.person.userData
                           };
-
-                          let modal = this.modalCtrl.create(CompletePage, { person: this.person });
-                          modal.onDidDismiss(res => {
-                            //this.faceDetecting();
-                            this.Tracking();
-                          });
-                          modal.present();
-
                           this.attendantServiceProvider.Checkin(bodyReq).then(res => {
-                            console.log(res);
+                            let modal = this.modalCtrl.create(CompletePage, { person: this.person });
+                            modal.onDidDismiss(res => {
+                              //this.faceDetecting();
+                              this.Tracking();
+                            });
+                            modal.present();
                           }).catch(err => {
-                            console.log(err);
+                            this.showNoDataFound(face);
                           });
                         }).catch(err => {
-                          //console.log(err);
+                          this.showNoDataFound(face);
                         });
                       } else {
                         this.dataServiceProvider.warning('พบการบันทึกลงเวลาแล้ว!!');
