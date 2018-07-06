@@ -14,6 +14,8 @@ import { ScreenSaverPage } from '../screen-saver/screen-saver';
 // import 'tracking/build/data/mouth';
 
 declare var tracking: any;
+var tracker: any;
+var trackingTask: any;
 
 @Component({
   selector: 'page-home',
@@ -33,92 +35,88 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    this.faceDetecting();
+    //this.faceDetecting();
     this.train();
+
+    clearTimeout(this.interval);
+    this.initTracking();
+    this.Tracking();
+
     //this.theLoop();
   }
 
-  faceDetecting() {
-    var _video: any = document.querySelector('video');
-    var _canvas: any = document.createElement('canvas');
-    
-    if (_video && _canvas) {
-      clearTimeout(this.interval);
-      const tracker = new tracking.ObjectTracker('face');
-      tracker.setInitialScale(4);
-      tracker.setStepSize(0.5);
-      tracker.setEdgesDensity(0);
-      const trackingTask = tracking.track('#video', tracker, { camera: true });
-      trackingTask.run();
-      // on tracker start, if we found face (event.data)
-      tracker.on('track', function (event) {
-        //console.log(event);
-        if (event.data.length > 0 && event.data[0].total >= 10) {
-
-          _canvas.height = _video.videoHeight;
-          _canvas.width = _video.videoWidth;
-          var ctx = _canvas.getContext('2d');
-          ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
-          var img = new Image();
-          img.src = _canvas.toDataURL();
-          window.localStorage.setItem('face', img.src);
-
-          // event.data.forEach(function (rect) {
-          //   console.log(rect);
-          // });
-
-        }
-        setTimeout(() => {
-          trackingTask.stop();
-        }, 100);
-      });
-
-
-      this.interval = setTimeout(() => {
-        let face = window.localStorage.getItem('face');
-        window.localStorage.removeItem('face');
-        //console.log(face);
-        if (face) {
-          console.log('detect');
-          this.noFaceCount = 0;
-          this.detect2(face)
-        } else {
-          console.log('no face');
-          
-          this.faceDetecting();
-        }
-      }, 1000);
-    }
-    //tracker stop just get face for detect
-    //console.log('detect');
-    
-
-    if (this.noFaceCount <= 20) {
-      this.noFaceCount++;
-    }else{
-      clearTimeout(this.interval);
-      this.navCtrl.setRoot(ScreenSaverPage);
-    }
-
+  initTracking() {
+    console.log('initail traking task');
+    tracker = new tracking.ObjectTracker('face');
+    tracker.setInitialScale(4);
+    tracker.setStepSize(0.5);
+    tracker.setEdgesDensity(0);
+    trackingTask = tracking.track('#video', tracker, { camera: true });
   }
 
-  theLoop() {
-    this.person = {}
-    let face = window.localStorage.getItem('face');
-    window.localStorage.removeItem('face');
-    //console.log(face);
-    if (face) {
-      this.detect(face)
-    } else {
-      console.log('wakeup tracker');
+  Tracking() {
+    clearTimeout(this.interval);
+    trackingTask.run();
+    // on tracker start, if we found face (event.data)
+    tracker.on('track', function (event) {
+      console.log('tracking in Run()');
+      if (event.data.length > 0 && event.data[0].total >= 10) {
+        var _video: any = document.querySelector('video');
+        var _canvas: any = document.createElement('canvas');
+        _canvas.height = _video.videoHeight;
+        _canvas.width = _video.videoWidth;
+        var ctx = _canvas.getContext('2d');
+        ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
+        var img = new Image();
+        img.src = _canvas.toDataURL();
+        window.localStorage.setItem('face', img.src);
+
+        event.data.forEach(function (rect) {
+          console.log(rect);
+        });
+
+      }
       setTimeout(() => {
-        this.faceDetecting();
-      }, 5000);
-    }
+        trackingTask.stop();
+      }, 100);
+    });
+
+
     this.interval = setTimeout(() => {
-      this.theLoop();
-    }, 10000);
+      let face = window.localStorage.getItem('face');
+      window.localStorage.removeItem('face');
+      //console.log(face);
+      if (face) {
+        console.log('detect');
+        this.noFaceCount = 0;
+        this.detect2(face)
+      } else {
+        console.log('no face');
+
+        this.Tracking();
+      }
+    }, 1000);
   }
+
+  faceDetecting() {
+
+    clearTimeout(this.interval);
+    this.initTracking();
+    this.Tracking();
+
+
+
+
+    // if (this.noFaceCount <= 20) {
+    //   this.noFaceCount++;
+    // } else {
+    //   clearTimeout(this.interval);
+    //   this.navCtrl.setRoot(ScreenSaverPage);
+    // }
+
+  }
+
+
 
   detect(face) {
     console.log('in detecting');
@@ -238,7 +236,8 @@ export class HomePage {
 
                           let modal = this.modalCtrl.create(CompletePage, { person: this.person });
                           modal.onDidDismiss(res => {
-                            this.faceDetecting();
+                            //this.faceDetecting();
+                            this.Tracking();
                           });
                           modal.present();
 
@@ -251,31 +250,39 @@ export class HomePage {
                           //console.log(err);
                         });
                       } else {
-                        this.faceDetecting();
+                        //this.faceDetecting();
+                        console.log('Same Person : ' + this.currentPerson);
+                        this.Tracking();
                       }
 
                     });
                   } else {
-                    this.faceDetecting();
+                    //this.faceDetecting();
+                    this.Tracking();
                   }
 
                 }
                 else {
-                  this.faceDetecting();
+                  //this.faceDetecting();
+                  this.Tracking();
                 }
               });
             } else {
-              this.faceDetecting();
+              //this.faceDetecting();
+              this.Tracking();
             }
           }).catch(err => {
             //console.log(err);
-            this.faceDetecting();
+            //this.faceDetecting();
+            this.Tracking();
           });
         }).catch(err => {
-          this.faceDetecting();
+          //this.faceDetecting();
+          this.Tracking();
         });
       } else {
-        this.faceDetecting();
+        //this.faceDetecting();
+        this.Tracking();
       }
 
 
