@@ -18,6 +18,7 @@ import { CompletePage } from '../pages/complete/complete';
 import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
 import { DataServiceProvider } from '../providers/data-service/data-service';
 import { MessageComponent } from '../components/message/message';
+import { NoDataPage } from '../pages/no-data/no-data';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { MessageComponent } from '../components/message/message';
     LoginPage,
     CompletePage,
     ScreenSaverPage,
-    MessageComponent
+    MessageComponent,
+    NoDataPage
   ],
   imports: [
     HttpClientModule,
@@ -48,7 +50,8 @@ import { MessageComponent } from '../components/message/message';
     LoginPage,
     CompletePage,
     ScreenSaverPage,
-    MessageComponent
+    MessageComponent,
+    NoDataPage
   ],
   providers: [
     StatusBar,

@@ -66,7 +66,7 @@ export class HomePage {
     // on tracker start, if we found face (event.data)
     tracker.on('track', function (event) {
       console.log('tracking in Run()');
-      if (event.data.length > 0 && event.data[0].total >= 10) {
+      if (event.data.length > 0 && event.data[0].total > 1) {
         var _video: any = document.querySelector('video');
         var _canvas: any = document.createElement('canvas');
         _canvas.height = _video.videoHeight;
@@ -99,7 +99,7 @@ export class HomePage {
         this.dataServiceProvider.warning('no face');
         this.Tracking();
       }
-    }, 3000);
+    }, 5000);
 
     if (this.noFaceCount <= 20) {
       this.noFaceCount++;
@@ -219,7 +219,7 @@ export class HomePage {
   }
   detect2(face) {
     this.faceServiceProvider.DetectStream(face).then(res => {
-      this.dataServiceProvider.success('Detect success');
+      this.dataServiceProvider.success('Face Scaning...');
       let data: any = res;
       if (data.length > 0) {
         this.dataServiceProvider.success('found ' + data.length + ' face(s)');
@@ -269,10 +269,7 @@ export class HomePage {
 
                     });
                   } else {
-                    //this.faceDetecting();
-
-
-                    this.Tracking();
+                    this.showNoDataFound(face);
                   }
 
                 }
@@ -289,19 +286,17 @@ export class HomePage {
             this.showNoDataFound(face);
           });
         }).catch(err => {
-          //this.faceDetecting();
-          this.Tracking();
+          //Face is Empty
+          this.showNoDataFound(face);
         });
       } else {
-        //this.faceDetecting();
-        this.Tracking();
+        this.showNoDataFound(face);
       }
 
 
     }).catch(err => {
-      //console.log(err);
-      //this.faceDetecting();
-      this.Tracking();
+      //Detect Service Return Error
+      this.showNoDataFound(face);
     });
   }
 
