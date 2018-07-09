@@ -82,7 +82,7 @@ export class HomePage {
           var ctx = _canvas.getContext('2d');
           ctx.drawImage(_video, 0, 0, _canvas.width, _canvas.height);
           var img = new Image();
-          img.src = _canvas.toDataURL();
+          img.src = _canvas.toDataURL("image/jpeg", 0.75);
           if (!window.localStorage.getItem('face')) {
             window.localStorage.setItem('face', img.src);
           }
