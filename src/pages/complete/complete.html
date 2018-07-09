@@ -7,7 +7,7 @@
 </ion-header>
 
 
-<ion-content text-center>
+<!-- <ion-content text-center>
   <ion-card>
     <img [src]="person.image" class="profile-img"/>
     <ion-card-content>
@@ -22,4 +22,15 @@
 </ion-content>
 <ion-footer text-center>
   <img src="http://www.emoji.co.uk/files/emoji-one/symbols-emoji-one/2118-white-heavy-check-mark.png" width="64px" height="64px">
-</ion-footer>
+</ion-footer> -->
+
+<ion-content text-center>
+  <img [src]="person.image" class="profile-img" />
+  <div class="info-box">
+    <h3>{{person.name}}</h3>
+    <h4>{{person.userData}}</h4>
+    <p>
+      <img src="assets/imgs/check.png" width="64px" height="64px">
+    </p>
+  </div>
+</ion-content>
