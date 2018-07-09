@@ -4,16 +4,14 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import firebase from 'firebase';
 import { LoginPage } from '../pages/login/login';
-import { PersonGroupDetailPage } from '../pages/person-group-detail/person-group-detail';
-import { HomePage } from '../pages/home/home';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
+import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage: any = LoginPage;
-  @ViewChild(Nav) nav;
   constructor(auth: AuthServiceProvider, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       statusBar.styleDefault();
@@ -29,26 +27,11 @@ export class MyApp {
       firebase.initializeApp(firebaseConfig);
 
       if (auth.authenticated()) {
-        this.rootPage = HomePage;
+        this.rootPage = ScreenSaverPage;
       } else {
         this.rootPage = LoginPage;
       }
     });
   }
-
-  openHome() {
-    this.nav.setRoot(HomePage);
-  }
-
-  logout() {
-    window.localStorage.removeItem('token');
-    this.nav.setRoot(LoginPage);
-  }
-
-  openPagePersonGroupDetail() {
-    this.nav.setRoot(PersonGroupDetailPage);
-  }
-
-
 }
 

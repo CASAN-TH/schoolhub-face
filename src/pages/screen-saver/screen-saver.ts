@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
+import { LoginPage } from '../login/login';
+import { PersonGroupDetailPage } from '../person-group-detail/person-group-detail';
 
 /**
  * Generated class for the ScreenSaverPage page.
@@ -19,11 +21,20 @@ export class ScreenSaverPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ScreenSaverPage');
+    
   }
 
-  gotoScan(){
-    this.navCtrl.setRoot(HomePage);
+  openHome() {
+    this.navCtrl.push(HomePage);
+  }
+
+  logout() {
+    window.localStorage.removeItem('token');
+    this.navCtrl.setRoot(LoginPage);
+  }
+
+  openPagePersonGroupDetail() {
+    this.navCtrl.push(PersonGroupDetailPage);
   }
 
 }

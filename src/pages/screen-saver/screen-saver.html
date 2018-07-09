@@ -1,11 +1,26 @@
-<!--
-  Generated template for the ScreenSaverPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-
-<ion-content test-center >
-    <h1>ระบบการลงเวลา</h1>
-    <button ion-button full (click)="gotoScan()">กลับสู่หน้าจอหลัก</button>
+<ion-content text-center>
+  <!-- <h1>ระบบการลงเวลา</h1>
+    <button ion-button full (click)="gotoScan()">กลับสู่หน้าจอหลัก</button> -->
+  <ion-grid>
+    <ion-row>
+      <ion-col col-4 (click)="openHome()">
+        <img src="https://cdn3.iconfinder.com/data/icons/new-apple-product-line/24/face_recognition-512.png" width="64px" height="64px">
+        <p>
+          สแกนใบหน้า
+        </p>
+      </ion-col>
+      <ion-col col-4 (click)="openPagePersonGroupDetail()">
+        <img src="https://www.shareicon.net/data/512x512/2016/06/18/596180_setting_512x512.png" width="64px" height="64px">
+        <p>
+          ตั้งค่า
+        </p>
+      </ion-col>
+      <ion-col col-4 (click)="logout()">
+        <img src="https://www.shareicon.net/data/512x512/2015/10/06/113415_logout_512x512.png" width="64px" height="64px">
+        <p>
+          ออกจากระบบ
+        </p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
