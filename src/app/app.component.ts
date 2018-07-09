@@ -6,13 +6,15 @@ import firebase from 'firebase';
 import { LoginPage } from '../pages/login/login';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
+import { TakePhotoPage } from '../pages/take-photo/take-photo';
+import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage: any = LoginPage;
-  constructor(auth: AuthServiceProvider, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(cameraPreview: CameraPreview,auth: AuthServiceProvider, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
@@ -25,6 +27,26 @@ export class MyApp {
 
       };
       firebase.initializeApp(firebaseConfig);
+
+      const cameraPreviewOpts: CameraPreviewOptions = {
+        x: 0,
+        y: 0,
+        width: window.screen.width,
+        height: window.screen.height,
+        camera: 'front',
+        tapPhoto: false,
+        previewDrag: false,
+        toBack: true,
+        alpha: 1
+      };
+
+      cameraPreview.startCamera(cameraPreviewOpts).then(
+        (res) => {
+          
+        },
+        (err) => {
+          alert(err);
+        });
 
       if (auth.authenticated()) {
         this.rootPage = ScreenSaverPage;

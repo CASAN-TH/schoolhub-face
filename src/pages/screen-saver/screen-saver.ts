@@ -3,6 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { LoginPage } from '../login/login';
 import { PersonGroupDetailPage } from '../person-group-detail/person-group-detail';
+import { TakePhotoPage } from '../take-photo/take-photo';
 
 /**
  * Generated class for the ScreenSaverPage page.
@@ -34,7 +35,7 @@ export class ScreenSaverPage {
   }
 
   openPagePersonGroupDetail() {
-    this.navCtrl.push(PersonGroupDetailPage);
+    this.navCtrl.push(TakePhotoPage);
   }
 
 }

@@ -19,6 +19,8 @@ import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
 import { DataServiceProvider } from '../providers/data-service/data-service';
 import { MessageComponent } from '../components/message/message';
 import { NoDataPage } from '../pages/no-data/no-data';
+import { TakePhotoPage } from '../pages/take-photo/take-photo';
+import { CameraPreview } from '@ionic-native/camera-preview';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { NoDataPage } from '../pages/no-data/no-data';
     CompletePage,
     ScreenSaverPage,
     MessageComponent,
-    NoDataPage
+    NoDataPage,
+    TakePhotoPage
   ],
   imports: [
     HttpClientModule,
@@ -51,7 +54,8 @@ import { NoDataPage } from '../pages/no-data/no-data';
     CompletePage,
     ScreenSaverPage,
     MessageComponent,
-    NoDataPage
+    NoDataPage,
+    TakePhotoPage
   ],
   providers: [
     StatusBar,
@@ -60,7 +64,8 @@ import { NoDataPage } from '../pages/no-data/no-data';
     FaceServiceProvider,
     AuthServiceProvider,
     AttendantServiceProvider,
-    DataServiceProvider
+    DataServiceProvider,
+    CameraPreview
   ]
 })
 export class AppModule {}

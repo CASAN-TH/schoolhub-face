@@ -1,0 +1,17 @@
+<ion-content>
+  <div id="ionball" (click)="takePhoto()">
+    <img src="./assets/imgs/great-ball.png">
+  </div>
+
+  <ion-fab right top small>
+    <button ion-fab color="light" (click)="cameraSwitch()">
+      <ion-icon name="reverse-camera"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <ion-fab left top small>
+    <button ion-fab color="light" (click)="gotoHome()">
+      <ion-icon name="home"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>
