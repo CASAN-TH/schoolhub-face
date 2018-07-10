@@ -1,0 +1,27 @@
+page-nfc {
+    .box {
+        bottom: 8rem;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+    }
+
+    .imgw {
+        position: absolute;
+        top: -6rem;
+        right: 4.8rem;
+    }
+    
+    .clrc {
+        height: 10rem !important;
+        border-radius: 100% !important;
+    }
+
+    a[disabled], button[disabled], [ion-button][disabled] {
+        cursor: default;
+        opacity: 1;
+        pointer-events: none;
+        background-color: #9bbfff;
+        color: #9bbfff;
+    }
+}

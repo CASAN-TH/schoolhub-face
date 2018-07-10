@@ -21,7 +21,8 @@ import { MessageComponent } from '../components/message/message';
 import { NoDataPage } from '../pages/no-data/no-data';
 import { TakePhotoPage } from '../pages/take-photo/take-photo';
 import { CameraPreview } from '@ionic-native/camera-preview';
-
+import { NfcPage } from '../pages/nfc/nfc';
+import { NFC, Ndef } from '@ionic-native/nfc';
 @NgModule({
   declarations: [
     MyApp,
@@ -35,7 +36,8 @@ import { CameraPreview } from '@ionic-native/camera-preview';
     ScreenSaverPage,
     MessageComponent,
     NoDataPage,
-    TakePhotoPage
+    TakePhotoPage,
+    NfcPage
   ],
   imports: [
     HttpClientModule,
@@ -55,11 +57,14 @@ import { CameraPreview } from '@ionic-native/camera-preview';
     ScreenSaverPage,
     MessageComponent,
     NoDataPage,
-    TakePhotoPage
+    TakePhotoPage,
+    NfcPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    NFC,
+    Ndef,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FaceServiceProvider,
     AuthServiceProvider,

@@ -1,0 +1,15 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>NFC</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div class="box">
+    <img class="imgw" src="https://pinscollective.com/app/uploads/bluetooth-signal-1.gif" *ngIf="enableSignal">
+    <button ion-button class="clrc" (click)="startNFC()" [disabled]="!enableBtn">Start NFC</button>
+  </div>
+</ion-content>

@@ -4,6 +4,7 @@ import { HomePage } from '../home/home';
 import { LoginPage } from '../login/login';
 import { PersonGroupDetailPage } from '../person-group-detail/person-group-detail';
 import { TakePhotoPage } from '../take-photo/take-photo';
+import { NfcPage } from '../nfc/nfc';
 
 /**
  * Generated class for the ScreenSaverPage page.
@@ -23,6 +24,10 @@ export class ScreenSaverPage {
 
   ionViewDidLoad() {
     
+  }
+
+  openNFC(){
+    this.navCtrl.push(NfcPage);
   }
 
   openHome() {
