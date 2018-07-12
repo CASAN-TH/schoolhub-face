@@ -1,20 +1,20 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { Platform, Nav } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import firebase from 'firebase';
 import { LoginPage } from '../pages/login/login';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
-import { TakePhotoPage } from '../pages/take-photo/take-photo';
 import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview';
+import { Network } from '@ionic-native/network';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage: any = LoginPage;
-  constructor(cameraPreview: CameraPreview,auth: AuthServiceProvider, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(network: Network, cameraPreview: CameraPreview, auth: AuthServiceProvider, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
@@ -27,6 +27,10 @@ export class MyApp {
 
       };
       firebase.initializeApp(firebaseConfig);
+
+      network.onDisconnect().subscribe(() => {
+        alert('ไม่ได้เชื่อมต่ออินเทอร์เน็ต :-(');
+      });
 
       const cameraPreviewOpts: CameraPreviewOptions = {
         x: 0,
@@ -42,7 +46,7 @@ export class MyApp {
 
       cameraPreview.startCamera(cameraPreviewOpts).then(
         (res) => {
-          
+
         },
         (err) => {
           console.log(err);

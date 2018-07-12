@@ -24,6 +24,7 @@ import { CameraPreview } from '@ionic-native/camera-preview';
 import { NfcPage } from '../pages/nfc/nfc';
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { LoadingProvider } from '../providers/loading/loading';
+import { Network } from '@ionic-native/network';
 @NgModule({
   declarations: [
     MyApp,
@@ -72,7 +73,8 @@ import { LoadingProvider } from '../providers/loading/loading';
     AttendantServiceProvider,
     DataServiceProvider,
     CameraPreview,
-    LoadingProvider
+    LoadingProvider,
+    Network
   ]
 })
 export class AppModule {}
