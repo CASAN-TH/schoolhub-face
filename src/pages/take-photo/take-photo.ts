@@ -4,6 +4,7 @@ import { CameraPreview } from '@ionic-native/camera-preview';
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
 import { CreatePersonModalPage } from '../create-person-modal/create-person-modal';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
+import { LoadingProvider } from '../../providers/loading/loading';
 
 @IonicPage()
 @Component({
@@ -13,7 +14,7 @@ import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 export class TakePhotoPage {
   faces: Array<any> = [];
   person: any;
-  constructor(public auth: AuthServiceProvider, public modalCtrl: ModalController, public faceServiceProvider: FaceServiceProvider, public cameraPreview: CameraPreview, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public loadingProvider: LoadingProvider, public auth: AuthServiceProvider, public modalCtrl: ModalController, public faceServiceProvider: FaceServiceProvider, public cameraPreview: CameraPreview, public navCtrl: NavController, public navParams: NavParams) {
 
   }
 
@@ -21,10 +22,12 @@ export class TakePhotoPage {
     let modal = this.modalCtrl.create(CreatePersonModalPage);
     modal.onDidDismiss(res => {
       if (res) {
+        this.loadingProvider.onLoading();
         this.faceServiceProvider.CreatePerson(this.auth.Uesr().schoolid, res).then(res => {
-          //alert(JSON.stringify(res));
+          this.loadingProvider.dismiss();
           this.person = res;
         }).catch(err => {
+          this.loadingProvider.dismiss();
           alert(JSON.stringify(err));
         });
       } else {
@@ -40,15 +43,13 @@ export class TakePhotoPage {
   }
 
   takePhoto() {
+    this.loadingProvider.onLoading();
     this.cameraPreview.takePicture().then((imageData) => {
       let img = 'data:image/jpeg;base64,' + imageData;
-      //this.detect(img);
       this.faceServiceProvider.DetectStream(img).then(res => {
         let data: any = res;
-        //alert(JSON.stringify(data));
         if (data.length > 0) {
           this.faceServiceProvider.AddPersonFaceStream(this.auth.Uesr().schoolid, this.person.personId, img).then(res => {
-            //alert(JSON.stringify(res));
             this.faces.push(res);
             if (this.faces.length >= 3) {
               this.faceServiceProvider.TrainPersonGroup(this.auth.Uesr().schoolid).then(res => {
@@ -57,14 +58,20 @@ export class TakePhotoPage {
                 alert(JSON.stringify(err));
               });
             }
+            this.loadingProvider.dismiss();
           }).catch(err => {
+            this.loadingProvider.dismiss();
             alert(JSON.stringify(err));
           });
+        } else {
+          this.loadingProvider.dismiss();
         }
       }).catch(err => {
+        this.loadingProvider.dismiss();
         alert(JSON.stringify(err));
       });
     }, (err) => {
+      this.loadingProvider.dismiss();
       console.log(err);
     });
   }
