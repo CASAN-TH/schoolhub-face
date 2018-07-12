@@ -25,4 +25,7 @@
   </ion-item>
   <button ion-button full *ngIf="!personData.name" [disabled]="!personData.userData" (click)="check()">ตรวจสอบข้อมูล</button>
   <button ion-button full *ngIf="personData.name" [disabled]="!(personData.name && personData.userData)" (click)="save()">บันทึก</button>
+  <p>
+    <message [type]="dataServiceProvider.messageType" [message]="dataServiceProvider.message"></message>
+  </p>
 </ion-content>

@@ -222,11 +222,12 @@ export class HomePage {
   }
 
   showNoDataFound(face) {
-    let modal = this.modalCtrl.create(NoDataPage, { face: face });
-    modal.present();
-    modal.onDidDismiss(res => {
-      this.Tracking();
-    });
+    // let modal = this.modalCtrl.create(NoDataPage, { face: face });
+    // modal.present();
+    // modal.onDidDismiss(res => {
+    //   this.Tracking();
+    // });
+    this.dataServiceProvider.error('ไม่พบข้อมูลใบหน้าบุคคล !');
   }
   detect2(face) {
     this.faceServiceProvider.DetectStream(face).then(res => {
@@ -302,8 +303,8 @@ export class HomePage {
 
     }).catch(err => {
       //Detect Service Return Error
-      //this.showNoDataFound(face);
-      this.dataServiceProvider.error('ไม่พบข้อมูลใบหน้าบุคคล !');
+      this.showNoDataFound(face);
+      
     });
   }
 

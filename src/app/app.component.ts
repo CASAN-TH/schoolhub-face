@@ -45,7 +45,7 @@ export class MyApp {
           
         },
         (err) => {
-          alert(err);
+          console.log(err);
         });
 
       if (auth.authenticated()) {

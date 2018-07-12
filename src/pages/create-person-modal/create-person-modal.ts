@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { AttendantServiceProvider } from '../../providers/attendant-service/attendant-service';
+import { DataServiceProvider } from '../../providers/data-service/data-service';
 
 @IonicPage()
 @Component({
@@ -10,7 +11,7 @@ import { AttendantServiceProvider } from '../../providers/attendant-service/atte
 export class CreatePersonModalPage {
   personData: any = {};
 
-  constructor(public attendantServiceProvider: AttendantServiceProvider, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public dataServiceProvider: DataServiceProvider, public attendantServiceProvider: AttendantServiceProvider, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
@@ -22,7 +23,7 @@ export class CreatePersonModalPage {
       let data: any = res;
       this.personData.name = data.data.firstname + ' ' + data.data.lastname;
     }).catch(err => {
-      alert('ไม่พบข้อมูล');
+      this.dataServiceProvider.error('ไม่พบข้อมูล');
     });
   }
 
