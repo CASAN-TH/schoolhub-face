@@ -4,6 +4,8 @@ import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
 import { HomePage } from '../home/home';
 import { ScreenSaverPage } from '../screen-saver/screen-saver';
+import { LoadingProvider } from '../../providers/loading/loading';
+import { DataServiceProvider } from '../../providers/data-service/data-service';
 
 
 @IonicPage()
@@ -14,7 +16,7 @@ import { ScreenSaverPage } from '../screen-saver/screen-saver';
 export class LoginPage {
   credencial: any = {};
 
-  constructor(public faceServiceProvider: FaceServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public dataServiceProvider: DataServiceProvider, public loadingProvider: LoadingProvider, public faceServiceProvider: FaceServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
@@ -22,19 +24,21 @@ export class LoginPage {
   }
 
   login() {
+    this.loadingProvider.onLoading();
     this.auth.Signin(this.credencial).then(res => {
       let data: any = res;
       window.localStorage.setItem('token', data.token);
-      console.log(window.localStorage.getItem('token'));
       let user: any = this.auth.Uesr();
-      console.log(user);
       this.faceServiceProvider.CreatePersonGroup(user.schoolid, { name: user.schoolid, userData: user.schoolid }).then(res => {
+        this.loadingProvider.dismiss();
         this.navCtrl.setRoot(ScreenSaverPage);
       }).catch(err => {
+        this.loadingProvider.dismiss();
         this.navCtrl.setRoot(ScreenSaverPage);
       });
     }).catch(err => {
-      console.log(err);
+      this.loadingProvider.dismiss();
+      this.dataServiceProvider.error('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
     });
   }
 

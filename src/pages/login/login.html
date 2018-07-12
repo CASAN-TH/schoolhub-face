@@ -19,5 +19,8 @@
     <ion-label floating>Password</ion-label>
     <ion-input type="password" [(ngModel)]="credencial.password"></ion-input>
   </ion-item>
-  <button ion-button full (click)="login()">Login</button>
+  <button ion-button full [disabled]="!(credencial.username && credencial.password)" (click)="login()">Login</button>
+  <p>
+    <message [type]="dataServiceProvider.messageType" [message]="dataServiceProvider.message"></message>
+  </p>
 </ion-content>
