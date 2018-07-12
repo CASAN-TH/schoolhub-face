@@ -302,7 +302,8 @@ export class HomePage {
 
     }).catch(err => {
       //Detect Service Return Error
-      this.showNoDataFound(face);
+      //this.showNoDataFound(face);
+      this.dataServiceProvider.error('ไม่พบข้อมูลใบหน้าบุคคล !');
     });
   }
 

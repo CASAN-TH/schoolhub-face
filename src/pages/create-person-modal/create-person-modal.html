@@ -1,14 +1,14 @@
 <ion-header>
   <ion-navbar>
-    <ion-buttons start>
+    <ion-buttons end>
       <button ion-button icon-only (click)="dismiss()">
         <ion-icon name="close"></ion-icon>
       </button>
     </ion-buttons>
     <ion-title>สร้างบุคคล</ion-title>
-    <ion-buttons end>
+    <!-- <ion-buttons end>
       <button ion-button [disabled]="!(personData.name && personData.userData)" (click)="save()">บันทึก</button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-navbar>
 
 </ion-header>
@@ -16,11 +16,13 @@
 
 <ion-content padding>
   <ion-item>
-    <ion-label floating>ชื่อ-สกุล</ion-label>
-    <ion-input type="text" [(ngModel)]="personData.name"></ion-input>
-  </ion-item>
-  <ion-item>
     <ion-label floating>เลขที่บัตรประชาชน</ion-label>
     <ion-input type="text" [(ngModel)]="personData.userData"></ion-input>
   </ion-item>
+  <ion-item *ngIf="personData.name">
+    <ion-label floating>ชื่อ-สกุล</ion-label>
+    <ion-input type="text" [disabled]="true" [(ngModel)]="personData.name"></ion-input>
+  </ion-item>
+  <button ion-button full *ngIf="!personData.name" [disabled]="!personData.userData" (click)="check()">ตรวจสอบข้อมูล</button>
+  <button ion-button full *ngIf="personData.name" [disabled]="!(personData.name && personData.userData)" (click)="save()">บันทึก</button>
 </ion-content>
