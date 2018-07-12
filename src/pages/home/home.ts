@@ -12,6 +12,7 @@ import { CompletePage } from '../complete/complete';
 import { ScreenSaverPage } from '../screen-saver/screen-saver';
 import { DataServiceProvider } from '../../providers/data-service/data-service';
 import { NoDataPage } from '../no-data/no-data';
+import { LoadingProvider } from '../../providers/loading/loading';
 // import 'tracking/build/data/eye';
 // import 'tracking/build/data/mouth';
 
@@ -29,7 +30,7 @@ export class HomePage {
   currentPerson: any;
   interval: any;
   noFaceCount: number = 0;
-  constructor(private dataServiceProvider: DataServiceProvider, public modalCtrl: ModalController, public attendantServiceProvider: AttendantServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
+  constructor(public loadingProvider: LoadingProvider, private dataServiceProvider: DataServiceProvider, public modalCtrl: ModalController, public attendantServiceProvider: AttendantServiceProvider, public auth: AuthServiceProvider, public navCtrl: NavController, public faceServiceProvider: FaceServiceProvider) {
     if (this.auth.authenticated()) {
       this.personGroupId = this.auth.Uesr().schoolid;
     }
@@ -88,9 +89,9 @@ export class HomePage {
           }
         }
 
-        event.data.forEach(function (rect) {
-          //console.log(rect);
-        });
+        // event.data.forEach(function (rect) {
+        //   console.log(rect);
+        // });
 
       }
       setTimeout(() => {
@@ -160,10 +161,12 @@ export class HomePage {
                                 this.Tracking();
                               });
                               modal.present();
-
+                              this.loadingProvider.onLoading();
                               this.attendantServiceProvider.Checkin(bodyReq).then(res => {
+                                this.loadingProvider.dismiss();
                                 this.dataServiceProvider.success('Checkin Success');
                               }).catch(err => {
+                                this.loadingProvider.dismiss();
                                 this.dataServiceProvider.error(JSON.stringify(err));
                               });
                             }).catch(err => {
@@ -171,21 +174,13 @@ export class HomePage {
                             });
                           } else {
                             //this.faceDetecting();
-
-
                             this.Tracking();
                           }
-
                         });
                       } else {
                         //this.faceDetecting();
-
-
-
-
                         this.Tracking();
                       }
-
                     }
                     else {
                       //this.faceDetecting();
@@ -244,7 +239,7 @@ export class HomePage {
                     this.dataServiceProvider.info('พบข้อมูลเจ้าของใบหน้า ' + itm.candidates.length + ' ข้อมูล');
                     itm.candidates.forEach(element => {
                       if (this.currentPerson !== element.personId) {
-                        
+
                         this.faceServiceProvider.GetPerson(this.personGroupId, element.personId).then(res => {
                           this.person = res;
                           this.person.image = face;
@@ -254,15 +249,18 @@ export class HomePage {
                             citizenid: this.person.userData
                           };
                           this.dataServiceProvider.info('ดำเนินการบันทึกข้อมูลการลงเวลา...');
+                          this.loadingProvider.onLoading();
                           this.attendantServiceProvider.Checkin(bodyReq).then(res => {
                             this.currentPerson = element.personId;
                             let modal = this.modalCtrl.create(CompletePage, { person: this.person });
+                            this.loadingProvider.dismiss();
                             modal.onDidDismiss(res => {
                               //this.faceDetecting();
                               this.Tracking();
                             });
                             modal.present();
                           }).catch(err => {
+                            this.loadingProvider.dismiss();
                             this.dataServiceProvider.error('บันทึกข้อมูลลงเวลาไม่สำเร็จ!!');
                             this.Tracking();
                           });
@@ -304,15 +302,18 @@ export class HomePage {
     }).catch(err => {
       //Detect Service Return Error
       this.showNoDataFound(face);
-      
+
     });
   }
 
 
   train() {
+    this.loadingProvider.onLoading();
     this.faceServiceProvider.TrainPersonGroup(this.personGroupId).then(data => {
+      this.loadingProvider.dismiss();
       this.getStatusRecuring();
     }).catch(err => {
+      this.loadingProvider.dismiss();
       this.dataServiceProvider.error(JSON.stringify(err));
     });
   }
