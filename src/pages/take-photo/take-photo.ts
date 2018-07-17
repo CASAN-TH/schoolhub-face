@@ -5,6 +5,7 @@ import { FaceServiceProvider } from '../../providers/face-service/face-service';
 import { CreatePersonModalPage } from '../create-person-modal/create-person-modal';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { LoadingProvider } from '../../providers/loading/loading';
+import { AttendantServiceProvider } from '../../providers/attendant-service/attendant-service';
 
 @IonicPage()
 @Component({
@@ -14,7 +15,8 @@ import { LoadingProvider } from '../../providers/loading/loading';
 export class TakePhotoPage {
   faces: Array<any> = [];
   person: any;
-  constructor(public loadingProvider: LoadingProvider, public auth: AuthServiceProvider, public modalCtrl: ModalController, public faceServiceProvider: FaceServiceProvider, public cameraPreview: CameraPreview, public navCtrl: NavController, public navParams: NavParams) {
+  personData: any = {};
+  constructor(public attendantServiceProvider: AttendantServiceProvider, public loadingProvider: LoadingProvider, public auth: AuthServiceProvider, public modalCtrl: ModalController, public faceServiceProvider: FaceServiceProvider, public cameraPreview: CameraPreview, public navCtrl: NavController, public navParams: NavParams) {
 
   }
 
@@ -22,6 +24,7 @@ export class TakePhotoPage {
     let modal = this.modalCtrl.create(CreatePersonModalPage);
     modal.onDidDismiss(res => {
       if (res) {
+        this.personData = res;
         this.loadingProvider.onLoading();
         this.faceServiceProvider.CreatePerson(this.auth.Uesr().schoolid, res).then(res => {
           this.loadingProvider.dismiss();
@@ -38,7 +41,6 @@ export class TakePhotoPage {
   }
 
   cameraSwitch() {
-    console.log('object');
     this.cameraPreview.switchCamera();
   }
 
@@ -49,19 +51,28 @@ export class TakePhotoPage {
       this.faceServiceProvider.DetectStream(img).then(res => {
         let data: any = res;
         if (data.length > 0) {
-          this.faceServiceProvider.AddPersonFaceStream(this.auth.Uesr().schoolid, this.person.personId, img).then(res => {
-            this.faces.push(res);
-            if (this.faces.length >= 3) {
-              this.faceServiceProvider.TrainPersonGroup(this.auth.Uesr().schoolid).then(res => {
-                this.navCtrl.pop();
-              }).catch(err => {
-                alert(JSON.stringify(err));
-              });
-            }
-            this.loadingProvider.dismiss();
+          let bodyReq: any = {
+            image: img,
+            citizenid: this.personData.userData
+          };
+          this.attendantServiceProvider.UploadImage(bodyReq).then(resData => {
+            this.faceServiceProvider.AddPersonFaceStream(this.auth.Uesr().schoolid, this.person.personId, img).then(res => {
+              this.faces.push(res);
+              if (this.faces.length >= 3) {
+                this.faceServiceProvider.TrainPersonGroup(this.auth.Uesr().schoolid).then(res => {
+                  this.navCtrl.pop();
+                }).catch(err => {
+                  alert(JSON.stringify(err));
+                });
+              }
+              this.loadingProvider.dismiss();
+            }).catch(err => {
+              this.loadingProvider.dismiss();
+              alert(JSON.stringify(err));
+            });
           }).catch(err => {
             this.loadingProvider.dismiss();
-            alert(JSON.stringify(err));
+            alert('ไม่สามารถอัพโหลดรูปได้: ' + JSON.stringify(err));
           });
         } else {
           this.loadingProvider.dismiss();

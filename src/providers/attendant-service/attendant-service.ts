@@ -7,12 +7,16 @@ export class AttendantServiceProvider {
   constructor(public http: HttpClient) {
 
   }
+
   private authorizationHeader() {
     const token = window.localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
     return headers;
   }
 
+  UploadImage(body) {
+    return this.http.post(this.baseUrl + '/image', body, { headers: this.authorizationHeader() }).toPromise();
+  }
 
   Checkin(body: any) {
     return this.http.post(this.baseUrl + '/time-attendance', body, { headers: this.authorizationHeader() }).toPromise();
