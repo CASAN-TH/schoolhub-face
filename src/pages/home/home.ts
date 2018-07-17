@@ -223,6 +223,7 @@ export class HomePage {
     //   this.Tracking();
     // });
     this.dataServiceProvider.error('ไม่พบข้อมูลใบหน้าบุคคล !');
+    this.Tracking();
   }
   detect2(face) {
     this.faceServiceProvider.DetectStream(face).then(res => {
