@@ -23,6 +23,7 @@
     <ion-label floating>ชื่อ-สกุล</ion-label>
     <ion-input type="text" [disabled]="true" [(ngModel)]="personData.name"></ion-input>
   </ion-item>
+  <button ion-button full color="danger" *ngIf="personData.userData" (click)="reset()">รีเซ็ตข้อมูล</button>
   <button ion-button full *ngIf="!personData.name" [disabled]="!personData.userData" (click)="check()">ตรวจสอบข้อมูล</button>
   <button ion-button full *ngIf="personData.name" [disabled]="!(personData.name && personData.userData)" (click)="save()">บันทึก</button>
   <p>

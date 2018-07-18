@@ -35,6 +35,13 @@ export class CreatePersonModalPage {
     this.viewCtrl.dismiss();
   }
 
+  reset() {
+    this.personData = {
+      userData: '',
+      name: ''
+    };
+  }
+
   save() {
     this.viewCtrl.dismiss(this.personData);
   }
