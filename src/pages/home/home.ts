@@ -235,7 +235,7 @@ export class HomePage {
             faceIds: faceIDs,
             personGroupId: this.personGroupId,
             maxNumOfCandidatesReturned: 1,
-            confidenceThreshold: 0.8
+            confidenceThreshold: 0.7
           };
           this.faceServiceProvider.Identify(body).then(res => {
             let cadidates: any = res;
