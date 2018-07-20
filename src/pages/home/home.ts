@@ -229,9 +229,15 @@ export class HomePage {
     this.faceServiceProvider.DetectStream(face).then(res => {
       let data: any = res;
       if (data.length > 0) {
-        this.dataServiceProvider.info('ตรวจสอบข้อมมูล ใบหน้า ' + data.length + ' ใบหน้า');
+        this.dataServiceProvider.info('ตรวจสอบข้อมูล ใบหน้า ' + data.length + ' ใบหน้า');
         this.faceServiceProvider.PushFaceIds(data).then(faceIDs => {
-          this.faceServiceProvider.Identify({ faceIds: faceIDs, personGroupId: this.personGroupId }).then(res => {
+          let body: any = {
+            faceIds: faceIDs,
+            personGroupId: this.personGroupId,
+            maxNumOfCandidatesReturned: 1,
+            confidenceThreshold: 0.8
+          };
+          this.faceServiceProvider.Identify(body).then(res => {
             let cadidates: any = res;
             if (cadidates) {
               cadidates.forEach(itm => {
