@@ -2,16 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { LoginPage } from '../login/login';
-import { PersonGroupDetailPage } from '../person-group-detail/person-group-detail';
-import { TakePhotoPage } from '../take-photo/take-photo';
-import { NfcPage } from '../nfc/nfc';
-
-/**
- * Generated class for the ScreenSaverPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @Component({
   selector: 'page-screen-saver',
@@ -23,11 +13,11 @@ export class ScreenSaverPage {
   }
 
   ionViewDidLoad() {
-    
+
   }
 
-  openNFC(){
-    this.navCtrl.push(NfcPage);
+  openNFC() {
+    this.navCtrl.push('NfcPage');
   }
 
   openHome() {
@@ -40,7 +30,7 @@ export class ScreenSaverPage {
   }
 
   openPagePersonGroupDetail() {
-    this.navCtrl.push(TakePhotoPage);
+    this.navCtrl.push('TakePhotoPage');
   }
 
 }

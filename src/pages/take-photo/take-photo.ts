@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { CameraPreview } from '@ionic-native/camera-preview';
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
-import { CreatePersonModalPage } from '../create-person-modal/create-person-modal';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { LoadingProvider } from '../../providers/loading/loading';
 import { AttendantServiceProvider } from '../../providers/attendant-service/attendant-service';
@@ -21,7 +20,7 @@ export class TakePhotoPage {
   }
 
   ionViewDidLoad() {
-    let modal = this.modalCtrl.create(CreatePersonModalPage);
+    let modal = this.modalCtrl.create('CreatePersonModalPage');
     modal.onDidDismiss(res => {
       if (res) {
         this.personData = res;

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class AttendantServiceProvider {
-  baseUrl: string = 'https://school-hub-api.herokuapp.com/api';
+  baseUrl: string = 'https://school-hub-api-dev.herokuapp.com/api';
   constructor(public http: HttpClient) {
 
   }

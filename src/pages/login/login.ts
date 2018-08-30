@@ -2,11 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
-import { HomePage } from '../home/home';
-import { ScreenSaverPage } from '../screen-saver/screen-saver';
 import { LoadingProvider } from '../../providers/loading/loading';
 import { DataServiceProvider } from '../../providers/data-service/data-service';
-
+import { ScreenSaverPage } from '../screen-saver/screen-saver';
 
 @IonicPage()
 @Component({

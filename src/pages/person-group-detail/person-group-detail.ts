@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
-import { CreatePersonModalPage } from '../create-person-modal/create-person-modal';
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
-import { AddFacePage } from '../add-face/add-face';
-import firebase from 'firebase';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 
 @IonicPage()
@@ -27,7 +24,6 @@ export class PersonGroupDetailPage {
     this.faceServiceProvider.GetListPerson(personGroupId).then(data => {
       this.persons = data;
     }).catch(err => {
-      //console.log(err);
       this.faceServiceProvider.CreatePersonGroup(personGroupId, { name: personGroupId, userData: personGroupId }).then(res => {
         console.log('create new group success..');
         this.getListPerson(personGroupId);
@@ -38,12 +34,12 @@ export class PersonGroupDetailPage {
   }
 
   createPerson() {
-    let modal = this.modalCtrl.create(CreatePersonModalPage, {}, { enableBackdropDismiss: false });
+    let modal = this.modalCtrl.create('CreatePersonModalPage', {}, { enableBackdropDismiss: false });
     modal.onDidDismiss(res => {
       if (res) {
         this.faceServiceProvider.CreatePerson(this.personGroup.personGroupId, res).then(data => {
           let person: any = data;
-          let modal2 = this.modalCtrl.create(AddFacePage, {}, { enableBackdropDismiss: false });
+          let modal2 = this.modalCtrl.create('AddFacePage', {}, { enableBackdropDismiss: false });
           modal2.onDidDismiss(res2 => {
             if (res2) {
               let cnt = 0;

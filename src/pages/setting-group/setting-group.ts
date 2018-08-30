@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
-import { PersonGroupDetailPage } from '../person-group-detail/person-group-detail';
 
 @IonicPage()
 @Component({
@@ -42,7 +41,7 @@ export class SettingGroupPage {
   }
 
   gotoDetail(personGroup) {
-    this.navCtrl.push(PersonGroupDetailPage, { personGroup: personGroup });
+    this.navCtrl.push('PersonGroupDetailPage', { personGroup: personGroup });
   }
 
 }

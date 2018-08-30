@@ -6,61 +6,35 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { FaceServiceProvider } from '../providers/face-service/face-service';
-import { SettingGroupPage } from '../pages/setting-group/setting-group';
 import { HttpClientModule  } from '@angular/common/http';
-import { PersonGroupDetailPage } from '../pages/person-group-detail/person-group-detail';
-import { CreatePersonModalPage } from '../pages/create-person-modal/create-person-modal';
-import { AddFacePage } from '../pages/add-face/add-face';
-import { LoginPage } from '../pages/login/login';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { AttendantServiceProvider } from '../providers/attendant-service/attendant-service';
-import { CompletePage } from '../pages/complete/complete';
 import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
 import { DataServiceProvider } from '../providers/data-service/data-service';
-import { MessageComponent } from '../components/message/message';
-import { NoDataPage } from '../pages/no-data/no-data';
-import { TakePhotoPage } from '../pages/take-photo/take-photo';
 import { CameraPreview } from '@ionic-native/camera-preview';
-import { NfcPage } from '../pages/nfc/nfc';
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { LoadingProvider } from '../providers/loading/loading';
 import { Network } from '@ionic-native/network';
+import { ComponentsModule } from '../components/components.module';
+import { LoginPage } from '../pages/login/login';
+
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    SettingGroupPage,
-    PersonGroupDetailPage,
-    CreatePersonModalPage,
-    AddFacePage,
-    LoginPage,
-    CompletePage,
-    ScreenSaverPage,
-    MessageComponent,
-    NoDataPage,
-    TakePhotoPage,
-    NfcPage
+    ScreenSaverPage
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-    SettingGroupPage,
-    PersonGroupDetailPage,
-    CreatePersonModalPage,
-    AddFacePage,
-    LoginPage,
-    CompletePage,
-    ScreenSaverPage,
-    MessageComponent,
-    NoDataPage,
-    TakePhotoPage,
-    NfcPage
+    ScreenSaverPage
   ],
   providers: [
     StatusBar,

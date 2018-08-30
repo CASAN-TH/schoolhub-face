@@ -17,7 +17,7 @@ export class AuthServiceProvider {
   }
 
   Signin(body: any) {
-    return this.http.post('https://school-hub-api.herokuapp.com/api/auth/signin', body, this.header()).toPromise();
+    return this.http.post('https://school-hub-api-dev.herokuapp.com/api/auth/signin', body, this.header()).toPromise();
   }
 
   authenticated() {

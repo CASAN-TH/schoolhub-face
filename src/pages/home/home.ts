@@ -1,20 +1,14 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
 import 'tracking/build/tracking';
 import 'tracking/build/data/face';
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
 import firebase from 'firebase';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
-import { LoginPage } from '../login/login';
-import { ClassField } from '@angular/compiler/src/output/output_ast';
 import { AttendantServiceProvider } from '../../providers/attendant-service/attendant-service';
-import { CompletePage } from '../complete/complete';
 import { ScreenSaverPage } from '../screen-saver/screen-saver';
 import { DataServiceProvider } from '../../providers/data-service/data-service';
-import { NoDataPage } from '../no-data/no-data';
 import { LoadingProvider } from '../../providers/loading/loading';
-// import 'tracking/build/data/eye';
-// import 'tracking/build/data/mouth';
 
 declare var tracking: any;
 var tracker: any;
@@ -155,7 +149,7 @@ export class HomePage {
                                 citizenid: this.person.userData
                               };
 
-                              let modal = this.modalCtrl.create(CompletePage, { person: this.person });
+                              let modal = this.modalCtrl.create('CompletePage', { person: this.person });
                               modal.onDidDismiss(res => {
                                 //this.faceDetecting();
                                 this.Tracking();
@@ -259,7 +253,7 @@ export class HomePage {
                           this.loadingProvider.onLoading();
                           this.attendantServiceProvider.Checkin(bodyReq).then(res => {
                             this.currentPerson = element.personId;
-                            let modal = this.modalCtrl.create(CompletePage, { person: this.person });
+                            let modal = this.modalCtrl.create('CompletePage', { person: this.person });
                             this.loadingProvider.dismiss();
                             modal.onDidDismiss(res => {
                               //this.faceDetecting();
