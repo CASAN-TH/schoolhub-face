@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Constants } from '../../app/app.constant';
 
 @Injectable()
 export class AttendantServiceProvider {
-  baseUrl: string = 'https://school-hub-api-dev.herokuapp.com/api';
   constructor(public http: HttpClient) {
 
   }
@@ -15,15 +15,15 @@ export class AttendantServiceProvider {
   }
 
   UploadImage(body) {
-    return this.http.post(this.baseUrl + '/image', body, { headers: this.authorizationHeader() }).toPromise();
+    return this.http.post(Constants.URL + '/api/image', body, { headers: this.authorizationHeader() }).toPromise();
   }
 
   Checkin(body: any) {
-    return this.http.post(this.baseUrl + '/time-attendance', body, { headers: this.authorizationHeader() }).toPromise();
+    return this.http.post(Constants.URL + '/api/time-attendance', body, { headers: this.authorizationHeader() }).toPromise();
   }
 
   Check(id: string) {
-    return this.http.get(this.baseUrl + '/student-school-citizenid/' + id, { headers: this.authorizationHeader() }).toPromise();
+    return this.http.get(Constants.URL + '/api/student-school-citizenid/' + id, { headers: this.authorizationHeader() }).toPromise();
   }
 
 }
