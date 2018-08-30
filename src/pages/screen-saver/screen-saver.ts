@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
-import { LoginPage } from '../login/login';
 
 @Component({
   selector: 'page-screen-saver',
@@ -26,7 +25,7 @@ export class ScreenSaverPage {
 
   logout() {
     window.localStorage.removeItem('token');
-    this.navCtrl.setRoot(LoginPage);
+    this.navCtrl.setRoot('LoginPage');
   }
 
   openPagePersonGroupDetail() {

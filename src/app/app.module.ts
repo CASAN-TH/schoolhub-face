@@ -16,7 +16,6 @@ import { NFC, Ndef } from '@ionic-native/nfc';
 import { LoadingProvider } from '../providers/loading/loading';
 import { Network } from '@ionic-native/network';
 import { ComponentsModule } from '../components/components.module';
-import { LoginPage } from '../pages/login/login';
 
 @NgModule({
   declarations: [

@@ -3,7 +3,6 @@ import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import firebase from 'firebase';
-import { LoginPage } from '../pages/login/login';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { ScreenSaverPage } from '../pages/screen-saver/screen-saver';
 import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview';
@@ -13,7 +12,7 @@ import { Network } from '@ionic-native/network';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage: any = LoginPage;
+  rootPage: any = 'LoginPage';
   constructor(network: Network, cameraPreview: CameraPreview, auth: AuthServiceProvider, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       statusBar.styleDefault();
@@ -55,7 +54,7 @@ export class MyApp {
       if (auth.authenticated()) {
         this.rootPage = ScreenSaverPage;
       } else {
-        this.rootPage = LoginPage;
+        this.rootPage = 'LoginPage';
       }
     });
   }
