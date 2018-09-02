@@ -1,0 +1,10 @@
+page-attendance {
+    video{
+        width: 640 px;
+        height: 480 px;
+    }
+    canvas {
+        position: absolute;
+        margin-left: -640px;
+    }
+}

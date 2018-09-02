@@ -16,12 +16,14 @@ import { NFC, Ndef } from '@ionic-native/nfc';
 import { LoadingProvider } from '../providers/loading/loading';
 import { Network } from '@ionic-native/network';
 import { ComponentsModule } from '../components/components.module';
+import { AttendancePage } from '../pages/attendance/attendance';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ScreenSaverPage
+    ScreenSaverPage,
+    AttendancePage
   ],
   imports: [
     HttpClientModule,
@@ -33,7 +35,8 @@ import { ComponentsModule } from '../components/components.module';
   entryComponents: [
     MyApp,
     HomePage,
-    ScreenSaverPage
+    ScreenSaverPage,
+    AttendancePage
   ],
   providers: [
     StatusBar,

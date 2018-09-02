@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-navbar>
+      <ion-title>หน้าหลัก</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content center text-center>
+  <ion-row center>
+      <ion-col>
+        <video id="video" preload autoplay loop muted></video>
+        <canvas id="canvas" ></canvas>
+      </ion-col>
+  </ion-row>
+</ion-content>
+<ion-footer text-center>
+  <message [type]="dataServiceProvider.messageType" [message]="dataServiceProvider.message"></message>
+</ion-footer>
+
