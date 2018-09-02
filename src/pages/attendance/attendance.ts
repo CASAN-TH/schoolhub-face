@@ -83,15 +83,15 @@ export class AttendancePage {
 
           var img = new Image();
           img.src = canvas.toDataURL("image/jpeg", 0.75);
-          
+
           if (!this.isLock) {
             this.detect(img.src);
           }
         });
       }
     } else {
-      this.dataServiceProvider.info('เครื่องพร้อมใช้งาน...');
-      if(this.personIDs.length > 0){
+      this.dataServiceProvider.info("เครื่องพร้อมใช้งาน...");
+      if (this.personIDs.length > 0) {
         this.personIDs = [];
       }
     }
@@ -103,66 +103,70 @@ export class AttendancePage {
         .DetectStream(face)
         .then((faces: any) => {
           this.isLock = true;
-          this.faceService.PushFaceIds(faces).then((faceIDs: any) => {
-            if (faceIDs.length > 0) {
-              this.dataServiceProvider.info('ตรวจสอบข้อมูล ใบหน้า ' + faceIDs.length + ' ใบหน้า');
-              let body: any = {
-                faceIds: faceIDs,
-                personGroupId: this.personGroupId,
-                maxNumOfCandidatesReturned: 10,
-                confidenceThreshold: 0.7
-              };
-              this.faceService.Identify(body).then((identifies: any) => {
-                if (identifies) {
-                  this.isLock = false;
-                  //console.log(this.personIDs);
-                  identifies.forEach(identity => {
-                    identity.candidates.forEach(person => {
-                      if (this.personIDs.indexOf(person.personId) < 0) {
-                        this.personIDs.push(person.personId);
-                        this.faceService
-                          .GetPerson(this.personGroupId, person.personId)
-                          .then((res: any) => {
-                            console.log(res);
+          this.faceService
+            .PushFaceIds(faces)
+            .then((faceIDs: any) => {
+              if (faceIDs.length > 0) {
+                this.dataServiceProvider.info(
+                  "ตรวจสอบข้อมูล ใบหน้า " + faceIDs.length + " ใบหน้า"
+                );
+                let body: any = {
+                  faceIds: faceIDs,
+                  personGroupId: this.personGroupId,
+                  maxNumOfCandidatesReturned: 10,
+                  confidenceThreshold: 0.7
+                };
+                this.faceService
+                  .Identify(body)
+                  .then((identifies: any) => {
+                    if (identifies) {
+                      this.isLock = false;
+                      //console.log(this.personIDs);
+                      identifies.forEach(identity => {
+                        identity.candidates.forEach(person => {
+                          if (this.personIDs.indexOf(person.personId) < 0) {
+                            this.personIDs.push(person.personId);
+                            this.faceService
+                              .GetPerson(this.personGroupId, person.personId)
+                              .then((res: any) => {
+                                console.log(res);
 
-                            let person = res;
-                            this.dataServiceProvider.info(person.name);
-                            person.image = face;
-                            let bodyReq = {
-                              image: face,
-                              citizenid: person.userData
-                            };
-                            this.attendantService
-                              .Checkin(bodyReq)
-                              .then(res => {
-                                this.dataServiceProvider.info("");
-                              })
-                              .catch(err => {
-                                this.dataServiceProvider.info("");
+                                let person = res;
+                                this.dataServiceProvider.info(person.name);
+                                person.image = face;
+                                let bodyReq = {
+                                  image: face,
+                                  citizenid: person.userData
+                                };
+                                this.attendantService
+                                  .Checkin(bodyReq)
+                                  .then(res => {
+                                    this.dataServiceProvider.info("");
+                                  })
+                                  .catch(err => {
+                                    this.dataServiceProvider.info("");
+                                  });
                               });
-                          });
-                      }
-                    });
+                          }
+                        });
+                      });
+                    } else {
+                      this.isLock = false;
+                      this.dataServiceProvider.info("");
+                    }
+                  })
+                  .catch(err => {
+                    this.isLock = false;
+                    this.dataServiceProvider.info("");
                   });
-                } else {
-                  this.isLock = false;
-                  this.dataServiceProvider.info("");
-                }
-              }).catch(err=>{
+              } else {
                 this.isLock = false;
                 this.dataServiceProvider.info("");
-              });
-            } else {
-              this.isLock = false;
-              this.dataServiceProvider.info("");
-            }
-          }).catch(err=>{
-
-          });
+              }
+            })
+            .catch(err => {});
         })
-        .catch(err => {
-
-        });
+        .catch(err => {});
     } catch {
       this.isLock = false;
     }
