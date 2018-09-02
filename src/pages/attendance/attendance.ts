@@ -3,8 +3,9 @@ import { IonicPage, NavController, NavParams } from "ionic-angular";
 import "tracking/build/tracking";
 import "tracking/build/data/face";
 import { DataServiceProvider } from "../../providers/data-service/data-service";
-import { FaceServiceProvider } from '../../providers/face-service/face-service';
-import { AttendantServiceProvider } from '../../providers/attendant-service/attendant-service';
+import { FaceServiceProvider } from "../../providers/face-service/face-service";
+import { AttendantServiceProvider } from "../../providers/attendant-service/attendant-service";
+import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 /**
  * Generated class for the AttendancePage page.
  *
@@ -21,19 +22,23 @@ export class AttendancePage {
   tracker: any;
   task: any;
   isLock: boolean = false;
-  personGroupId: any = "5b4ea676a581760014b38015";
+  personGroupId: any;
   personIDs: any = [];
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private dataServiceProvider: DataServiceProvider,
     private faceService: FaceServiceProvider,
-    private attendantService:AttendantServiceProvider
-  ) {}
+    private attendantService: AttendantServiceProvider,
+    private auth: AuthServiceProvider
+  ) {
+    if (this.auth.authenticated()) {
+      this.personGroupId = this.auth.Uesr().schoolid;
+    }
+  }
 
   ionViewDidLoad() {
     //console.log('ionViewDidLoad AttendancePage');
-
     this.initTracker();
   }
 
@@ -78,16 +83,17 @@ export class AttendancePage {
 
           var img = new Image();
           img.src = canvas.toDataURL("image/jpeg", 0.75);
-
+          
           if (!this.isLock) {
             this.detect(img.src);
           }
         });
       }
     } else {
-      // if(this.personIDs.length > 0){
-      //   //this.personIDs = [];
-      // }
+      this.dataServiceProvider.info('เครื่องพร้อมใช้งาน...');
+      if(this.personIDs.length > 0){
+        this.personIDs = [];
+      }
     }
   }
 
@@ -99,6 +105,7 @@ export class AttendancePage {
           this.isLock = true;
           this.faceService.PushFaceIds(faces).then((faceIDs: any) => {
             if (faceIDs.length > 0) {
+              this.dataServiceProvider.info('ตรวจสอบข้อมูล ใบหน้า ' + faceIDs.length + ' ใบหน้า');
               let body: any = {
                 faceIds: faceIDs,
                 personGroupId: this.personGroupId,
@@ -117,7 +124,7 @@ export class AttendancePage {
                           .GetPerson(this.personGroupId, person.personId)
                           .then((res: any) => {
                             console.log(res);
-                            
+
                             let person = res;
                             this.dataServiceProvider.info(person.name);
                             person.image = face;
@@ -125,25 +132,37 @@ export class AttendancePage {
                               image: face,
                               citizenid: person.userData
                             };
-                            this.attendantService.Checkin(bodyReq).then(res => {
-                              this.dataServiceProvider.info("");
-                            }).catch(err => {
-                              this.dataServiceProvider.info("");
-                            });
+                            this.attendantService
+                              .Checkin(bodyReq)
+                              .then(res => {
+                                this.dataServiceProvider.info("");
+                              })
+                              .catch(err => {
+                                this.dataServiceProvider.info("");
+                              });
                           });
                       }
                     });
                   });
                 } else {
                   this.isLock = false;
+                  this.dataServiceProvider.info("");
                 }
+              }).catch(err=>{
+                this.isLock = false;
+                this.dataServiceProvider.info("");
               });
             } else {
               this.isLock = false;
+              this.dataServiceProvider.info("");
             }
+          }).catch(err=>{
+
           });
         })
-        .catch(err => {});
+        .catch(err => {
+
+        });
     } catch {
       this.isLock = false;
     }
