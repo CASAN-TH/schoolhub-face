@@ -3,10 +3,10 @@
       <ion-title>หน้าหลัก</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content center text-center>
-  <ion-row center>
-      <ion-col>
-        <video id="video" preload autoplay loop muted></video>
+<ion-content>
+  <ion-row>
+      <ion-col class="bg">
+        <video id="video" preload autoplay loop muted width="{{screenSize.width}}" height="{{screenSize.height}}"></video>
         <canvas id="canvas" ></canvas>
       </ion-col>
   </ion-row>
