@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { HomePage } from '../home/home';
-import { AttendancePage } from '../attendance/attendance';
 
 @Component({
   selector: 'page-screen-saver',
@@ -21,7 +19,7 @@ export class ScreenSaverPage {
   }
 
   openHome() {
-    this.navCtrl.push(AttendancePage);
+    this.navCtrl.push('AttendancePage');
   }
 
   logout() {
