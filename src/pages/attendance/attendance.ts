@@ -42,6 +42,12 @@ export class AttendancePage {
     this.initTracker();
   }
 
+  ionViewWillLeave(){
+    
+    this.task.stop();
+    console.log('ionViewWillLeave')
+  }
+
   initTracker(): void {
     try {
       const global = <any>window;
@@ -65,7 +71,7 @@ export class AttendancePage {
   tryToDetectFace(trackedData: any): void {
     if (trackedData.length > 0) {
       const video = this.getVideo();
-      const canvas = this.getCanvas();
+      const canvas = this.createCanvas();//this.getCanvas();
       const ctx = canvas.getContext("2d");
 
       if (video && canvas) {
@@ -74,10 +80,10 @@ export class AttendancePage {
         ctx.drawImage(video, 0, 0);
         trackedData.forEach(rect => {
           //const gradient = ctx.createLinearGradient(0, 0, 170, 0);
-          ctx.strokeStyle = "#a64ceb";
-          ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
-          ctx.font = "11px Helvetica";
-          ctx.fillStyle = "#fff";
+          // ctx.strokeStyle = "#a64ceb";
+          // ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+          // ctx.font = "11px Helvetica";
+          // ctx.fillStyle = "#fff";
           // ctx.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
           // ctx.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
 
@@ -90,7 +96,7 @@ export class AttendancePage {
         });
       }
     } else {
-      this.dataServiceProvider.info("เครื่องพร้อมใช้งาน...");
+      
       if (this.personIDs.length > 0) {
         this.personIDs = [];
       }
@@ -103,6 +109,7 @@ export class AttendancePage {
         .DetectStream(face)
         .then((faces: any) => {
           this.isLock = true;
+          this.dataServiceProvider.info("");
           this.faceService
             .PushFaceIds(faces)
             .then((faceIDs: any) => {
@@ -174,6 +181,10 @@ export class AttendancePage {
 
   getCanvas(): HTMLCanvasElement {
     return <HTMLCanvasElement>document.getElementsByTagName("canvas")[0];
+  }
+
+  createCanvas():HTMLCanvasElement{
+    return  <HTMLCanvasElement>document.createElement('canvas');
   }
 
   getVideo(): HTMLVideoElement {
