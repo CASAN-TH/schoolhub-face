@@ -135,7 +135,7 @@ export class AttendancePage {
                   .then((identifies: any) => {
                     if (identifies) {
                       this.isLock = false;
-                      //console.log(this.personIDs);
+                      this.dataServiceProvider.info("");
                       identifies.forEach(identity => {
                         identity.candidates.forEach(person => {
                           if (this.personIDs.indexOf(person.personId) < 0) {
