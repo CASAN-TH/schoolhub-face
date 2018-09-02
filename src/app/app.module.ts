@@ -22,8 +22,7 @@ import { AttendancePage } from '../pages/attendance/attendance';
   declarations: [
     MyApp,
     HomePage,
-    ScreenSaverPage,
-    AttendancePage
+    ScreenSaverPage
   ],
   imports: [
     HttpClientModule,
@@ -35,8 +34,7 @@ import { AttendancePage } from '../pages/attendance/attendance';
   entryComponents: [
     MyApp,
     HomePage,
-    ScreenSaverPage,
-    AttendancePage
+    ScreenSaverPage
   ],
   providers: [
     StatusBar,

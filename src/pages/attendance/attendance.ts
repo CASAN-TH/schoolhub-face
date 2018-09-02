@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
+import { IonicPage, NavController, NavParams, Platform } from "ionic-angular";
 import "tracking/build/tracking";
 import "tracking/build/data/face";
 import { DataServiceProvider } from "../../providers/data-service/data-service";
@@ -24,14 +24,21 @@ export class AttendancePage {
   isLock: boolean = false;
   personGroupId: any;
   personIDs: any = [];
+  screenSize: any = {};
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private dataServiceProvider: DataServiceProvider,
     private faceService: FaceServiceProvider,
     private attendantService: AttendantServiceProvider,
-    private auth: AuthServiceProvider
+    private auth: AuthServiceProvider,
+    private platform: Platform
   ) {
+    this.screenSize = {
+      width: this.platform.width(),
+      height: this.platform.height()
+    };
+    console.log(this.screenSize);
     if (this.auth.authenticated()) {
       this.personGroupId = this.auth.Uesr().schoolid;
     }
@@ -171,9 +178,9 @@ export class AttendancePage {
                 this.dataServiceProvider.info("");
               }
             })
-            .catch(err => {});
+            .catch(err => { });
         })
-        .catch(err => {});
+        .catch(err => { });
     } catch {
       this.isLock = false;
     }
@@ -191,8 +198,4 @@ export class AttendancePage {
     return <HTMLVideoElement>document.getElementsByTagName("video")[0];
   }
 
-  getWidth() {
-    let width: string = screen.width + "px";
-    return width;
-  }
 }
