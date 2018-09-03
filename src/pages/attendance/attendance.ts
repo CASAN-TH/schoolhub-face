@@ -144,34 +144,39 @@ export class AttendancePage {
 
                           // }
                           /** */
-                          if (this.currentPerson !== person.personId && cnt === 0) {
-                            cnt ++;
+                          console.log('out===> ' + person.personId);
+                          if (cnt === 0) {
+                            cnt++;
+                            if (this.currentPerson !== person.personId) {
 
-                            this.currentPerson = person.personId;
-                            
-                            this.faceService
-                              .GetPerson(this.personGroupId, person.personId)
-                              .then((res: any) => {
-                                console.log(res);
+                              console.log('in===> ' + person.personId);
+                              this.currentPerson = person.personId;
 
-                                let person = res;
-                                this.dataServiceProvider.info(person.name);
-                                person.image = face;
-                                let bodyReq = {
-                                  image: face,
-                                  citizenid: person.userData
-                                };
-          
-                                this.attendantService
-                                  .Checkin(bodyReq)
-                                  .then(res => {
-                                    this.dataServiceProvider.info("");
-                                  })
-                                  .catch(err => {
-                                    this.dataServiceProvider.info("");
-                                  });
-                              });
+                              this.faceService
+                                .GetPerson(this.personGroupId, person.personId)
+                                .then((res: any) => {
+                                  console.log(res);
+
+                                  let person = res;
+                                  this.dataServiceProvider.info(person.name);
+                                  person.image = face;
+                                  let bodyReq = {
+                                    image: face,
+                                    citizenid: person.userData
+                                  };
+
+                                  this.attendantService
+                                    .Checkin(bodyReq)
+                                    .then(res => {
+                                      this.dataServiceProvider.info("");
+                                    })
+                                    .catch(err => {
+                                      this.dataServiceProvider.info("");
+                                    });
+                                });
+                            }
                           }
+
                         });
                       });
                     } else {
@@ -188,9 +193,9 @@ export class AttendancePage {
                 this.dataServiceProvider.info("");
               }
             })
-            .catch(err => {});
+            .catch(err => { });
         })
-        .catch(err => {});
+        .catch(err => { });
     } catch {
       this.isLock = false;
     }
