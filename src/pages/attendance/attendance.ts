@@ -41,6 +41,9 @@ export class AttendancePage {
     console.log(this.screenSize);
     if (this.auth.authenticated()) {
       this.personGroupId = this.auth.Uesr().schoolid;
+      if (this.personGroupId === "5b89127e9bcb300014a221fe") {
+        this.personGroupId = "5b4ea676a581760014b38015";
+      }
     }
   }
 
