@@ -127,7 +127,7 @@ export class AttendancePage {
                 let body: any = {
                   faceIds: faceIDs,
                   personGroupId: this.personGroupId,
-                  maxNumOfCandidatesReturned: 10,
+                  maxNumOfCandidatesReturned: 1,
                   confidenceThreshold: 0.7
                 };
                 this.faceService
