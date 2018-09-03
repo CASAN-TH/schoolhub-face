@@ -6,12 +6,7 @@ import { DataServiceProvider } from "../../providers/data-service/data-service";
 import { FaceServiceProvider } from "../../providers/face-service/face-service";
 import { AttendantServiceProvider } from "../../providers/attendant-service/attendant-service";
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
-/**
- * Generated class for the AttendancePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Dialogs } from '@ionic-native/dialogs';
 
 @IonicPage()
 @Component({
@@ -32,7 +27,8 @@ export class AttendancePage {
     private faceService: FaceServiceProvider,
     private attendantService: AttendantServiceProvider,
     private auth: AuthServiceProvider,
-    private platform: Platform
+    private platform: Platform,
+    private dialogs: Dialogs
   ) {
     this.screenSize = {
       width: this.platform.width(),
@@ -52,8 +48,8 @@ export class AttendancePage {
     this.initTracker();
   }
 
-  ionViewWillLeave(){
-    
+  ionViewWillLeave() {
+
     this.task.stop();
     console.log('ionViewWillLeave')
   }
@@ -106,7 +102,7 @@ export class AttendancePage {
         });
       }
     } else {
-      
+
       if (this.personIDs.length > 0) {
         this.personIDs = [];
       }
@@ -127,6 +123,7 @@ export class AttendancePage {
                 this.dataServiceProvider.info(
                   "ตรวจสอบข้อมูล ใบหน้า " + faceIDs.length + " ใบหน้า"
                 );
+                this.dialogs.beep(1);
                 let body: any = {
                   faceIds: faceIDs,
                   personGroupId: this.personGroupId,
@@ -193,8 +190,8 @@ export class AttendancePage {
     return <HTMLCanvasElement>document.getElementsByTagName("canvas")[0];
   }
 
-  createCanvas():HTMLCanvasElement{
-    return  <HTMLCanvasElement>document.createElement('canvas');
+  createCanvas(): HTMLCanvasElement {
+    return <HTMLCanvasElement>document.createElement('canvas');
   }
 
   getVideo(): HTMLVideoElement {

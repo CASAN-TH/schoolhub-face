@@ -23,6 +23,7 @@
         "@angular/platform-browser-dynamic": "5.2.11",
         "@ionic-native/camera-preview": "^4.9.0",
         "@ionic-native/core": "4.8.0",
+        "@ionic-native/dialogs": "^4.12.2",
         "@ionic-native/network": "^4.9.1",
         "@ionic-native/nfc": "^4.9.1",
         "@ionic-native/splash-screen": "4.8.0",
@@ -33,6 +34,7 @@
         "cordova-ios": "^4.4.0",
         "cordova-plugin-camera-preview": "^0.10.0",
         "cordova-plugin-device": "^2.0.2",
+        "cordova-plugin-dialogs": "^2.0.1",
         "cordova-plugin-ionic-keyboard": "^2.1.2",
         "cordova-plugin-ionic-webview": "^1.2.1",
         "cordova-plugin-network-information": "^2.0.1",
@@ -63,7 +65,8 @@
             "cordova-plugin-ionic-webview": {},
             "cordova-plugin-ionic-keyboard": {},
             "phonegap-nfc": {},
-            "cordova-plugin-network-information": {}
+            "cordova-plugin-network-information": {},
+            "cordova-plugin-dialogs": {}
         },
         "platforms": [
             "android",
