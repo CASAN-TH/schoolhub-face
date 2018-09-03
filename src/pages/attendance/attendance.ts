@@ -6,7 +6,7 @@ import { DataServiceProvider } from "../../providers/data-service/data-service";
 import { FaceServiceProvider } from "../../providers/face-service/face-service";
 import { AttendantServiceProvider } from "../../providers/attendant-service/attendant-service";
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
-import { Dialogs } from '@ionic-native/dialogs';
+import { Dialogs } from "@ionic-native/dialogs";
 
 @IonicPage()
 @Component({
@@ -20,6 +20,7 @@ export class AttendancePage {
   personGroupId: any;
   personIDs: any = [];
   screenSize: any = {};
+  currentPerson: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -49,9 +50,8 @@ export class AttendancePage {
   }
 
   ionViewWillLeave() {
-
     this.task.stop();
-    console.log('ionViewWillLeave')
+    console.log("ionViewWillLeave");
   }
 
   initTracker(): void {
@@ -77,7 +77,7 @@ export class AttendancePage {
   tryToDetectFace(trackedData: any): void {
     if (trackedData.length > 0) {
       const video = this.getVideo();
-      const canvas = this.createCanvas();//this.getCanvas();
+      const canvas = this.createCanvas(); //this.getCanvas();
       const ctx = canvas.getContext("2d");
 
       if (video && canvas) {
@@ -102,7 +102,6 @@ export class AttendancePage {
         });
       }
     } else {
-
       if (this.personIDs.length > 0) {
         this.personIDs = [];
       }
@@ -138,8 +137,16 @@ export class AttendancePage {
                       this.dataServiceProvider.info("");
                       identifies.forEach(identity => {
                         identity.candidates.forEach(person => {
-                          if (this.personIDs.indexOf(person.personId) < 0) {
-                            this.personIDs.push(person.personId);
+                          //****************ค*/
+                          // if (this.personIDs.indexOf(person.personId) < 0) {
+                          //   this.personIDs.push(person.personId);
+
+                          // }
+                          /** */
+                          if (this.currentPerson !== person.personId) {
+
+                            this.currentPerson = person.personId;
+                            
                             this.faceService
                               .GetPerson(this.personGroupId, person.personId)
                               .then((res: any) => {
@@ -152,6 +159,7 @@ export class AttendancePage {
                                   image: face,
                                   citizenid: person.userData
                                 };
+          
                                 this.attendantService
                                   .Checkin(bodyReq)
                                   .then(res => {
@@ -178,9 +186,9 @@ export class AttendancePage {
                 this.dataServiceProvider.info("");
               }
             })
-            .catch(err => { });
+            .catch(err => {});
         })
-        .catch(err => { });
+        .catch(err => {});
     } catch {
       this.isLock = false;
     }
@@ -191,11 +199,10 @@ export class AttendancePage {
   }
 
   createCanvas(): HTMLCanvasElement {
-    return <HTMLCanvasElement>document.createElement('canvas');
+    return <HTMLCanvasElement>document.createElement("canvas");
   }
 
   getVideo(): HTMLVideoElement {
     return <HTMLVideoElement>document.getElementsByTagName("video")[0];
   }
-
 }
