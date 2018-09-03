@@ -136,6 +136,7 @@ export class AttendancePage {
                       this.isLock = false;
                       this.dataServiceProvider.info("");
                       identifies.forEach(identity => {
+                        let cnt = 0;
                         identity.candidates.forEach(person => {
                           //****************ค*/
                           // if (this.personIDs.indexOf(person.personId) < 0) {
@@ -143,7 +144,8 @@ export class AttendancePage {
 
                           // }
                           /** */
-                          if (this.currentPerson !== person.personId) {
+                          if (this.currentPerson !== person.personId && cnt === 0) {
+                            cnt ++;
 
                             this.currentPerson = person.personId;
                             
