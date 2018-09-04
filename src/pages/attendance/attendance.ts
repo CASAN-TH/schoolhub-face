@@ -38,14 +38,13 @@ export class AttendancePage {
     console.log(this.screenSize);
     if (this.auth.authenticated()) {
       this.personGroupId = this.auth.Uesr().schoolid;
-      if (this.personGroupId === "5b89127e9bcb300014a221fe") {
-        this.personGroupId = "5b4ea676a581760014b38015";
-      }
+      // if (this.personGroupId === "5b89127e9bcb300014a221fe") {
+      //   this.personGroupId = "5b4ea676a581760014b38015"; // กลุ่มเด็ก
+      // }
     }
   }
 
   ionViewDidLoad() {
-    //console.log('ionViewDidLoad AttendancePage');
     this.initTracker();
   }
 
@@ -144,19 +143,13 @@ export class AttendancePage {
 
                           // }
                           /** */
-                          console.log('out===> ' + person.personId);
                           if (cnt === 0) {
                             cnt++;
                             if (this.currentPerson !== person.personId) {
-
-                              console.log('in===> ' + person.personId);
                               this.currentPerson = person.personId;
-
                               this.faceService
                                 .GetPerson(this.personGroupId, person.personId)
                                 .then((res: any) => {
-                                  console.log(res);
-
                                   let person = res;
                                   this.dataServiceProvider.info(person.name);
                                   person.image = face;
