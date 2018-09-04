@@ -93,7 +93,7 @@ export class AttendancePage {
           // ctx.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
 
           var img = new Image();
-          img.src = canvas.toDataURL("image/jpeg", 0.75);
+          img.src = canvas.toDataURL("image/jpeg", 0.70);
 
           if (!this.isLock) {
             this.detect(img.src);

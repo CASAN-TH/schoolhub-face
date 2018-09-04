@@ -31,4 +31,8 @@ export class ScreenSaverPage {
     this.navCtrl.push('TakePhotoPage');
   }
 
+  openDuplicate() {
+    this.navCtrl.push('DuplicatePersonGroupPage');
+  }
+
 }
