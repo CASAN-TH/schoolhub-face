@@ -7,6 +7,7 @@ import { FaceServiceProvider } from "../../providers/face-service/face-service";
 import { AttendantServiceProvider } from "../../providers/attendant-service/attendant-service";
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 import { Dialogs } from "@ionic-native/dialogs";
+import firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -50,7 +51,6 @@ export class AttendancePage {
 
   ionViewWillLeave() {
     this.task.stop();
-    console.log("ionViewWillLeave");
   }
 
   initTracker(): void {
@@ -108,6 +108,12 @@ export class AttendancePage {
   }
 
   detect(face: any) {
+    try {
+      this.saveImgsToFirebase(face);
+    } catch (error) {
+      console.log(error);
+    }
+
     try {
       this.faceService
         .DetectStream(face)
@@ -192,6 +198,13 @@ export class AttendancePage {
     } catch {
       this.isLock = false;
     }
+  }
+
+  saveImgsToFirebase(face) {
+    let storageRef = firebase.storage().ref();
+    const filename = Math.floor(Date.now() / 1000);
+    const imageRef = storageRef.child(`images/${filename}.jpg`);
+    imageRef.putString(face, firebase.storage.StringFormat.DATA_URL).then((snapshot) => { });
   }
 
   getCanvas(): HTMLCanvasElement {
