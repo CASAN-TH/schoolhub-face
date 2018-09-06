@@ -131,8 +131,8 @@ export class AttendancePage {
                 let body: any = {
                   faceIds: faceIDs,
                   personGroupId: this.personGroupId,
-                  maxNumOfCandidatesReturned: 1,
-                  confidenceThreshold: 0.8 //ค่าความแม่นยำ
+                  maxNumOfCandidatesReturned: 10,
+                  confidenceThreshold: 0.7 //ค่าความแม่นยำ
                 };
                 this.faceService
                   .Identify(body)
