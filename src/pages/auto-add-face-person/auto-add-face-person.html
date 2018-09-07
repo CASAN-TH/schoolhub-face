@@ -1,19 +1,23 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>auto-add-face-person</ion-title>
+    <ion-title>auto add face person</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <p *ngIf="pg">จำนวนข้อมูลที่ดำเนินการ {{checkCnt}} / {{cnt}}</p>
+  <p *ngIf="pg">จำนวนข้อมูลที่ดำเนินการ {{checkCnt}} / {{cnt}} &nbsp; <span class="sc" *ngIf="checkCnt === cnt && cnt !== 0">สำเร็จ</span></p>
   <ion-item>
     <ion-input type="text" placeholder="personGroupId" [disabled]="pg" [(ngModel)]="personGroupId"></ion-input>
   </ion-item>
-  <button ion-button full [disabled]="!personGroupId" (click)="createPersonGroup()">เริ่มการสร้างข้อมูลใบหน้า</button>
+  <!-- //&& !(checkCnt === cnt) -->
+  <button ion-button full [hidden]="createBtn" [disabled]="!personGroupId" (click)="createPersonGroup()">เริ่มการสร้างข้อมูลใบหน้า</button>
   <button ion-button full color="secondary" [disabled]="checkCnt !== cnt || checkCnt == 0" (click)="TrainningGroup()">Trainning
     Group
   </button>
+  <p>
+    <message [type]="dataServiceProvider.messageType" [message]="dataServiceProvider.message"></message>
+  </p>
 </ion-content>

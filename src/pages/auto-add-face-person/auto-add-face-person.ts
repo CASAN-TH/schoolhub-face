@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FaceServiceProvider } from '../../providers/face-service/face-service';
 import { AttendantServiceProvider } from '../../providers/attendant-service/attendant-service';
+import { DataServiceProvider } from '../../providers/data-service/data-service';
 
 @IonicPage()
 @Component({
@@ -13,8 +14,9 @@ export class AutoAddFacePersonPage {
   public cnt: number = 0;
   public checkCnt: number = 0;
   public pg: boolean = false;
+  public createBtn: boolean = false;
 
-  constructor(public faceServiceProvider: FaceServiceProvider, public attendantServiceProvider: AttendantServiceProvider, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public dataServiceProvider: DataServiceProvider, public faceServiceProvider: FaceServiceProvider, public attendantServiceProvider: AttendantServiceProvider, public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
@@ -26,6 +28,9 @@ export class AutoAddFacePersonPage {
     if (cfm) {
       try {
         this.pg = true;
+        this.checkCnt = 0;
+        this.createBtn = true;
+        this.dataServiceProvider.success('');
         let body = {
           name: this.personGroupId,
           userData: this.personGroupId
@@ -33,7 +38,7 @@ export class AutoAddFacePersonPage {
         let res: any = await this.faceServiceProvider.CreatePersonGroup(this.personGroupId, body);
         this.addPersonToPersonGroup();
       } catch (error) {
-        console.log(error);
+        this.errHandle(error);
       }
     }
   }
@@ -49,7 +54,7 @@ export class AutoAddFacePersonPage {
         }, 1000 * i);
       });
     } catch (error) {
-      console.log(error);
+      this.errHandle(error);
     }
   }
 
@@ -68,16 +73,15 @@ export class AutoAddFacePersonPage {
 
       this.checkCnt++;
     } catch (error) {
-      console.log(error);
+      this.errHandle(error);
     }
   }
 
   async addPersonFace(personGroupId, personId, url) {
     try {
       let face: any = await this.faceServiceProvider.AddPersonFace(personGroupId, personId, { url: url });
-      console.log(face);
     } catch (error) {
-      console.log(error);
+      this.errHandle(error);
     }
   }
 
@@ -88,6 +92,12 @@ export class AutoAddFacePersonPage {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  errHandle(error) {
+    this.dataServiceProvider.error(JSON.stringify(error || error.error));
+    this.createBtn = false;
+    this.pg = false;
   }
 
 }

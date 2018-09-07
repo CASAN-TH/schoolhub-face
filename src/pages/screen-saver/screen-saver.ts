@@ -35,4 +35,8 @@ export class ScreenSaverPage {
     this.navCtrl.push('DuplicatePersonGroupPage');
   }
 
+  openAutoAddFace() {
+    this.navCtrl.push('AutoAddFacePersonPage');
+  }
+
 }
