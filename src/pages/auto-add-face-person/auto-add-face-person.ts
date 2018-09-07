@@ -70,7 +70,7 @@ export class AutoAddFacePersonPage {
       el.imgs.forEach((url, i) => {
         setTimeout(() => {
           this.addPersonFace(this.personGroupId, res.personId, url);
-        }, 1000 * i);
+        }, 2000 * i);
       });
 
       this.checkCnt++;
@@ -100,7 +100,7 @@ export class AutoAddFacePersonPage {
   errHandle(error) {
     this.dataServiceProvider.error(JSON.stringify(error || error.error));
     this.createBtn = false;
-    this.pg = false;
+    // this.pg = false;
   }
 
 }
