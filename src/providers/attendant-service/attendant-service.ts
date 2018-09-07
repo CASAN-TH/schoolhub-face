@@ -30,6 +30,10 @@ export class AttendantServiceProvider {
     return this.http.post(Constants.URL + '/api/get-student-school', { limit: 999 }, { headers: this.authorizationHeader() }).toPromise();
   }
 
+  getStudentListFromJson() {
+    return this.http.get('../../assets/json/students.json', { headers: this.authorizationHeader() }).toPromise();
+  }
+
   getStudentImages(citizenid: string) {
     return this.http.post(Constants.URL + '/api/images-citizenid', { citizenid: citizenid }, { headers: this.authorizationHeader() }).toPromise();
   }
