@@ -51,7 +51,7 @@ export class AutoAddFacePersonPage {
       studentList.forEach((el, i) => {
         setTimeout(() => {
           this.createPerson(el);
-        }, 1000 * i);
+        }, 2000 * i);
       });
     } catch (error) {
       this.errHandle(error);
