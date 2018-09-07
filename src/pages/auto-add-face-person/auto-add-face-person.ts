@@ -67,8 +67,10 @@ export class AutoAddFacePersonPage {
       };
 
       let res: any = await this.faceServiceProvider.CreatePerson(this.personGroupId, personGroupData);
-      el.imgs.forEach(url => {
-        this.addPersonFace(this.personGroupId, res.personId, url);
+      el.imgs.forEach((url, i) => {
+        setTimeout(() => {
+          this.addPersonFace(this.personGroupId, res.personId, url);
+        }, 1000 * i);
       });
 
       this.checkCnt++;
@@ -80,6 +82,7 @@ export class AutoAddFacePersonPage {
   async addPersonFace(personGroupId, personId, url) {
     try {
       let face: any = await this.faceServiceProvider.AddPersonFace(personGroupId, personId, { url: url });
+      console.log(face);
     } catch (error) {
       this.errHandle(error);
     }
