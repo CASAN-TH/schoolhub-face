@@ -132,7 +132,7 @@ export class AttendancePage {
                   faceIds: faceIDs,
                   personGroupId: this.personGroupId,
                   maxNumOfCandidatesReturned: 1,
-                  confidenceThreshold: 0.8 //ค่าความแม่นยำ
+                  confidenceThreshold: 0.85 //ค่าความแม่นยำ
                 };
                 this.faceService
                   .Identify(body)
