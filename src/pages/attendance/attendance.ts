@@ -7,7 +7,7 @@ import { FaceServiceProvider } from "../../providers/face-service/face-service";
 import { AttendantServiceProvider } from "../../providers/attendant-service/attendant-service";
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 import { Dialogs } from "@ionic-native/dialogs";
-import firebase from 'firebase';
+import firebase from "firebase";
 
 @IonicPage()
 @Component({
@@ -84,16 +84,8 @@ export class AttendancePage {
         canvas.height = video.videoHeight;
         ctx.drawImage(video, 0, 0);
         trackedData.forEach(rect => {
-          //const gradient = ctx.createLinearGradient(0, 0, 170, 0);
-          // ctx.strokeStyle = "#a64ceb";
-          // ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
-          // ctx.font = "11px Helvetica";
-          // ctx.fillStyle = "#fff";
-          // ctx.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
-          // ctx.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
-
           var img = new Image();
-          img.src = canvas.toDataURL("image/jpeg", 0.70);
+          img.src = canvas.toDataURL("image/jpeg", 0.7);
 
           if (!this.isLock) {
             this.detect(img.src);
@@ -108,11 +100,12 @@ export class AttendancePage {
   }
 
   detect(face: any) {
-    try {
-      this.saveImgsToFirebase(face);
-    } catch (error) {
-      console.log(error);
-    }
+    //ยกเลิกมันช้า
+    // try {
+    //   this.saveImgsToFirebase(face);
+    // } catch (error) {
+    //   console.log(error);
+    // }
 
     try {
       this.faceService
@@ -124,10 +117,6 @@ export class AttendancePage {
             .PushFaceIds(faces)
             .then((faceIDs: any) => {
               if (faceIDs.length > 0) {
-                this.dataServiceProvider.info(
-                  "ตรวจสอบข้อมูล ใบหน้า " + faceIDs.length + " ใบหน้า"
-                );
-                this.dialogs.beep(1);
                 let body: any = {
                   faceIds: faceIDs,
                   personGroupId: this.personGroupId,
@@ -138,65 +127,100 @@ export class AttendancePage {
                   .Identify(body)
                   .then((identifies: any) => {
                     if (identifies) {
-                      this.isLock = false;
-                      this.dataServiceProvider.info("");
+                      // แก้ไขย้ายไปให้ปลดล๊อคเมื่อเจอข้อมูลบุคคล หรือไม่เจอ
+                      // this.isLock = false;
+                      //this.dataServiceProvider.info("");
+
+                      this.dataServiceProvider.info(
+                        "ตรวจสอบข้อมูล ใบหน้า " + faceIDs.length + " ใบหน้า"
+                      );
+
                       identifies.forEach(identity => {
-                        let cnt = 0;
-                        identity.candidates.forEach(person => {
-                          //****************ค*/
-                          // if (this.personIDs.indexOf(person.personId) < 0) {
-                          //   this.personIDs.push(person.personId);
-
-                          // }
-                          /** */
-                          if (cnt === 0) {
-                            cnt++;
-                            if (this.currentPerson !== person.personId) {
-                              this.currentPerson = person.personId;
-                              this.faceService
-                                .GetPerson(this.personGroupId, person.personId)
-                                .then((res: any) => {
-                                  let person = res;
-                                  this.dataServiceProvider.info(person.name);
-                                  person.image = face;
-                                  let bodyReq = {
-                                    image: face,
-                                    citizenid: person.userData
-                                  };
-
-                                  this.attendantService
-                                    .Checkin(bodyReq)
-                                    .then(res => {
-                                      this.dataServiceProvider.info("");
-                                    })
-                                    .catch(err => {
-                                      this.dataServiceProvider.info("");
-                                    });
-                                });
-                            }
+                        //แก้ไขเอา candidates สูงสุดที่ array ตัวที่ 0
+                        if (
+                          identity.candidates &&
+                          identity.candidates.length === 0
+                        ) {
+                          // กรณี Identify ที่ความแม่นยำ 85% แล้วไม่ Match กับบุคคลใด
+                          // ต้องการเก็บข้อมูลคนที่ No one identified
+                          this.isLock = false;
+                          this.dataServiceProvider.info("ยังไม่มีข้อมูลประวัติบุคคล");
+                          this.dialogs.beep(1);
+                        } else {
+                          var person = identity.candidates[0];
+                          if (this.currentPerson !== person.personId) {
+                            this.currentPerson = person.personId;
+                            this.faceService
+                              .GetPerson(this.personGroupId, person.personId)
+                              .then((res: any) => {
+                                let person = res;
+                                this.dataServiceProvider.info(person.name);
+                                person.image = face;
+                                let bodyReq = {
+                                  image: face,
+                                  citizenid: person.userData
+                                };
+                                this.attendantService
+                                  .Checkin(bodyReq)
+                                  .then(res => {
+                                    //กรณี ส่งข้อมูลไปลงชื่อสำเร็จ
+                                    this.isLock = false;
+                                    this.dataServiceProvider.info("ลงชื่อสำเร็จ");
+                                    this.dialogs.beep(1);
+                                  })
+                                  .catch(err => {
+                                    //กรณี ส่งข้อมูลไปลงชื่อไม่สำเร็จ
+                                    this.isLock = false;
+                                    this.dataServiceProvider.info("");
+                                    this.dialogs.beep(1);
+                                  });
+                              })
+                              .catch(err => {
+                                //กรณี GetPerson Error
+                                this.isLock = false;
+                                this.dataServiceProvider.info("");
+                                this.dialogs.beep(1);
+                              });
+                          } else {
+                            // กรณีใบหน้าซ้ำกับคนก่อนหน้า
+                            this.isLock = false;
+                            this.dataServiceProvider.info("ลงชื่อเข้าไปแล้วครับ");
+                            this.dialogs.beep(1);
                           }
-
-                        });
+                        }
                       });
                     } else {
+                      // กรณี Identify ไม่มีข้อมูล
                       this.isLock = false;
                       this.dataServiceProvider.info("");
                     }
                   })
                   .catch(err => {
+                    //กรณี Identify Error
                     this.isLock = false;
                     this.dataServiceProvider.info("");
                   });
               } else {
+                // กรณี Detect ไม่เจอใบหน้า
                 this.isLock = false;
                 this.dataServiceProvider.info("");
               }
             })
-            .catch(err => { });
+            .catch(err => {
+              //กรณี PushFaceIds Error
+              this.isLock = false;
+              this.dataServiceProvider.info("");
+            });
         })
-        .catch(err => { });
+        .catch(err => {
+          //กรณี Detect Error
+          this.isLock = false;
+          this.dataServiceProvider.info("");
+        });
     } catch {
+      //กรณี Unhandle Error
       this.isLock = false;
+      this.dataServiceProvider.info("");
     }
   }
 
@@ -204,7 +228,9 @@ export class AttendancePage {
     let storageRef = firebase.storage().ref();
     const filename = Math.floor(Date.now() / 1000);
     const imageRef = storageRef.child(`images/${filename}.jpg`);
-    imageRef.putString(face, firebase.storage.StringFormat.DATA_URL).then((snapshot) => { });
+    imageRef
+      .putString(face, firebase.storage.StringFormat.DATA_URL)
+      .then(snapshot => {});
   }
 
   getCanvas(): HTMLCanvasElement {

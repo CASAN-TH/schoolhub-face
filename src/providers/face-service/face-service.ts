@@ -89,9 +89,15 @@ export class FaceServiceProvider {
 
   PushFaceIds(faces: any) {
     let faceIDs: any = [];
-    faces.forEach(face => {
-      faceIDs.push(face.faceId);
-    });
+
+    //แบบเดิมเอาทุกหน้าที่ scan ได้ ***เกิดปัญหา
+    // faces.forEach(face => {
+    //   faceIDs.push(face.faceId);
+    // });
+
+    //เอาหน้าเดียวที่อยู่หน้าสุด
+    faceIDs.push(faces[0].faceId);
+
     return new Promise((resove, reject) => {
       resove(faceIDs);
     })
