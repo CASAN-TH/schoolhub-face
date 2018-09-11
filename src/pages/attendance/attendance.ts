@@ -121,7 +121,7 @@ export class AttendancePage {
                   faceIds: faceIDs,
                   personGroupId: this.personGroupId,
                   maxNumOfCandidatesReturned: 1,
-                  confidenceThreshold: 0.85 //ค่าความแม่นยำ
+                  confidenceThreshold: 0.8 //ค่าความแม่นยำ
                 };
                 this.faceService
                   .Identify(body)
@@ -145,7 +145,7 @@ export class AttendancePage {
                           // ต้องการเก็บข้อมูลคนที่ No one identified
                           this.isLock = false;
                           this.dataServiceProvider.info(
-                            "ยังไม่มีข้อมูลประวัติบุคคล"
+                            "..."
                           );
                           this.dialogs.beep(1);
                         } else {
