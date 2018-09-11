@@ -54,21 +54,23 @@ export class TakePhotoPage {
             image: img,
             citizenid: this.personData.userData
           };
-          this.attendantServiceProvider.UploadImage(bodyReq).then(resData => {
-            this.faceServiceProvider.AddPersonFaceStream(this.auth.Uesr().schoolid, this.person.personId, img).then(res => {
-              this.faces.push(res);
-              if (this.faces.length >= 3) {
-                this.faceServiceProvider.TrainPersonGroup(this.auth.Uesr().schoolid).then(res => {
-                  this.navCtrl.pop();
-                }).catch(err => {
-                  alert(JSON.stringify(err));
-                });
-              }
-              this.loadingProvider.dismiss();
-            }).catch(err => {
-              this.loadingProvider.dismiss();
-              alert(JSON.stringify(err));
-            });
+          this.attendantServiceProvider.UploadImage(bodyReq).then((resData: any) => {
+            if (resData && resData.data) {
+              this.faceServiceProvider.AddPersonFace(this.auth.Uesr().schoolid, this.person.personId, { url: resData.data.image }).then(res => {
+                this.faces.push(res);
+                if (this.faces.length >= 10) {
+                  this.faceServiceProvider.TrainPersonGroup(this.auth.Uesr().schoolid).then(res => {
+                    this.navCtrl.pop();
+                  }).catch(err => {
+                    alert(JSON.stringify(err));
+                  });
+                }
+                this.loadingProvider.dismiss();
+              }).catch(err => {
+                this.loadingProvider.dismiss();
+                alert(JSON.stringify(err));
+              });
+            }
           }).catch(err => {
             this.loadingProvider.dismiss();
             alert('ไม่สามารถอัพโหลดรูปได้: ' + JSON.stringify(err));
