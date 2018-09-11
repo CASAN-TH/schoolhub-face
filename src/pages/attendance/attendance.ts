@@ -144,7 +144,9 @@ export class AttendancePage {
                           // กรณี Identify ที่ความแม่นยำ 85% แล้วไม่ Match กับบุคคลใด
                           // ต้องการเก็บข้อมูลคนที่ No one identified
                           this.isLock = false;
-                          this.dataServiceProvider.info("ยังไม่มีข้อมูลประวัติบุคคล");
+                          this.dataServiceProvider.info(
+                            "ยังไม่มีข้อมูลประวัติบุคคล"
+                          );
                           this.dialogs.beep(1);
                         } else {
                           var person = identity.candidates[0];
@@ -165,7 +167,9 @@ export class AttendancePage {
                                   .then(res => {
                                     //กรณี ส่งข้อมูลไปลงชื่อสำเร็จ
                                     this.isLock = false;
-                                    this.dataServiceProvider.info("ลงชื่อสำเร็จ");
+                                    this.dataServiceProvider.info(
+                                      "ลงชื่อสำเร็จ"
+                                    );
                                     this.dialogs.beep(1);
                                   })
                                   .catch(err => {
@@ -184,7 +188,9 @@ export class AttendancePage {
                           } else {
                             // กรณีใบหน้าซ้ำกับคนก่อนหน้า
                             this.isLock = false;
-                            this.dataServiceProvider.info("ลงชื่อเข้าไปแล้วครับ");
+                            this.dataServiceProvider.info(
+                              "ลงชื่อเข้าไปแล้วครับ"
+                            );
                             this.dialogs.beep(1);
                           }
                         }
