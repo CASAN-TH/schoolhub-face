@@ -141,13 +141,29 @@ export class AttendancePage {
                           identity.candidates &&
                           identity.candidates.length === 0
                         ) {
-                          // กรณี Identify ที่ความแม่นยำ 85% แล้วไม่ Match กับบุคคลใด
+                          // กรณี Identify ที่ความแม่นยำ 80% แล้วไม่ Match กับบุคคลใด
                           // ต้องการเก็บข้อมูลคนที่ No one identified
+                          // let bodyReq: any = {
+                          //   image: face,
+                          //   citizenid: "unknown"
+                          // };
+                          // this.attendantService
+                          //   .UploadImage(bodyReq)
+                          //   .then((resData: any) => {
+                          //     this.isLock = false;
+                          //     this.dataServiceProvider.info("...");
+                          //     this.dialogs.beep(1);
+                          //   })
+                          //   .catch(err => {
+                          //     this.isLock = false;
+                          //     this.dataServiceProvider.info("...");
+                          //     this.dialogs.beep(1);
+                          //   });
+                          
                           this.isLock = false;
-                          this.dataServiceProvider.info(
-                            "..."
-                          );
+                          this.dataServiceProvider.info("...");
                           this.dialogs.beep(1);
+                          
                         } else {
                           var person = identity.candidates[0];
                           if (this.currentPerson !== person.personId) {
@@ -160,7 +176,10 @@ export class AttendancePage {
                                 person.image = face;
                                 let bodyReq = {
                                   image: face,
-                                  citizenid: person.userData
+                                  citizenid: person.userData,
+                                  faceId: identity.faceId,
+                                  personId: person.personId,
+                                  personName: person.name
                                 };
                                 this.attendantService
                                   .Checkin(bodyReq)
