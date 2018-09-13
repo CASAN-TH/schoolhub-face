@@ -8,6 +8,7 @@ import { AttendantServiceProvider } from "../../providers/attendant-service/atte
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 import { Dialogs } from "@ionic-native/dialogs";
 import firebase from "firebase";
+import { ScreenSaverPage } from "../screen-saver/screen-saver";
 
 @IonicPage()
 @Component({
@@ -22,6 +23,8 @@ export class AttendancePage {
   personIDs: any = [];
   screenSize: any = {};
   currentPerson: any;
+  currentTime : any;
+  tickerIn = [9,17]
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -45,8 +48,28 @@ export class AttendancePage {
     }
   }
 
-  ionViewDidLoad() {
+  // ionViewDidLoad() {
+  //   this.initTracker();
+  // }
+
+  ionViewWillEnter(){
+    this.tickTime();
     this.initTracker();
+  }
+
+  tickTime(){
+    this.currentTime = new Date();
+
+    setTimeout(() => {
+      if(this.tickerIn.indexOf(new Date().getHours()) > 0){
+        this.task.stop();
+        this.navCtrl.pop();
+        //this.navCtrl.setRoot(ScreenSaverPage);
+      }else{
+        this.tickTime();
+      }
+     
+    }, 1000);
   }
 
   ionViewWillLeave() {

@@ -1,6 +1,11 @@
 <ion-content text-center>
   <ion-grid>
     <ion-row>
+      <ion-col col-12>
+        <h1>{{currentTime | date:"mediumTime"}}</h1>
+      </ion-col>
+    </ion-row>
+    <ion-row>
       <ion-col col-4 (click)="openHome()">
         <img src="./assets/imgs/scan.png" width="64px" height="64px">
         <p>

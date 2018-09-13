@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/timer'
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/take'
+
 
 @Component({
   selector: 'page-screen-saver',
@@ -7,11 +12,28 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class ScreenSaverPage {
 
+  currentTime : any;
+  tickerIn = [6,14]
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter(){
+    this.tickTime();
+  }
 
+  tickTime(){
+    this.currentTime = new Date();
+
+    setTimeout(() => {
+      if(this.tickerIn.indexOf(new Date().getHours()) > 0){
+        //this.navCtrl.setRoot('AttendancePage');
+        this.openHome();
+      }else{
+        this.tickTime();
+      }
+     
+    }, 1000);
   }
 
   openNFC() {
