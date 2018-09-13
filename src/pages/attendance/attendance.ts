@@ -23,8 +23,8 @@ export class AttendancePage {
   personIDs: any = [];
   screenSize: any = {};
   currentPerson: any;
-  currentTime : any;
-  tickerIn = [9,17]
+  currentTime: any;
+  tickerIn = [9, 10, 11, 12, 13, 17, 18, 19, 20];
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -52,23 +52,23 @@ export class AttendancePage {
   //   this.initTracker();
   // }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.tickTime();
     this.initTracker();
   }
 
-  tickTime(){
+  tickTime() {
     this.currentTime = new Date();
 
     setTimeout(() => {
-      if(this.tickerIn.indexOf(new Date().getHours()) > 0){
+      if (this.tickerIn.indexOf(new Date().getHours()) > 0) {
         this.task.stop();
         this.navCtrl.pop();
         //this.navCtrl.setRoot(ScreenSaverPage);
-      }else{
+      } else {
         this.tickTime();
       }
-     
+
     }, 1000);
   }
 
@@ -182,11 +182,11 @@ export class AttendancePage {
                           //     this.dataServiceProvider.info("...");
                           //     this.dialogs.beep(1);
                           //   });
-                          
+
                           this.isLock = false;
                           this.dataServiceProvider.info("...");
                           this.dialogs.beep(1);
-                          
+
                         } else {
                           var person = identity.candidates[0];
                           if (this.currentPerson !== person.personId) {
@@ -278,7 +278,7 @@ export class AttendancePage {
     const imageRef = storageRef.child(`images/${filename}.jpg`);
     imageRef
       .putString(face, firebase.storage.StringFormat.DATA_URL)
-      .then(snapshot => {});
+      .then(snapshot => { });
   }
 
   getCanvas(): HTMLCanvasElement {
