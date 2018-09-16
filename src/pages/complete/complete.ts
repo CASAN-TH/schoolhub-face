@@ -7,9 +7,11 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
   templateUrl: 'complete.html',
 })
 export class CompletePage {
-  person: any = {};
+  //person: any = {};
+  face: any;
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
-    this.person = navParams.get('person');
+    //this.person = navParams.get('person');
+    this.face = navParams.get('face');
   }
 
   ionViewDidLoad() {

@@ -3,15 +3,16 @@ page-complete {
         background-image: none;
     }
     .profile-img {
-        height: 100% !important;
-        max-height: 100% !important;
+        // height: 100% !important;
+        // max-height: 100% !important;
     }
     .info-box {
-        position: absolute;
-        bottom: 0;
+        // position: absolute;
+        // bottom: 0;
         background-color: rgba(0, 0, 0, 0.4);
-        color: #ffff;
-        width: 100%;
+        // color: #ffff;
+        // width: 100%;
     }
-    background-color: #ffffff !important;
+    //background-color: #ffffff !important;
+    background-color: rgba(0, 0, 0, 0.4) !important;
 }

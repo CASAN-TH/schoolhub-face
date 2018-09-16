@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams, Platform } from "ionic-angular";
+import { IonicPage, NavController, NavParams, Platform, ModalController } from "ionic-angular";
 import "tracking/build/tracking";
 import "tracking/build/data/face";
 import { DataServiceProvider } from "../../providers/data-service/data-service";
@@ -33,7 +33,8 @@ export class AttendancePage {
     private attendantService: AttendantServiceProvider,
     private auth: AuthServiceProvider,
     private platform: Platform,
-    private dialogs: Dialogs
+    private dialogs: Dialogs,
+    private modalCtrl: ModalController
   ) {
     this.screenSize = {
       width: this.platform.width(),
@@ -123,19 +124,11 @@ export class AttendancePage {
   }
 
   detect(face: any) {
-    //ยกเลิกมันช้า
-    // try {
-    //   this.saveImgsToFirebase(face);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-
+    this.isLock = true;
     try {
       this.faceService
         .DetectStream(face)
         .then((faces: any) => {
-          this.isLock = true;
-          this.dataServiceProvider.info("");
           this.faceService
             .PushFaceIds(faces)
             .then((faceIDs: any) => {
@@ -183,9 +176,8 @@ export class AttendancePage {
                           //     this.dialogs.beep(1);
                           //   });
 
-                          this.isLock = false;
-                          this.dataServiceProvider.info("...");
-                          this.dialogs.beep(1);
+            
+                          this.showFoundFace(face);
 
                         } else {
                           var person = identity.candidates[0];
@@ -208,68 +200,59 @@ export class AttendancePage {
                                   .Checkin(bodyReq)
                                   .then(res => {
                                     //กรณี ส่งข้อมูลไปลงชื่อสำเร็จ
-                                    this.isLock = false;
-                                    this.dataServiceProvider.info(
-                                      "ลงชื่อสำเร็จ"
-                                    );
-                                    this.dialogs.beep(1);
+                                    this.showFoundFace(face);
                                   })
                                   .catch(err => {
                                     //กรณี ส่งข้อมูลไปลงชื่อไม่สำเร็จ
-                                    this.isLock = false;
-                                    this.dataServiceProvider.info("");
-                                    this.dialogs.beep(1);
+                                    this.showFoundFace(face);
                                   });
                               })
                               .catch(err => {
                                 //กรณี GetPerson Error
-                                this.isLock = false;
-                                this.dataServiceProvider.info("");
-                                this.dialogs.beep(1);
+                                this.showFoundFace(face);
                               });
                           } else {
                             // กรณีใบหน้าซ้ำกับคนก่อนหน้า
-                            this.isLock = false;
-                            this.dataServiceProvider.info(
-                              "ลงชื่อเข้าไปแล้วครับ"
-                            );
-                            this.dialogs.beep(1);
+                            this.showFoundFace(face);
                           }
                         }
                       });
                     } else {
                       // กรณี Identify ไม่มีข้อมูล
-                      this.isLock = false;
-                      this.dataServiceProvider.info("");
+                      this.showFoundFace(face);
                     }
                   })
                   .catch(err => {
                     //กรณี Identify Error
-                    this.isLock = false;
-                    this.dataServiceProvider.info("");
+                    this.showFoundFace(face);
                   });
               } else {
                 // กรณี Detect ไม่เจอใบหน้า
-                this.isLock = false;
-                this.dataServiceProvider.info("");
+                this.showFoundFace(face);
               }
             })
             .catch(err => {
               //กรณี PushFaceIds Error
-              this.isLock = false;
-              this.dataServiceProvider.info("");
+              this.showFoundFace(face);
             });
         })
         .catch(err => {
           //กรณี Detect Error
-          this.isLock = false;
-          this.dataServiceProvider.info("");
+          this.showFoundFace(face);
         });
     } catch {
       //กรณี Unhandle Error
-      this.isLock = false;
-      this.dataServiceProvider.info("");
+      this.showFoundFace(face);
     }
+  }
+
+  showFoundFace(face) {
+    this.dialogs.beep(1);
+    let modal = this.modalCtrl.create('CompletePage', { face: face });
+    modal.present();
+    modal.onDidDismiss(res => {
+      this.isLock = false;
+    });
   }
 
   saveImgsToFirebase(face) {
