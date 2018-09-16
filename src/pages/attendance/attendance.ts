@@ -30,9 +30,9 @@ export class AttendancePage {
   screenSize: any = {};
   currentPerson: any;
   currentTime: any;
-  tickerIn = [10, 11, 12, 13, 17, 18, 19, 20];
+  tickerIn = [9, 10, 11, 12, 13, 17, 18, 19, 20];
   confidenceThreshold = 0.8; //ค่าความแม่นยำ (default)
-  tryConfidenceThreshold = 0.7; //ค่าความแม่นยำ (default try)
+  tryConfidenceThreshold = 0.75; //ค่าความแม่นยำ (default try)
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -161,7 +161,7 @@ export class AttendancePage {
                           identity.candidates.length === 0
                         ) {
                           // กรณี Identify ที่ความแม่นยำ 80% แล้วไม่ Match กับบุคคลใด
-                          // ระบบจะพยายาม ที่ความแม่นยำ 70% อีกครั้ง
+                          // ระบบจะพยายาม ที่ความแม่นยำ 75% อีกครั้ง
                           if (
                             confidenceThreshold === this.confidenceThreshold
                           ) {
@@ -184,7 +184,8 @@ export class AttendancePage {
                                   citizenid: person.userData,
                                   faceId: identity.faceId,
                                   personId: person.personId,
-                                  personName: person.name
+                                  personName: person.name,
+                                  confidence: identity.candidates[0].confidence
                                 };
                                 this.attendantService
                                   .Checkin(bodyReq)
