@@ -177,7 +177,7 @@ export class AttendancePage {
                               .GetPerson(this.personGroupId, person.personId)
                               .then((res: any) => {
                                 let person = res;
-                                this.dataServiceProvider.info(person.name);
+                                //this.dataServiceProvider.info(person.name);
                                 person.image = face;
                                 let bodyReq = {
                                   image: face,
