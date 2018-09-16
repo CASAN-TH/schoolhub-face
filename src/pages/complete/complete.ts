@@ -1,17 +1,28 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { Component } from "@angular/core";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  ViewController
+} from "ionic-angular";
 
 @IonicPage()
 @Component({
-  selector: 'page-complete',
-  templateUrl: 'complete.html',
+  selector: "page-complete",
+  templateUrl: "complete.html"
 })
 export class CompletePage {
   //person: any = {};
   face: any;
-  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
+  msg: any = "";
+  constructor(
+    public viewCtrl: ViewController,
+    public navCtrl: NavController,
+    public navParams: NavParams
+  ) {
     //this.person = navParams.get('person');
-    this.face = navParams.get('face');
+    this.face = navParams.get("face");
+    this.msg = navParams.get("msg");
   }
 
   ionViewDidLoad() {
@@ -23,5 +34,4 @@ export class CompletePage {
   dismiss() {
     this.viewCtrl.dismiss();
   }
-
 }

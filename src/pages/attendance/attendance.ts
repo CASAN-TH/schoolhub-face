@@ -1,5 +1,11 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams, Platform, ModalController } from "ionic-angular";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  Platform,
+  ModalController
+} from "ionic-angular";
 import "tracking/build/tracking";
 import "tracking/build/data/face";
 import { DataServiceProvider } from "../../providers/data-service/data-service";
@@ -24,7 +30,9 @@ export class AttendancePage {
   screenSize: any = {};
   currentPerson: any;
   currentTime: any;
-  tickerIn = [9, 10, 11, 12, 13, 17, 18, 19, 20];
+  tickerIn = [10, 11, 12, 13, 17, 18, 19, 20];
+  confidenceThreshold = 0.8; //ค่าความแม่นยำ (default)
+  tryConfidenceThreshold = 0.7; //ค่าความแม่นยำ (default try)
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -69,7 +77,6 @@ export class AttendancePage {
       } else {
         this.tickTime();
       }
-
     }, 1000);
   }
 
@@ -112,7 +119,7 @@ export class AttendancePage {
           img.src = canvas.toDataURL("image/jpeg", 0.7);
 
           if (!this.isLock) {
-            this.detect(img.src);
+            this.detect(img.src, this.confidenceThreshold);
           }
         });
       }
@@ -123,7 +130,7 @@ export class AttendancePage {
     }
   }
 
-  detect(face: any) {
+  detect(face: any, confidenceThreshold: any) {
     this.isLock = true;
     try {
       this.faceService
@@ -137,16 +144,12 @@ export class AttendancePage {
                   faceIds: faceIDs,
                   personGroupId: this.personGroupId,
                   maxNumOfCandidatesReturned: 1,
-                  confidenceThreshold: 0.8 //ค่าความแม่นยำ
+                  confidenceThreshold: confidenceThreshold //ค่าความแม่นยำ
                 };
                 this.faceService
                   .Identify(body)
                   .then((identifies: any) => {
                     if (identifies) {
-                      // แก้ไขย้ายไปให้ปลดล๊อคเมื่อเจอข้อมูลบุคคล หรือไม่เจอ
-                      // this.isLock = false;
-                      //this.dataServiceProvider.info("");
-
                       this.dataServiceProvider.info(
                         "ตรวจสอบข้อมูล ใบหน้า " + faceIDs.length + " ใบหน้า"
                       );
@@ -158,27 +161,14 @@ export class AttendancePage {
                           identity.candidates.length === 0
                         ) {
                           // กรณี Identify ที่ความแม่นยำ 80% แล้วไม่ Match กับบุคคลใด
-                          // ต้องการเก็บข้อมูลคนที่ No one identified
-                          // let bodyReq: any = {
-                          //   image: face,
-                          //   citizenid: "unknown"
-                          // };
-                          // this.attendantService
-                          //   .UploadImage(bodyReq)
-                          //   .then((resData: any) => {
-                          //     this.isLock = false;
-                          //     this.dataServiceProvider.info("...");
-                          //     this.dialogs.beep(1);
-                          //   })
-                          //   .catch(err => {
-                          //     this.isLock = false;
-                          //     this.dataServiceProvider.info("...");
-                          //     this.dialogs.beep(1);
-                          //   });
-
-            
-                          this.showFoundFace(face);
-
+                          // ระบบจะพยายาม ที่ความแม่นยำ 70% อีกครั้ง
+                          if (
+                            confidenceThreshold === this.confidenceThreshold
+                          ) {
+                            this.detect(face, this.tryConfidenceThreshold);
+                          } else {
+                            this.showFoundFace(face, "ยังไม่ได้ลงทะเบียน");
+                          }
                         } else {
                           var person = identity.candidates[0];
                           if (this.currentPerson !== person.personId) {
@@ -200,55 +190,76 @@ export class AttendancePage {
                                   .Checkin(bodyReq)
                                   .then(res => {
                                     //กรณี ส่งข้อมูลไปลงชื่อสำเร็จ
-                                    this.showFoundFace(face);
+                                    this.showFoundFace(face, "ลงชื่อสำเร็จ");
                                   })
                                   .catch(err => {
                                     //กรณี ส่งข้อมูลไปลงชื่อไม่สำเร็จ
-                                    this.showFoundFace(face);
+                                    this.showFoundFace(
+                                      face,
+                                      "พบข้อผิดพลาด : ในการลงชื่อ"
+                                    );
                                   });
                               })
                               .catch(err => {
                                 //กรณี GetPerson Error
-                                this.showFoundFace(face);
+                                this.showFoundFace(
+                                  face,
+                                  "พบข้อผิดพลาด : ข้อมูลบุคคลไม่ถูกต้อง"
+                                );
                               });
                           } else {
                             // กรณีใบหน้าซ้ำกับคนก่อนหน้า
-                            this.showFoundFace(face);
+                            this.showFoundFace(
+                              face,
+                              "พบข้อผิดพลาด : ท่านได้ทำการลงชื่อแล้ว"
+                            );
                           }
                         }
                       });
                     } else {
                       // กรณี Identify ไม่มีข้อมูล
-                      this.showFoundFace(face);
+                      this.showFoundFace(
+                        face,
+                        "พบข้อผิดพลาด : ไม่พบข้อมูลบุคคล"
+                      );
                     }
                   })
                   .catch(err => {
                     //กรณี Identify Error
-                    this.showFoundFace(face);
+                    this.showFoundFace(
+                      face,
+                      "พบข้อผิดพลาด : การยืนยันบุคคลผิดพลาด"
+                    );
                   });
               } else {
                 // กรณี Detect ไม่เจอใบหน้า
-                this.showFoundFace(face);
+                this.showFoundFace(
+                  face,
+                  "พบข้อผิดพลาด : ไม่สามารถตรวจจับใบหน้า"
+                );
               }
             })
             .catch(err => {
               //กรณี PushFaceIds Error
-              this.showFoundFace(face);
+              this.showFoundFace(
+                face,
+                "พบข้อผิดพลาด : ข้อมูลลำดับใบหน้าไม่ถูกต้อง"
+              );
             });
         })
         .catch(err => {
           //กรณี Detect Error
-          this.showFoundFace(face);
+          this.showFoundFace(face, "พบข้อผิดพลาด : การตรวจสอบใบหน้าไม่ถูกต้อง");
         });
     } catch {
       //กรณี Unhandle Error
-      this.showFoundFace(face);
+      this.showFoundFace(face, "พบข้อผิดพลาด : การตรวจสอบข้อมูลผิดพลาด");
     }
   }
 
-  showFoundFace(face) {
+  showFoundFace(face, msg) {
     this.dialogs.beep(1);
-    let modal = this.modalCtrl.create('CompletePage', { face: face });
+    let modal = this.modalCtrl.create("CompletePage", { face: face, msg: msg });
     modal.present();
     modal.onDidDismiss(res => {
       this.isLock = false;
@@ -261,7 +272,7 @@ export class AttendancePage {
     const imageRef = storageRef.child(`images/${filename}.jpg`);
     imageRef
       .putString(face, firebase.storage.StringFormat.DATA_URL)
-      .then(snapshot => { });
+      .then(snapshot => {});
   }
 
   getCanvas(): HTMLCanvasElement {
