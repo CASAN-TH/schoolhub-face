@@ -32,7 +32,7 @@ export class AttendancePage {
   currentTime: any;
   tickerIn = [9, 10, 11, 12, 13, 17, 18, 19, 20];
   confidenceThreshold = 0.8; //ค่าความแม่นยำ (default)
-  tryConfidenceThreshold = 0.75; //ค่าความแม่นยำ (default try)
+  tryConfidenceThreshold = 0.7; //ค่าความแม่นยำ (default try)
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -187,18 +187,18 @@ export class AttendancePage {
                                   personName: person.name,
                                   confidence: identity.candidates[0].confidence
                                 };
+
+                                this.showFoundFace(face, "ลงชื่อสำเร็จ");
+
                                 this.attendantService
                                   .Checkin(bodyReq)
                                   .then(res => {
                                     //กรณี ส่งข้อมูลไปลงชื่อสำเร็จ
-                                    this.showFoundFace(face, "ลงชื่อสำเร็จ");
+                                    
                                   })
                                   .catch(err => {
                                     //กรณี ส่งข้อมูลไปลงชื่อไม่สำเร็จ
-                                    this.showFoundFace(
-                                      face,
-                                      "พบข้อผิดพลาด : ในการลงชื่อ"
-                                    );
+                                    
                                   });
                               })
                               .catch(err => {
@@ -259,9 +259,9 @@ export class AttendancePage {
   }
 
   showFoundFace(face, msg) {
-    this.dialogs.beep(1);
     let modal = this.modalCtrl.create("CompletePage", { face: face, msg: msg });
     modal.present();
+    this.dialogs.beep(1);
     modal.onDidDismiss(res => {
       this.isLock = false;
     });
