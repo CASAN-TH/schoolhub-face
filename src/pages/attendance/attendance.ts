@@ -30,7 +30,7 @@ export class AttendancePage {
   screenSize: any = {};
   currentPerson: any;
   currentTime: any;
-  tickerIn = [9, 10, 11, 12, 13, 17, 18, 19, 20];
+  tickerIn = [9, 10, 11, 12, 13, 18, 19, 20];
   confidenceThreshold = 0.8; //ค่าความแม่นยำ (default)
   tryConfidenceThreshold = 0.7; //ค่าความแม่นยำ (default try)
   constructor(

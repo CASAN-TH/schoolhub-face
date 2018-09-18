@@ -13,7 +13,7 @@ import 'rxjs/add/operator/take'
 export class ScreenSaverPage {
 
   currentTime : any;
-  tickerIn = [6, 7, 8, 14, 15, 16];
+  tickerIn = [6, 7, 8, 14, 15, 16, 17];
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     
   }
