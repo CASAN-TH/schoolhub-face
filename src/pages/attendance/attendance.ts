@@ -146,14 +146,13 @@ export class AttendancePage {
                   maxNumOfCandidatesReturned: 1,
                   confidenceThreshold: confidenceThreshold //ค่าความแม่นยำ
                 };
+                this.dataServiceProvider.info(
+                  "ตรวจสอบข้อมูล ใบหน้า " + faceIDs.length + " ใบหน้า"
+                );
                 this.faceService
                   .Identify(body)
                   .then((identifies: any) => {
                     if (identifies) {
-                      this.dataServiceProvider.info(
-                        "ตรวจสอบข้อมูล ใบหน้า " + faceIDs.length + " ใบหน้า"
-                      );
-
                       identifies.forEach(identity => {
                         //แก้ไขเอา candidates สูงสุดที่ array ตัวที่ 0
                         if (
@@ -170,8 +169,8 @@ export class AttendancePage {
                             this.showFoundFace(face, "ยังไม่ได้ลงทะเบียน");
                           }
                         } else {
-                          var person = identity.candidates[0];
                           this.showFoundFace(face, "ลงชื่อสำเร็จ");
+                          var person = identity.candidates[0];
                           if (this.currentPerson !== person.personId) {
                             this.currentPerson = person.personId;
                             this.faceService
@@ -258,7 +257,8 @@ export class AttendancePage {
   }
 
   showFoundFace(face, msg) {
-    let modal = this.modalCtrl.create("CompletePage", { face: face, msg: msg });
+    //let modal = this.modalCtrl.create("CompletePage", { face: face, msg: msg });
+    let modal = this.modalCtrl.create("CompletePage", { msg: msg });
     modal.present();
     this.dialogs.beep(1);
     modal.onDidDismiss(res => {
