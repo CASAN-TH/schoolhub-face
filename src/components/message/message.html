@@ -3,5 +3,6 @@
   type === 'danger' ? 'alert alert-danger' : 
   type === 'warning' ? 'alert alert-warning' : 
   type === 'info' ? 'alert alert-info' : ''}}">
-  {{message}}
+  <img *ngIf="type === 'success'" src="assets/imgs/check.png" width="64px" height="64px">
+  <p>{{message}}</p>
 </div>

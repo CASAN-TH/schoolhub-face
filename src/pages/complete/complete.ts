@@ -21,7 +21,7 @@ export class CompletePage {
     public navParams: NavParams
   ) {
     //this.person = navParams.get('person');
-    //this.face = navParams.get("face");
+    this.face = navParams.get("face");
     this.msg = navParams.get("msg");
   }
 

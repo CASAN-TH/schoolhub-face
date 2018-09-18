@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/timer'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/take'
@@ -13,7 +12,7 @@ import 'rxjs/add/operator/take'
 export class ScreenSaverPage {
 
   currentTime : any;
-  tickerIn = [6, 7, 8, 14, 15, 16, 17];
+  tickerIn = [6, 7, 8, 14, 15, 16, 22];
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     
   }

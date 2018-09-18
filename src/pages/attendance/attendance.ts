@@ -14,7 +14,6 @@ import { AttendantServiceProvider } from "../../providers/attendant-service/atte
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 import { Dialogs } from "@ionic-native/dialogs";
 import firebase from "firebase";
-import { ScreenSaverPage } from "../screen-saver/screen-saver";
 
 @IonicPage()
 @Component({
@@ -30,7 +29,7 @@ export class AttendancePage {
   screenSize: any = {};
   currentPerson: any;
   currentTime: any;
-  tickerIn = [9, 10, 11, 12, 13, 18, 19, 20];
+  tickerIn = [9, 10, 11, 12, 13, 17, 18, 19, 20];
   confidenceThreshold = 0.8; //ค่าความแม่นยำ (default)
   tryConfidenceThreshold = 0.7; //ค่าความแม่นยำ (default try)
   constructor(
@@ -51,15 +50,8 @@ export class AttendancePage {
     console.log(this.screenSize);
     if (this.auth.authenticated()) {
       this.personGroupId = this.auth.Uesr().schoolid;
-      // if (this.personGroupId === "5b89127e9bcb300014a221fe") {
-      //   this.personGroupId = "5b4ea676a581760014b38015"; // กลุ่มเด็ก
-      // }
     }
   }
-
-  // ionViewDidLoad() {
-  //   this.initTracker();
-  // }
 
   ionViewWillEnter() {
     this.tickTime();
@@ -140,19 +132,23 @@ export class AttendancePage {
             .PushFaceIds(faces)
             .then((faceIDs: any) => {
               if (faceIDs.length > 0) {
+                this.dataServiceProvider.info(
+                  "ตรวจสอบข้อมูล ใบหน้า " + faceIDs.length + " ใบหน้า"
+                );
                 let body: any = {
                   faceIds: faceIDs,
                   personGroupId: this.personGroupId,
                   maxNumOfCandidatesReturned: 1,
                   confidenceThreshold: confidenceThreshold //ค่าความแม่นยำ
                 };
-                this.dataServiceProvider.info(
-                  "ตรวจสอบข้อมูล ใบหน้า " + faceIDs.length + " ใบหน้า"
-                );
                 this.faceService
                   .Identify(body)
                   .then((identifies: any) => {
                     if (identifies) {
+                      // this.dataServiceProvider.info(
+                      //   "ตรวจสอบข้อมูล ใบหน้า " + faceIDs.length + " ใบหน้า"
+                      // );
+
                       identifies.forEach(identity => {
                         //แก้ไขเอา candidates สูงสุดที่ array ตัวที่ 0
                         if (
@@ -169,8 +165,8 @@ export class AttendancePage {
                             this.showFoundFace(face, "ยังไม่ได้ลงทะเบียน");
                           }
                         } else {
-                          this.showFoundFace(face, "ลงชื่อสำเร็จ");
                           var person = identity.candidates[0];
+                          this.showFoundFace(face, "ลงชื่อสำเร็จ");
                           if (this.currentPerson !== person.personId) {
                             this.currentPerson = person.personId;
                             this.faceService
@@ -192,19 +188,22 @@ export class AttendancePage {
                                   .Checkin(bodyReq)
                                   .then(res => {
                                     //กรณี ส่งข้อมูลไปลงชื่อสำเร็จ
-                                    
+                                    //this.showFoundFace(face, "ลงชื่อสำเร็จ");
                                   })
                                   .catch(err => {
                                     //กรณี ส่งข้อมูลไปลงชื่อไม่สำเร็จ
-                                    
+                                    // this.showFoundFace(
+                                    //   face,
+                                    //   "พบข้อผิดพลาด : ข้อมูลบุคคลไม่ถูกต้อง"
+                                    // );
                                   });
                               })
                               .catch(err => {
                                 //กรณี GetPerson Error
-                                this.showFoundFace(
-                                  face,
-                                  "พบข้อผิดพลาด : ข้อมูลบุคคลไม่ถูกต้อง"
-                                );
+                                // this.showFoundFace(
+                                //   face,
+                                //   "พบข้อผิดพลาด : ข้อมูลบุคคลไม่ถูกต้อง"
+                                // );
                               });
                           } else {
                             // กรณีใบหน้าซ้ำกับคนก่อนหน้า
@@ -257,13 +256,23 @@ export class AttendancePage {
   }
 
   showFoundFace(face, msg) {
-    //let modal = this.modalCtrl.create("CompletePage", { face: face, msg: msg });
-    let modal = this.modalCtrl.create("CompletePage", { msg: msg });
-    modal.present();
+    
+    //วิธีที่ 1 แสดง Modal
+    // let modal = this.modalCtrl.create("CompletePage", { face: face, msg: msg });
+    // modal.present();
+    // this.dialogs.beep(1);
+    // modal.onDidDismiss(res => {
+    //   this.isLock = false;
+    // });
+
+    //วิธีที่ 2 แสดงข้อความ
     this.dialogs.beep(1);
-    modal.onDidDismiss(res => {
-      this.isLock = false;
-    });
+    this.dataServiceProvider.success(
+      "ลงชื่อสำเร็จ"
+    );
+    this.isLock = false;
+
+
   }
 
   saveImgsToFirebase(face) {
