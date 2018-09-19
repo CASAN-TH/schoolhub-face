@@ -200,17 +200,17 @@ export class AttendancePage {
                               })
                               .catch(err => {
                                 //กรณี GetPerson Error
-                                // this.showFoundFace(
-                                //   face,
-                                //   "พบข้อผิดพลาด : ข้อมูลบุคคลไม่ถูกต้อง"
-                                // );
+                                this.showFoundFace(
+                                  face,
+                                  "พบข้อผิดพลาด : ข้อมูลบุคคลไม่ถูกต้อง"
+                                );
                               });
                           } else {
                             // กรณีใบหน้าซ้ำกับคนก่อนหน้า
-                            // this.showFoundFace(
-                            //   face,
-                            //   "พบข้อผิดพลาด : ท่านได้ทำการลงชื่อแล้ว"
-                            // );
+                            this.showFoundFace(
+                              face,
+                              "พบข้อผิดพลาด : ท่านได้ทำการลงชื่อแล้ว"
+                            );
                           }
                         }
                       });
