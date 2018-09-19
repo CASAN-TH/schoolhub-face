@@ -35,7 +35,7 @@ export class AutoAddFacePersonPage {
           name: this.personGroupId,
           userData: this.personGroupId
         };
-        let res: any = await this.faceServiceProvider.CreatePersonGroup(this.personGroupId, body);
+        // let res: any = await this.faceServiceProvider.CreatePersonGroup(this.personGroupId, body);
         this.addPersonToPersonGroup();
       } catch (error) {
         this.errHandle(error);
