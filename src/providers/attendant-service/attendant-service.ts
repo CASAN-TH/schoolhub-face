@@ -31,7 +31,7 @@ export class AttendantServiceProvider {
   }
 
   getStudentListFromJson() {
-    return this.http.get('../../assets/json/1-8.json', { headers: this.authorizationHeader() }).toPromise();
+    return this.http.get('../../assets/json/1-6.json', { headers: this.authorizationHeader() }).toPromise();
   }
 
   getStudentImages(citizenid: string) {
