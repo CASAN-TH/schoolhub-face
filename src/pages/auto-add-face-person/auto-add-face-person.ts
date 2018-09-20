@@ -10,7 +10,7 @@ import { DataServiceProvider } from '../../providers/data-service/data-service';
   templateUrl: 'auto-add-face-person.html',
 })
 export class AutoAddFacePersonPage {
-  public personGroupId: any;
+  public personGroupId: any; //5b89127e9bcb300014a221fe
   public cnt: number = 0;
   public checkCnt: number = 0;
   public pg: boolean = false;
@@ -70,7 +70,7 @@ export class AutoAddFacePersonPage {
       el.imgs.forEach((url, i) => {
         setTimeout(() => {
           this.addPersonFace(this.personGroupId, res.personId, url);
-        }, 2000 * i);
+        }, 4000 * i);
       });
 
       this.checkCnt++;
