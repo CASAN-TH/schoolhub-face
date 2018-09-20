@@ -166,7 +166,7 @@ export class AttendancePage {
                           }
                         } else {
                           var person = identity.candidates[0];
-                          
+                          this.showFoundFace(face, "ลงชื่อสำเร็จ");
                           if (this.currentPerson !== person.personId) {
                             this.currentPerson = person.personId;
                             this.faceService
@@ -183,7 +183,7 @@ export class AttendancePage {
                                   personName: person.name,
                                   confidence: identity.candidates[0].confidence
                                 };
-                                this.showFoundFace(face, "ลงชื่อสำเร็จ");
+                                
                                 this.attendantService
                                   .Checkin(bodyReq)
                                   .then(res => {
@@ -200,17 +200,17 @@ export class AttendancePage {
                               })
                               .catch(err => {
                                 //กรณี GetPerson Error
-                                this.showFoundFace(
-                                  face,
-                                  "พบข้อผิดพลาด : ข้อมูลบุคคลไม่ถูกต้อง"
-                                );
+                                // this.showFoundFace(
+                                //   face,
+                                //   "พบข้อผิดพลาด : ข้อมูลบุคคลไม่ถูกต้อง"
+                                // );
                               });
                           } else {
                             // กรณีใบหน้าซ้ำกับคนก่อนหน้า
-                            this.showFoundFace(
-                              face,
-                              "พบข้อผิดพลาด : ท่านได้ทำการลงชื่อแล้ว"
-                            );
+                            // this.showFoundFace(
+                            //   face,
+                            //   "พบข้อผิดพลาด : ท่านได้ทำการลงชื่อแล้ว"
+                            // );
                           }
                         }
                       });
