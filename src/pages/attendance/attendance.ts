@@ -31,7 +31,7 @@ export class AttendancePage {
   currentTime: any;
   tickerIn = [9, 10, 11, 12, 13, 17, 18, 19, 20];
   confidenceThreshold = 0.8; //ค่าความแม่นยำ (default)
-  tryConfidenceThreshold = 0.7; //ค่าความแม่นยำ (default try)
+  tryConfidenceThreshold = 0.65; //ค่าความแม่นยำ (default try)
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -156,7 +156,7 @@ export class AttendancePage {
                           identity.candidates.length === 0
                         ) {
                           // กรณี Identify ที่ความแม่นยำ 80% แล้วไม่ Match กับบุคคลใด
-                          // ระบบจะพยายาม ที่ความแม่นยำ 75% อีกครั้ง
+                          // ระบบจะพยายาม ที่ความแม่นยำ 65% อีกครั้ง
                           if (
                             confidenceThreshold === this.confidenceThreshold
                           ) {
