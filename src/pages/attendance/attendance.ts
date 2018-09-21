@@ -29,10 +29,10 @@ export class AttendancePage {
   screenSize: any = {};
   currentPerson: any;
   currentTime: any;
-  tickerIn = [9, 10, 11, 12, 13, 17, 18, 19, 20];
-  
+  tickerIn = [9, 17];
+
   confidenceThreshold = 0.8; //ค่าความแม่นยำ (default)
-  tryConfidenceThreshold = 0.65; //ค่าความแม่นยำ (default try)
+  tryConfidenceThreshold = 0.7; //ค่าความแม่นยำ (default try)
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -89,7 +89,7 @@ export class AttendancePage {
         const { data } = event;
         this.tryToDetectFace(data);
       });
-      this.tracker.setInitialScale(4);
+      this.tracker.setInitialScale(6);
       this.tracker.setStepSize(2);
       this.tracker.setEdgesDensity(0.1);
     } catch (e) {
@@ -117,6 +117,7 @@ export class AttendancePage {
         });
       }
     } else {
+      this.dataServiceProvider.info("");
       if (this.personIDs.length > 0) {
         this.personIDs = [];
       }
@@ -156,7 +157,7 @@ export class AttendancePage {
                           identity.candidates &&
                           identity.candidates.length === 0
                         ) {
-                          // กรณี Identify ที่ความแม่นยำ 80% แล้วไม่ Match กับบุคคลใด
+                          // กรณี Identify ที่ความแม่นยำ 70% แล้วไม่ Match กับบุคคลใด
                           // ระบบจะพยายาม ที่ความแม่นยำ 65% อีกครั้ง
                           if (
                             confidenceThreshold === this.confidenceThreshold
@@ -167,7 +168,7 @@ export class AttendancePage {
                           }
                         } else {
                           var person = identity.candidates[0];
-                          this.showFoundFace(face, "ลงชื่อสำเร็จ");
+
                           if (this.currentPerson !== person.personId) {
                             this.currentPerson = person.personId;
                             this.faceService
@@ -184,7 +185,7 @@ export class AttendancePage {
                                   personName: person.name,
                                   confidence: identity.candidates[0].confidence
                                 };
-                                
+                                this.showFoundFace(face, "ลงชื่อสำเร็จ");
                                 this.attendantService
                                   .Checkin(bodyReq)
                                   .then(res => {
@@ -201,10 +202,10 @@ export class AttendancePage {
                               })
                               .catch(err => {
                                 //กรณี GetPerson Error
-                                // this.showFoundFace(
-                                //   face,
-                                //   "พบข้อผิดพลาด : ข้อมูลบุคคลไม่ถูกต้อง"
-                                // );
+                                this.showFoundFace(
+                                  face,
+                                  "พบข้อผิดพลาด : ข้อมูลบุคคลไม่ถูกต้อง"
+                                );
                               });
                           } else {
                             // กรณีใบหน้าซ้ำกับคนก่อนหน้า
@@ -257,7 +258,6 @@ export class AttendancePage {
   }
 
   showFoundFace(face, msg) {
-    
     //วิธีที่ 1 แสดง Modal
     // let modal = this.modalCtrl.create("CompletePage", { face: face, msg: msg });
     // modal.present();
@@ -268,12 +268,8 @@ export class AttendancePage {
 
     //วิธีที่ 2 แสดงข้อความ
     this.dialogs.beep(1);
-    this.dataServiceProvider.success(
-      "ลงชื่อสำเร็จ"
-    );
+    this.dataServiceProvider.success("ลงชื่อสำเร็จ");
     this.isLock = false;
-
-
   }
 
   saveImgsToFirebase(face) {
