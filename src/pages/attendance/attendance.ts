@@ -226,34 +226,39 @@ export class AttendancePage {
                   })
                   .catch(err => {
                     //กรณี Identify Error
-                    this.showFoundFace(
-                      face,
-                      "พบข้อผิดพลาด : การยืนยันบุคคลผิดพลาด"
-                    );
+                    // this.showFoundFace(
+                    //   face,
+                    //   "พบข้อผิดพลาด : การยืนยันบุคคลผิดพลาด"
+                    // );
+                    this.isLock = false;
                   });
               } else {
                 // กรณี Detect ไม่เจอใบหน้า
-                this.showFoundFace(
-                  face,
-                  "พบข้อผิดพลาด : ไม่สามารถตรวจจับใบหน้า"
-                );
+                // this.showFoundFace(
+                //   face,
+                //   "พบข้อผิดพลาด : ไม่สามารถตรวจจับใบหน้า"
+                // );
+                this.isLock = false;
               }
             })
             .catch(err => {
               //กรณี PushFaceIds Error
-              this.showFoundFace(
-                face,
-                "พบข้อผิดพลาด : ข้อมูลลำดับใบหน้าไม่ถูกต้อง"
-              );
+              // this.showFoundFace(
+              //   face,
+              //   "พบข้อผิดพลาด : ข้อมูลลำดับใบหน้าไม่ถูกต้อง"
+              // );
+              this.isLock = false;
             });
         })
         .catch(err => {
           //กรณี Detect Error
-          this.showFoundFace(face, "พบข้อผิดพลาด : การตรวจสอบใบหน้าไม่ถูกต้อง");
+          //this.showFoundFace(face, "พบข้อผิดพลาด : การตรวจสอบใบหน้าไม่ถูกต้อง");
+          this.isLock = false;
         });
     } catch {
       //กรณี Unhandle Error
-      this.showFoundFace(face, "พบข้อผิดพลาด : การตรวจสอบข้อมูลผิดพลาด");
+      //this.showFoundFace(face, "พบข้อผิดพลาด : การตรวจสอบข้อมูลผิดพลาด");
+      this.isLock = false;
     }
   }
 
