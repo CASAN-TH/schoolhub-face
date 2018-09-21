@@ -89,8 +89,8 @@ export class AttendancePage {
         const { data } = event;
         this.tryToDetectFace(data);
       });
-      this.tracker.setInitialScale(6);
-      this.tracker.setStepSize(2);
+      this.tracker.setInitialScale(7);
+      this.tracker.setStepSize(3.5);
       this.tracker.setEdgesDensity(0.1);
     } catch (e) {
       console.log(e);
@@ -112,12 +112,12 @@ export class AttendancePage {
           img.src = canvas.toDataURL("image/jpeg", 0.7);
 
           if (!this.isLock) {
+            console.log(trackedData.length);
             this.detect(img.src, this.confidenceThreshold);
           }
         });
       }
     } else {
-      this.dataServiceProvider.info("");
       if (this.personIDs.length > 0) {
         this.personIDs = [];
       }
@@ -130,6 +130,7 @@ export class AttendancePage {
       this.faceService
         .DetectStream(face)
         .then((faces: any) => {
+         if(faces.length > 0){
           this.faceService
             .PushFaceIds(faces)
             .then((faceIDs: any) => {
@@ -234,11 +235,11 @@ export class AttendancePage {
                   });
               } else {
                 // กรณี Detect ไม่เจอใบหน้า
-                // this.showFoundFace(
-                //   face,
-                //   "พบข้อผิดพลาด : ไม่สามารถตรวจจับใบหน้า"
-                // );
-                this.isLock = false;
+                this.showFoundFace(
+                  face,
+                  "พบข้อผิดพลาด : ไม่สามารถตรวจจับใบหน้า"
+                );
+                //this.isLock = false;
               }
             })
             .catch(err => {
@@ -249,15 +250,19 @@ export class AttendancePage {
               // );
               this.isLock = false;
             });
+         }else{
+          this.isLock = false;
+         }
         })
         .catch(err => {
           //กรณี Detect Error
-          //this.showFoundFace(face, "พบข้อผิดพลาด : การตรวจสอบใบหน้าไม่ถูกต้อง");
+          this.dataServiceProvider.error("ไม่สามารถเชื่อมต่ออินเตอร์เน๊ต");
           this.isLock = false;
         });
     } catch {
       //กรณี Unhandle Error
       //this.showFoundFace(face, "พบข้อผิดพลาด : การตรวจสอบข้อมูลผิดพลาด");
+      this.dataServiceProvider.error("ไม่สามารถเชื่อมต่ออินเตอร์เน๊ต")
       this.isLock = false;
     }
   }
@@ -274,7 +279,11 @@ export class AttendancePage {
     //วิธีที่ 2 แสดงข้อความ
     this.dialogs.beep(1);
     this.dataServiceProvider.success("ลงชื่อสำเร็จ");
-    this.isLock = false;
+    setTimeout(() => {
+      this.dataServiceProvider.info("");
+      this.isLock = false;
+    }, 1000);
+    
   }
 
   saveImgsToFirebase(face) {
